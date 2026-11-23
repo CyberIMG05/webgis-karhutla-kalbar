@@ -2638,8 +2638,14 @@
           weeklyMerraGroup.clearLayers();
           L.geoJSON(data, {
             style: (feature) => {
-              const hexColor = extractPropValue(feature.properties, ['warna_hex'], '#9333ea');
-              return { color: '#475569', weight: 0.7, fillColor: hexColor, fillOpacity: 0.55 };
+              const val = Number(extractPropValue(feature.properties, ['pm25_ugm3', 'PM25', 'pm25', 'value'], 0));
+              let ispuColor = '#10b981'; // Baik (0 - 50)
+              if (val > 300) ispuColor = '#7f1d1d';      // Berbahaya (> 300)
+              else if (val > 200) ispuColor = '#ef4444'; // Sangat Tidak Sehat (201 - 300)
+              else if (val > 100) ispuColor = '#f59e0b'; // Tidak Sehat (101 - 200)
+              else if (val > 50)  ispuColor = '#3b82f6'; // Sedang (51 - 100)
+
+              return { color: '#334155', weight: 0.7, fillColor: ispuColor, fillOpacity: 0.55 };
             },
             onEachFeature: (feature, layer) => {
               const p = feature.properties || {};
