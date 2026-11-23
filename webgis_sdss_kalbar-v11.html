@@ -1119,6 +1119,14 @@
         </label>
       </div>
 
+      <div class="layer-row">
+        <label class="layer-label">
+          <input type="checkbox" id="chkAdminBoundary" checked />
+          <span class="dot-indicator" style="background:#334155;"></span>
+          <span>Batas Kab/Kota (Kalbar)</span>
+        </label>
+      </div>
+      
       <div class="slider-block">
         <div class="slider-label-row">
           <span>Opacity Layer Asap</span>
@@ -2328,6 +2336,69 @@
     }
 
     // ============================================================================
+    // 6A. MUAT BATAS ADMINISTRASI KAB/KOTA KALIMANTAN BARAT (GEOJSON)
+    // ============================================================================
+    const adminBoundaryGroup = L.layerGroup().addTo(map);
+
+    function extractDistrictName(props) {
+      if (!props) return 'Wilayah Administrasi';
+      const candidates = ['WADMKK', 'NAMOBJ', 'KAB_KOTA', 'KABUPATEN', 'NAMA_KAB', 'NAME_2', 'nama', 'kab_kota'];
+      for (const key of candidates) {
+        if (props[key]) return props[key];
+      }
+      return 'Kabupaten/Kota';
+    }
+
+    function loadAdminBoundaryGeoJSON(urls = [
+      'https://raw.githubusercontent.com/CyberIMG05/webgis-karhutla-kalbar/main/Batas_KabKota_KalimantanBarat.geojson',
+      './Batas_KabKota_KalimantanBarat.geojson',
+      './data/Batas_KabKota_KalimantanBarat.geojson'
+    ]) {
+      const list = Array.isArray(urls) ? urls : [urls];
+
+      const tryNext = (index) => {
+        if (index >= list.length) {
+          console.warn('Batas_KabKota_KalimantanBarat.geojson gagal dimuat dari semua sumber.');
+          return;
+        }
+        fetch(list[index])
+          .then(res => {
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            return res.json();
+          })
+          .then(geojsonData => {
+            adminBoundaryGroup.clearLayers();
+            L.geoJSON(geojsonData, {
+              style: {
+                color: '#1e293b',
+                weight: 1.4,
+                opacity: 0.85,
+                dashArray: '4, 3',
+                fillColor: '#64748b',
+                fillOpacity: 0.04
+              },
+              onEachFeature: (feature, layer) => {
+                const kabName = extractDistrictName(feature.properties);
+                layer.bindTooltip(kabName, { sticky: true, direction: 'center' });
+                layer.bindPopup(`
+                  <div class="popup-header">${kabName}</div>
+                  <div class="popup-line"><strong>Provinsi:</strong> Kalimantan Barat</div>
+                  <div class="popup-line"><strong>Sumber:</strong> Batas Administrasi RBI (EPSG:4326)</div>
+                `);
+              }
+            }).addTo(adminBoundaryGroup);
+
+            // Pastikan garis batas tetap berada di bawah titik api & fasilitas
+            adminBoundaryGroup.eachLayer(l => { if (l.bringToBack) l.bringToBack(); });
+            console.log('Berhasil memuat Batas_KabKota_KalimantanBarat.geojson dari:', list[index]);
+          })
+          .catch(() => tryNext(index + 1));
+      };
+
+      tryNext(0);
+    }
+    
+    // ============================================================================
     // 6B. MUAT CAMS_PM25.GEOJSON (PERMALINK RAW + FALLBACK RELATIVE PATH)
     // ============================================================================
     const camsLayerGroup = L.layerGroup().addTo(map);
@@ -2578,9 +2649,15 @@
       document.getElementById('zenBtnText').textContent = isZen ? 'Tampilkan Panel' : 'Fokus Peta';
     });
 
+    document.getElementById('chkAdminBoundary').addEventListener('change', (e) => {
+      if (e.target.checked) map.addLayer(adminBoundaryGroup);
+      else map.removeLayer(adminBoundaryGroup);
+    });
+    
     // Jalankan Inisialisasi
     renderBaseVectorLayers('ALL');
     setTimelineMode('seasonal', 72);
+    loadAdminBoundaryGeoJSON();
     loadCamsPm25GeoJSON();
   </script>
 </body>
