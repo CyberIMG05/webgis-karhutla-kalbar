@@ -2445,10 +2445,10 @@
             adminBoundaryGroup.clearLayers();
             const adminGeoJson = L.geoJSON(geojsonData, {
               style: {
-                color: '#ffffff',
-                weight: 2.2,
-                opacity: 0.95,
-                dashArray: '6, 4',
+                color: '#ffffff',      // Putih terang agar kontras di atas citra satelit
+                weight: 1.6,           // Ketebalan pas untuk layer di bawah
+                opacity: 0.85,
+                dashArray: '5, 4',     // Pola garis putus-putus batas kab/kota
                 fillColor: '#64748b',
                 fillOpacity: 0.03
               },
@@ -2468,8 +2468,9 @@
               }
             }).addTo(adminBoundaryGroup);
   
-            adminGeoJson.bringToFront();
-
+            // Posisikan di bawah seluruh layer asap, grid validasi, dan titik hotspot
+            adminGeoJson.bringToBack();
+  
             console.log('Berhasil memuat Batas_KabKota_KalimantanBarat.geojson dari:', list[index]);
           })
           .catch(() => tryNext(index + 1));
