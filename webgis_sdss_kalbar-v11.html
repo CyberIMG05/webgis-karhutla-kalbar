@@ -1126,6 +1126,14 @@
           <span>Batas Kab/Kota (Kalbar)</span>
         </label>
       </div>
+
+      <div class="layer-row">
+        <label class="layer-label">
+          <input type="checkbox" id="chkCams" />
+          <span class="dot-indicator" style="background:#7c3aed;"></span>
+          <span>Validasi PM2.5 (CAMS)</span>
+        </label>
+      </div>
       
       <div class="slider-block">
         <div class="slider-label-row">
@@ -2401,7 +2409,7 @@
     // ============================================================================
     // 6B. MUAT CAMS_PM25.GEOJSON (PERMALINK RAW + FALLBACK RELATIVE PATH)
     // ============================================================================
-    const camsLayerGroup = L.layerGroup().addTo(map);
+    const camsLayerGroup = L.layerGroup();
 
     function extractPm25Value(props) {
       if (!props) return null;
@@ -2652,6 +2660,11 @@
     document.getElementById('chkAdminBoundary').addEventListener('change', (e) => {
       if (e.target.checked) map.addLayer(adminBoundaryGroup);
       else map.removeLayer(adminBoundaryGroup);
+    });
+
+    document.getElementById('chkCams').addEventListener('change', (e) => {
+      if (e.target.checked) map.addLayer(camsLayerGroup);
+      else map.removeLayer(camsLayerGroup);
     });
     
     // Jalankan Inisialisasi
