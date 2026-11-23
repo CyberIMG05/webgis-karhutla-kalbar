@@ -2638,23 +2638,29 @@
           weeklyMerraGroup.clearLayers();
           L.geoJSON(data, {
             style: (feature) => {
-              const val = Number(extractPropValue(feature.properties, ['PM25', 'pm25', 'value', 'mean', 'BCSMASS'], 0));
-              const fill = val > 150 ? '#7f1d1d' : val > 75 ? '#dc2626' : val > 35 ? '#f59e0b' : '#22c55e';
-              return { color: '#6b21a8', weight: 0.8, fillColor: fill, fillOpacity: 0.45 };
+              const hexColor = extractPropValue(feature.properties, ['warna_hex'], '#9333ea');
+              return { color: '#475569', weight: 0.7, fillColor: hexColor, fillOpacity: 0.55 };
             },
             onEachFeature: (feature, layer) => {
-              const val = extractPropValue(feature.properties, ['PM25', 'pm25', 'value', 'mean', 'BCSMASS']);
+              const p = feature.properties || {};
+              const rawVal = extractPropValue(p, ['pm25_ugm3', 'PM25', 'pm25', 'value']);
+              const valFormatted = typeof rawVal === 'number' ? rawVal.toFixed(2) : rawVal;
+              const kategori = extractPropValue(p, ['kategori'], '-');
+              const rentang = extractPropValue(p, ['label_rentang'], '-');
+              const periode = extractPropValue(p, ['periode'], periodObj.label);
+
               layer.bindPopup(`
                 <div class="popup-header">NASA MERRA-2 PM2.5</div>
-                <div class="popup-line"><strong>Periode:</strong> ${periodObj.label}</div>
-                <div class="popup-line"><strong>Konsentrasi:</strong> ${val} µg/m³</div>
+                <div class="popup-line"><strong>Periode:</strong> ${periode}</div>
+                <div class="popup-line"><strong>Konsentrasi:</strong> ${valFormatted} µg/m³</div>
+                <div class="popup-line"><strong>Kategori:</strong> ${kategori} (${rentang})</div>
               `);
             }
           }).addTo(weeklyMerraGroup);
         })
         .catch(() => console.warn(`File MERRA2_PM25_${periodKey}.geojson belum tersedia.`));
 
-      // 2. MODIS AOD Mingguan (otomatis sesuaikan akhiran 1002 pada minggu akhir September)
+      // 2. MODIS AOD Mingguan
       const modisKey = periodKey === '20260926_1001' ? '20260926_1002' : periodKey;
       fetch(`${BASE_PJBL_URL}/MODIS_mingguan/MODIS_AOD_${modisKey}.geojson`)
         .then(res => { if (!res.ok) throw new Error(res.status); return res.json(); })
@@ -2662,16 +2668,22 @@
           weeklyModisGroup.clearLayers();
           L.geoJSON(data, {
             style: (feature) => {
-              const aod = Number(extractPropValue(feature.properties, ['AOD', 'aod', 'Optical_Depth_047', 'value', 'mean'], 0));
-              const fill = aod > 1.0 ? '#991b1b' : aod > 0.5 ? '#ea580c' : aod > 0.2 ? '#facc15' : '#38bdf8';
-              return { color: '#b45309', weight: 0.8, fillColor: fill, fillOpacity: 0.45 };
+              const hexColor = extractPropValue(feature.properties, ['warna_hex'], '#f59e0b');
+              return { color: '#78350f', weight: 0.7, fillColor: hexColor, fillOpacity: 0.55 };
             },
             onEachFeature: (feature, layer) => {
-              const aod = extractPropValue(feature.properties, ['AOD', 'aod', 'Optical_Depth_047', 'value', 'mean']);
+              const p = feature.properties || {};
+              const rawAod = extractPropValue(p, ['aod_550nm', 'aod', 'AOD', 'value']);
+              const aodFormatted = typeof rawAod === 'number' ? rawAod.toFixed(3) : rawAod;
+              const kategori = extractPropValue(p, ['kategori'], '-');
+              const rentang = extractPropValue(p, ['label_rentang'], '-');
+              const periode = extractPropValue(p, ['periode'], periodObj.label);
+
               layer.bindPopup(`
                 <div class="popup-header">NASA MODIS AOD</div>
-                <div class="popup-line"><strong>Periode:</strong> ${periodObj.label}</div>
-                <div class="popup-line"><strong>Nilai AOD:</strong> ${aod}</div>
+                <div class="popup-line"><strong>Periode:</strong> ${periode}</div>
+                <div class="popup-line"><strong>Nilai AOD:</strong> ${aodFormatted}</div>
+                <div class="popup-line"><strong>Kategori:</strong> ${kategori} (${rentang})</div>
               `);
             }
           }).addTo(weeklyModisGroup);
