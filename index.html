@@ -1003,6 +1003,49 @@
         display: none;
       }
     }
+/* ============================================================================
+   RESPONSIF UNTUK LAYAR HP / MOBILE (<= 768px)
+   ============================================================================ */
+@media (max-width: 768px) {
+  /* Izinkan halaman di-scroll ke bawah pada layar kecil */
+  html, body {
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto !important;
+  }
+
+  /* Peta diletakkan di bagian atas dengan tinggi proporsional */
+  #map {
+    position: relative !important;
+    width: 100% !important;
+    height: 55vh !important;
+    min-height: 360px;
+  }
+
+  /* Ubah semua panel mengambang (kiri, kanan, bawah) menjadi tumpukan vertikal rapi */
+  .dock-left,
+  .dock-right,
+  .timeline-dock {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    width: calc(100% - 20px) !important;
+    max-width: 100% !important;
+    max-height: none !important;
+    margin: 10px auto !important;
+    transform: none !important;
+  }
+
+  /* Sesuaikan header atas agar tidak terpotong */
+  .top-header, header {
+    position: relative !important;
+    flex-wrap: wrap !important;
+    gap: 8px;
+    padding: 10px 12px !important;
+  }
+}
   </style>
 </head>
 <body>
