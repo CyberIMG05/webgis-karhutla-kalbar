@@ -2445,12 +2445,12 @@
             adminBoundaryGroup.clearLayers();
             L.geoJSON(geojsonData, {
               style: {
-                color: '#1e293b',
-                weight: 1.4,
-                opacity: 0.85,
-                dashArray: '4, 3',
+                color: '#ffffff',      // Ubah ke putih terang agar kontras
+                weight: 2.2,           // Tebalkan garis batas
+                opacity: 0.95,         // Buat garis solid/tegas
+                dashArray: '6, 4',     // Pola garis putus-putus batas kab/kota
                 fillColor: '#64748b',
-                fillOpacity: 0.04
+                fillOpacity: 0.03
               },
               onEachFeature: (feature, layer) => {
                 const kabName = extractDistrictName(feature.properties);
@@ -2461,7 +2461,11 @@
                   <div class="popup-line"><strong>Sumber:</strong> Batas Administrasi RBI (EPSG:4326)</div>
                 `);
               }
+                const adminGeoJson = L.geoJSON(geojsonData, {
+              // ... (biarkan bagian style dan onEachFeature tetap sama seperti yang sudah Anda buat)
             }).addTo(adminBoundaryGroup);
+    
+            adminGeoJson.bringToFront();
 
             // Pastikan garis batas tetap berada di bawah titik api & fasilitas
             adminBoundaryGroup.eachLayer(l => { if (l.bringToBack) l.bringToBack(); });
