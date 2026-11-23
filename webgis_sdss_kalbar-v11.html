@@ -2328,6 +2328,91 @@
     }
 
     // ============================================================================
+    // 6B. MUAT CAMS_PM25.GEOJSON (PERMALINK RAW + FALLBACK RELATIVE PATH)
+    // ============================================================================
+    const camsLayerGroup = L.layerGroup().addTo(map);
+
+    function extractPm25Value(props) {
+      if (!props) return null;
+      const candidates = ['pm25', 'PM25', 'pm2_5', 'PM2_5', 'value', 'VALUE', 'val', 'mean', 'DN', 'raster_val'];
+      for (const key of candidates) {
+        if (props[key] !== undefined && props[key] !== null && !isNaN(parseFloat(props[key]))) {
+          return parseFloat(props[key]);
+        }
+      }
+      for (const [key, val] of Object.entries(props)) {
+        if (typeof val === 'number' && !isNaN(val)) return val;
+        if (typeof val === 'string' && val.trim() !== '' && !isNaN(parseFloat(val))) {
+          return parseFloat(val);
+        }
+      }
+      return null;
+    }
+
+    function renderCamsGeoJSON(geojsonData) {
+      camsLayerGroup.clearLayers();
+      const opacitySliderEl = document.getElementById('opacitySlider');
+      const opacity = (parseInt(opacitySliderEl ? opacitySliderEl.value : '70', 10) / 100) * 0.65;
+
+      L.geoJSON(geojsonData, {
+        style: (feature) => {
+          const pmVal = extractPm25Value(feature.properties);
+          const ispu = pmVal !== null ? getIspuCategory(pmVal) : { label: 'N/A', color: '#0284c7' };
+          return {
+            color: '#090d16',
+            weight: 0.7,
+            fillColor: ispu.color,
+            fillOpacity: opacity
+          };
+        },
+        onEachFeature: (feature, layer) => {
+          const props = feature.properties || {};
+          const pmVal = extractPm25Value(props);
+          const ispu = pmVal !== null ? getIspuCategory(pmVal) : { label: 'Tidak terdeteksi', color: '#0284c7' };
+          const attrLines = Object.entries(props)
+            .map(([k, v]) => `<div class="popup-line"><strong>${k}:</strong> ${v}</div>`)
+            .join('');
+
+          layer.bindPopup(`
+            <div class="popup-header">CAMS PM2.5 (GeoJSON)</div>
+            <div class="popup-line"><strong>Nilai PM2.5 Terdeteksi:</strong> ${pmVal !== null ? `${pmVal} µg/m³ (${ispu.label})` : '-'}</div>
+            ${attrLines}
+          `);
+        }
+      }).addTo(camsLayerGroup);
+    }
+
+    function loadCamsPm25GeoJSON(urls = [
+      'https://raw.githubusercontent.com/CyberIMG05/webgis-karhutla-kalbar/main/CAMS_PM25.geojson',
+      './CAMS_PM25.geojson'
+    ]) {
+      const list = Array.isArray(urls) ? urls : [urls];
+
+      const tryNext = (index) => {
+        if (index >= list.length) {
+          console.warn('CAMS_PM25.geojson gagal dimuat dari semua sumber URL.');
+          return;
+        }
+        const targetUrl = list[index];
+        fetch(targetUrl)
+          .then(res => {
+            if (!res.ok) throw new Error(`HTTP ${res.status} (${targetUrl})`);
+            return res.json();
+          })
+          .then(geojsonData => {
+            renderCamsGeoJSON(geojsonData);
+            console.log('Berhasil memuat CAMS_PM25.geojson dari:', targetUrl);
+          })
+          .catch(err => {
+            console.warn('Percobaan muat gagal:', err.message);
+            tryNext(index + 1);
+          });
+      };
+
+      tryNext(0);
+    }
+    
+    // ============================================================================
     // 7. EVENT LISTENERS
     // ============================================================================
     [
@@ -2496,6 +2581,7 @@
     // Jalankan Inisialisasi
     renderBaseVectorLayers('ALL');
     setTimelineMode('seasonal', 72);
+    loadCamsPm25GeoJSON();
   </script>
 </body>
 </html>
