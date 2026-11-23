@@ -2443,32 +2443,33 @@
           })
           .then(geojsonData => {
             adminBoundaryGroup.clearLayers();
-            L.geoJSON(geojsonData, {
+            const adminGeoJson = L.geoJSON(geojsonData, {
               style: {
-                color: '#ffffff',      // Ubah ke putih terang agar kontras
-                weight: 2.2,           // Tebalkan garis batas
-                opacity: 0.95,         // Buat garis solid/tegas
-                dashArray: '6, 4',     // Pola garis putus-putus batas kab/kota
+                color: '#ffffff',
+                weight: 2.2,
+                opacity: 0.95,
+                dashArray: '6, 4',
                 fillColor: '#64748b',
                 fillOpacity: 0.03
               },
               onEachFeature: (feature, layer) => {
-                const kabName = extractDistrictName(feature.properties);
+                const p = feature.properties || {};
+                const kabName = p.WADMKK || p.NAMOBJ || extractDistrictName(p);
+                const kodeKab = p.KDPKAB || '-';
+                const luasKm2 = p.LUASWH ? Number(p.LUASWH).toLocaleString('id-ID', { maximumFractionDigits: 2 }) : '-';
+  
                 layer.bindTooltip(kabName, { sticky: true, direction: 'center' });
                 layer.bindPopup(`
-                  <div class="popup-header">${kabName}</div>
-                  <div class="popup-line"><strong>Provinsi:</strong> Kalimantan Barat</div>
-                  <div class="popup-line"><strong>Sumber:</strong> Batas Administrasi RBI (EPSG:4326)</div>
+                  <div class="popup-header">Kabupaten/Kota ${kabName}</div>
+                  <div class="popup-line"><strong>Kode Wilayah:</strong> ${kodeKab}</div>
+                  <div class="popup-line"><strong>Luas Wilayah:</strong> ${luasKm2} km²</div>
+                  <div class="popup-line"><strong>Provinsi:</strong> ${p.WADMPR || 'Kalimantan Barat'}</div>
                 `);
               }
-                const adminGeoJson = L.geoJSON(geojsonData, {
-              // ... (biarkan bagian style dan onEachFeature tetap sama seperti yang sudah Anda buat)
             }).addTo(adminBoundaryGroup);
-    
+  
             adminGeoJson.bringToFront();
 
-            // Pastikan garis batas tetap berada di bawah titik api & fasilitas
-            adminBoundaryGroup.eachLayer(l => { if (l.bringToBack) l.bringToBack(); });
             console.log('Berhasil memuat Batas_KabKota_KalimantanBarat.geojson dari:', list[index]);
           })
           .catch(() => tryNext(index + 1));
