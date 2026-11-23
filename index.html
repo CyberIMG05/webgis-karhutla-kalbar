@@ -1177,6 +1177,30 @@
           <span>Validasi PM2.5 (CAMS)</span>
         </label>
       </div>
+
+      <div class="layer-row">
+        <label class="layer-label">
+          <input type="checkbox" id="chkLayerDampak" checked />
+          <span class="dot-indicator" style="background:#059669;"></span>
+          <span>Fasilitas Kesehatan & Pendidikan</span>
+        </label>
+      </div>
+
+      <div class="layer-row">
+        <label class="layer-label">
+          <input type="checkbox" id="chkWeeklyMerra" />
+          <span class="dot-indicator" style="background:#9333ea;"></span>
+          <span>MERRA-2 PM2.5 (Mingguan)</span>
+        </label>
+      </div>
+
+      <div class="layer-row">
+        <label class="layer-label">
+          <input type="checkbox" id="chkWeeklyModis" />
+          <span class="dot-indicator" style="background:#d97706;"></span>
+          <span>MODIS AOD (Mingguan)</span>
+        </label>
+      </div>
       
       <div class="slider-block">
         <div class="slider-label-row">
@@ -2533,6 +2557,146 @@
 
       tryNext(0);
     }
+
+    // ============================================================================
+    // 6C. MUAT LAYER DAMPAK & VALIDASI MINGGUAN OTOMATIS MENGIKUTI TIME-SLIDER
+    // ============================================================================
+    const BASE_PJBL_URL = 'https://raw.githubusercontent.com/CyberIMG05/webgis-karhutla-kalbar/main/data_pjbl';
+    const dampakLayerGroup = L.layerGroup().addTo(map);
+    const weeklyMerraGroup = L.layerGroup();
+    const weeklyModisGroup = L.layerGroup();
+
+    const WEEKLY_PERIODS = [
+      { key: '20260801_0807', label: '1 – 7 Agustus 2026' },
+      { key: '20260808_0814', label: '8 – 14 Agustus 2026' },
+      { key: '20260815_0821', label: '15 – 21 Agustus 2026' },
+      { key: '20260822_0828', label: '22 – 28 Agustus 2026' },
+      { key: '20260829_0904', label: '29 Agu – 4 Sep 2026' },
+      { key: '20260905_0911', label: '5 – 11 September 2026' },
+      { key: '20260912_0918', label: '12 – 18 September 2026' },
+      { key: '20260919_0925', label: '19 – 25 September 2026' },
+      { key: '20260926_1001', label: '26 Sep – 1/2 Okt 2026' },
+      { key: '20261003_1009', label: '3 – 9 Oktober 2026' },
+      { key: '20261010_1016', label: '10 – 16 Oktober 2026' },
+      { key: '20261017_1023', label: '17 – 23 Oktober 2026' },
+      { key: '20261024_1031', label: '24 – 31 Oktober 2026' }
+    ];
+
+    let activeWeeklyKey = '';
+
+    function extractPropValue(props, keys, fallback = '-') {
+      if (!props) return fallback;
+      for (const k of keys) {
+        if (props[k] !== undefined && props[k] !== null && props[k] !== '') return props[k];
+      }
+      return fallback;
+    }
+
+    // A. Muat Titik Pendidikan & Kesehatan (data_pjbl/layer_dampak)
+    function loadLayerDampakGeoJSON() {
+      dampakLayerGroup.clearLayers();
+      const sources = [
+        { file: 'education_point.geojson', jenis: 'Fasilitas Pendidikan', color: '#0284c7' },
+        { file: 'health_point.geojson', jenis: 'Fasilitas Kesehatan', color: '#dc2626' }
+      ];
+
+      sources.forEach(src => {
+        fetch(`${BASE_PJBL_URL}/layer_dampak/${src.file}`)
+          .then(res => { if (!res.ok) throw new Error(res.status); return res.json(); })
+          .then(data => {
+            L.geoJSON(data, {
+              pointToLayer: (feature, latlng) => L.circleMarker(latlng, {
+                radius: 4.5,
+                fillColor: src.color,
+                color: '#ffffff',
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.85
+              }),
+              onEachFeature: (feature, layer) => {
+                const nama = extractPropValue(feature.properties, ['name', 'NAMOBJ', 'nama', 'Name', 'amenity'], src.jenis);
+                layer.bindPopup(`
+                  <div class="popup-header">${nama}</div>
+                  <div class="popup-line"><strong>Kategori:</strong> ${src.jenis}</div>
+                  <div class="popup-line"><strong>Status:</strong> Objek Vital Terdampak Kabut Asap</div>
+                `);
+              }
+            }).addTo(dampakLayerGroup);
+          })
+          .catch(err => console.warn(`Gagal memuat ${src.file}:`, err));
+      });
+    }
+
+    // B. Muat File MERRA-2 PM2.5 & MODIS AOD Sesuai Minggu Aktif
+    function loadWeeklyValidationLayers(periodObj) {
+      const periodKey = periodObj.key;
+
+      // 1. MERRA-2 PM2.5 Mingguan
+      fetch(`${BASE_PJBL_URL}/merra2_mingguan/MERRA2_PM25_${periodKey}.geojson`)
+        .then(res => { if (!res.ok) throw new Error(res.status); return res.json(); })
+        .then(data => {
+          weeklyMerraGroup.clearLayers();
+          L.geoJSON(data, {
+            style: (feature) => {
+              const val = Number(extractPropValue(feature.properties, ['PM25', 'pm25', 'value', 'mean', 'BCSMASS'], 0));
+              const fill = val > 150 ? '#7f1d1d' : val > 75 ? '#dc2626' : val > 35 ? '#f59e0b' : '#22c55e';
+              return { color: '#6b21a8', weight: 0.8, fillColor: fill, fillOpacity: 0.45 };
+            },
+            onEachFeature: (feature, layer) => {
+              const val = extractPropValue(feature.properties, ['PM25', 'pm25', 'value', 'mean', 'BCSMASS']);
+              layer.bindPopup(`
+                <div class="popup-header">NASA MERRA-2 PM2.5</div>
+                <div class="popup-line"><strong>Periode:</strong> ${periodObj.label}</div>
+                <div class="popup-line"><strong>Konsentrasi:</strong> ${val} µg/m³</div>
+              `);
+            }
+          }).addTo(weeklyMerraGroup);
+        })
+        .catch(() => console.warn(`File MERRA2_PM25_${periodKey}.geojson belum tersedia.`));
+
+      // 2. MODIS AOD Mingguan (otomatis sesuaikan akhiran 1002 pada minggu akhir September)
+      const modisKey = periodKey === '20260926_1001' ? '20260926_1002' : periodKey;
+      fetch(`${BASE_PJBL_URL}/MODIS_mingguan/MODIS_AOD_${modisKey}.geojson`)
+        .then(res => { if (!res.ok) throw new Error(res.status); return res.json(); })
+        .then(data => {
+          weeklyModisGroup.clearLayers();
+          L.geoJSON(data, {
+            style: (feature) => {
+              const aod = Number(extractPropValue(feature.properties, ['AOD', 'aod', 'Optical_Depth_047', 'value', 'mean'], 0));
+              const fill = aod > 1.0 ? '#991b1b' : aod > 0.5 ? '#ea580c' : aod > 0.2 ? '#facc15' : '#38bdf8';
+              return { color: '#b45309', weight: 0.8, fillColor: fill, fillOpacity: 0.45 };
+            },
+            onEachFeature: (feature, layer) => {
+              const aod = extractPropValue(feature.properties, ['AOD', 'aod', 'Optical_Depth_047', 'value', 'mean']);
+              layer.bindPopup(`
+                <div class="popup-header">NASA MODIS AOD</div>
+                <div class="popup-line"><strong>Periode:</strong> ${periodObj.label}</div>
+                <div class="popup-line"><strong>Nilai AOD:</strong> ${aod}</div>
+              `);
+            }
+          }).addTo(weeklyModisGroup);
+        })
+        .catch(() => console.warn(`File MODIS_AOD_${modisKey}.geojson belum tersedia.`));
+    }
+
+    // C. Otomatis Cocokkan Posisi Time-Slider Utama dengan Urutan Minggu
+    function syncValidationWithMainSlider() {
+      const sliderEl = document.getElementById('timeSlider') || document.querySelector('.timeline-dock input[type="range"]');
+      if (!sliderEl) return;
+
+      const min = Number(sliderEl.min || 0);
+      const max = Number(sliderEl.max || 100);
+      const val = Number(sliderEl.value || 0);
+      const ratio = Math.min(Math.max((val - min) / ((max - min) || 1), 0), 0.9999);
+
+      const weekIndex = Math.floor(ratio * WEEKLY_PERIODS.length);
+      const targetPeriod = WEEKLY_PERIODS[weekIndex];
+
+      if (targetPeriod && targetPeriod.key !== activeWeeklyKey) {
+        activeWeeklyKey = targetPeriod.key;
+        loadWeeklyValidationLayers(targetPeriod);
+      }
+    }
     
     // ============================================================================
     // 7. EVENT LISTENERS
@@ -2709,12 +2873,39 @@
       if (e.target.checked) map.addLayer(camsLayerGroup);
       else map.removeLayer(camsLayerGroup);
     });
+
+    // Kontrol Nyala/Mati Layer Dampak & Validasi Mingguan
+    document.getElementById('chkLayerDampak').addEventListener('change', (e) => {
+      if (e.target.checked) map.addLayer(dampakLayerGroup);
+      else map.removeLayer(dampakLayerGroup);
+    });
+
+    document.getElementById('chkWeeklyMerra').addEventListener('change', (e) => {
+      if (e.target.checked) map.addLayer(weeklyMerraGroup);
+      else map.removeLayer(weeklyMerraGroup);
+    });
+
+    document.getElementById('chkWeeklyModis').addEventListener('change', (e) => {
+      if (e.target.checked) map.addLayer(weeklyModisGroup);
+      else map.removeLayer(weeklyModisGroup);
+    });
+
+    // Otomatis perbarui layer validasi setiap kali time-slider utama digeser atau di-play
+    const mainTimeSliderEl = document.getElementById('timeSlider') || document.querySelector('.timeline-dock input[type="range"]');
+    if (mainTimeSliderEl) {
+      mainTimeSliderEl.addEventListener('input', syncValidationWithMainSlider);
+      mainTimeSliderEl.addEventListener('change', syncValidationWithMainSlider);
+      // Pantau juga jika nilai slider berubah otomatis lewat tombol Play animasi
+      setInterval(syncValidationWithMainSlider, 600);
+    }
     
     // Jalankan Inisialisasi
     renderBaseVectorLayers('ALL');
     setTimelineMode('seasonal', 72);
     loadAdminBoundaryGeoJSON();
     loadCamsPm25GeoJSON();
+    loadLayerDampakGeoJSON();
+    syncValidationWithMainSlider();
   </script>
 </body>
 </html>
