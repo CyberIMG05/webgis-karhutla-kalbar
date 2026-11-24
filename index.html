@@ -1185,14 +1185,6 @@
           <span>Batas Kab/Kota (Kalbar)</span>
         </label>
       </div>
-
-      <div class="layer-row">
-        <label class="layer-label">
-          <input type="checkbox" id="chkLayerDampak" checked />
-          <span class="dot-indicator" style="background:#059669;"></span>
-          <span>Fasilitas Kesehatan & Pendidikan</span>
-        </label>
-      </div>
       
       <div class="layer-row">
         <label class="layer-label">
@@ -2780,7 +2772,9 @@
       { id: 'chkEducation', group: 'education' },
       { id: 'chkAirport', group: 'airport' }
     ].forEach(item => {
-      document.getElementById(item.id).addEventListener('change', (e) => {
+      const el = document.getElementById(item.id);
+      if (!el || !layerGroups[item.group]) return;
+      el.addEventListener('change', (e) => {
         if (e.target.checked) map.addLayer(layerGroups[item.group]);
         else map.removeLayer(layerGroups[item.group]);
       });
