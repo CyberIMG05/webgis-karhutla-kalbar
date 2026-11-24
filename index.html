@@ -2317,13 +2317,12 @@
     }
 
     // ============================================================================
-    // 6. RENDER LAYER VEKTOR DASAR
+    // 6. RENDER LAYER VEKTOR DASAR & 3 KATEGORI OBJEK VITAL TERDAMPAK
     // ============================================================================
     function renderBaseVectorLayers(districtFilter = 'ALL') {
       layerGroups.peat.clearLayers();
       layerGroups.trajectory.clearLayers();
       layerGroups.hotspots.clearLayers();
-      layerGroups.facilities.clearLayers();
 
       L.geoJSON(dummyPeatland, {
         style: {
@@ -2371,7 +2370,10 @@
           `);
         }
       }).addTo(layerGroups.hotspots);
+    }
 
+    // Fungsi terpisah (dipanggil 1 kali saat awal agar tidak menumpuk saat slider digeser)
+    function loadSeparatedImpactLayers() {
       const BASE_IMPACT_URL = 'https://raw.githubusercontent.com/CyberIMG05/webgis-karhutla-kalbar/main/data_pjbl/layer_dampak';
 
       const formatImpactPopup = (p, defaultTitle, kategoriLabel) => {
@@ -2380,7 +2382,7 @@
         const desa = p.adm4_name ? `${p.adm4_name}, ` : '';
         const kec  = p.adm3_name ? `Kec. ${p.adm3_name}, ` : '';
         const kab  = p.adm2_name || p.WADMKK || 'Kalimantan Barat';
-    
+
         return `
           <div class="popup-header">${nama}</div>
           <div class="popup-line"><strong>Kategori:</strong> ${kategoriLabel} (${jenis})</div>
@@ -2388,7 +2390,7 @@
           <div class="popup-line"><strong>Status:</strong> Terdampak Sebaran Kabut Asap</div>
         `;
       };
-    
+
       // 1. Fasilitas Kesehatan
       ['health_point.geojson', 'health_polygon.geojson'].forEach(file => {
         fetch(`${BASE_IMPACT_URL}/${file}`)
@@ -2404,7 +2406,7 @@
           })
           .catch(err => console.warn(`Gagal memuat ${file}:`, err));
       });
-    
+
       // 2. Fasilitas Pendidikan
       ['education_point.geojson', 'education_polygon.geojson'].forEach(file => {
         fetch(`${BASE_IMPACT_URL}/${file}`)
@@ -2420,7 +2422,7 @@
           })
           .catch(err => console.warn(`Gagal memuat ${file}:`, err));
       });
-    
+
       // 3. Bandara & Helipad
       ['airport_point.geojson', 'airport_polygon.geojson', 'airport_polyline.geojson'].forEach(file => {
         fetch(`${BASE_IMPACT_URL}/${file}`)
@@ -2605,7 +2607,6 @@
     // 6C. MUAT LAYER DAMPAK & VALIDASI MINGGUAN OTOMATIS MENGIKUTI TIME-SLIDER
     // ============================================================================
     const BASE_PJBL_URL = 'https://raw.githubusercontent.com/CyberIMG05/webgis-karhutla-kalbar/main/data_pjbl';
-    const dampakLayerGroup = L.layerGroup().addTo(map);
     const weeklyMerraGroup = L.layerGroup();
     const weeklyModisGroup = L.layerGroup();
 
@@ -2633,41 +2634,6 @@
         if (props[k] !== undefined && props[k] !== null && props[k] !== '') return props[k];
       }
       return fallback;
-    }
-
-    // A. Muat Titik Pendidikan & Kesehatan (data_pjbl/layer_dampak)
-    function loadLayerDampakGeoJSON() {
-      dampakLayerGroup.clearLayers();
-      const sources = [
-        { file: 'education_point.geojson', jenis: 'Fasilitas Pendidikan', color: '#0284c7' },
-        { file: 'health_point.geojson', jenis: 'Fasilitas Kesehatan', color: '#dc2626' }
-      ];
-
-      sources.forEach(src => {
-        fetch(`${BASE_PJBL_URL}/layer_dampak/${src.file}`)
-          .then(res => { if (!res.ok) throw new Error(res.status); return res.json(); })
-          .then(data => {
-            L.geoJSON(data, {
-              pointToLayer: (feature, latlng) => L.circleMarker(latlng, {
-                radius: 4.5,
-                fillColor: src.color,
-                color: '#ffffff',
-                weight: 1,
-                opacity: 1,
-                fillOpacity: 0.85
-              }),
-              onEachFeature: (feature, layer) => {
-                const nama = extractPropValue(feature.properties, ['name', 'NAMOBJ', 'nama', 'Name', 'amenity'], src.jenis);
-                layer.bindPopup(`
-                  <div class="popup-header">${nama}</div>
-                  <div class="popup-line"><strong>Kategori:</strong> ${src.jenis}</div>
-                  <div class="popup-line"><strong>Status:</strong> Objek Vital Terdampak Kabut Asap</div>
-                `);
-              }
-            }).addTo(dampakLayerGroup);
-          })
-          .catch(err => console.warn(`Gagal memuat ${src.file}:`, err));
-      });
     }
 
     // B. Muat File MERRA-2 PM2.5 & MODIS AOD Sesuai Minggu Aktif
@@ -2966,10 +2932,10 @@
     
     // Jalankan Inisialisasi
     renderBaseVectorLayers('ALL');
+    loadSeparatedImpactLayers();
     setTimelineMode('seasonal', 72);
     loadAdminBoundaryGeoJSON();
     loadCamsPm25GeoJSON();
-    loadLayerDampakGeoJSON();
     syncValidationWithMainSlider();
   </script>
 </body>
