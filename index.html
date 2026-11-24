@@ -15,14 +15,12 @@
   <style>
     :root {
       --bg-canvas: #e5e9f0;
-      /* Light Frosted Glass Material (White translucent + strong backdrop blur) */
       --glass-surface: rgba(255, 255, 255, 0.78);
       --glass-surface-strong: rgba(255, 255, 255, 0.88);
       --glass-tile: rgba(15, 23, 42, 0.045);
       --glass-tile-hover: rgba(15, 23, 42, 0.085);
       --glass-border: rgba(15, 23, 42, 0.14);
       --glass-highlight: rgba(255, 255, 255, 0.92);
-      /* High-Contrast Black & Slate Ink */
       --text-primary: #090d16;
       --text-secondary: #1e293b;
       --text-muted: #475569;
@@ -424,7 +422,7 @@
       font-size: 11px;
     }
 
-    /* CUSTOM MODERN RANGE SLIDER (HIGH CONTRAST ON WHITE GLASS) */
+    /* CUSTOM MODERN RANGE SLIDER */
     input[type="range"] {
       -webkit-appearance: none;
       width: 100%;
@@ -547,7 +545,7 @@
       background: var(--warning);
     }
 
-    /* FLOATING BOTTOM TIMELINE DOCK (TWO-LEVEL: 92-DAY SEASONAL + 72-HOUR EPISODE) */
+    /* FLOATING BOTTOM TIMELINE DOCK */
     .timeline-dock {
       position: absolute;
       bottom: 16px;
@@ -966,7 +964,6 @@
       margin: 3.5px 0;
     }
 
-
     .forecast-tag {
       display: inline-flex;
       align-items: center;
@@ -1003,49 +1000,40 @@
         display: none;
       }
     }
-/* ============================================================================
-   RESPONSIF UNTUK LAYAR HP / MOBILE (<= 768px)
-   ============================================================================ */
-@media (max-width: 768px) {
-  /* Izinkan halaman di-scroll ke bawah pada layar kecil */
-  html, body {
-    height: auto;
-    min-height: 100vh;
-    overflow-y: auto !important;
-  }
 
-  /* Peta diletakkan di bagian atas dengan tinggi proporsional */
-  #map {
-    position: relative !important;
-    width: 100% !important;
-    height: 55vh !important;
-    min-height: 360px;
-  }
-
-  /* Ubah semua panel mengambang (kiri, kanan, bawah) menjadi tumpukan vertikal rapi */
-  .dock-left,
-  .dock-right,
-  .timeline-dock {
-    position: relative !important;
-    top: auto !important;
-    left: auto !important;
-    right: auto !important;
-    bottom: auto !important;
-    width: calc(100% - 20px) !important;
-    max-width: 100% !important;
-    max-height: none !important;
-    margin: 10px auto !important;
-    transform: none !important;
-  }
-
-  /* Sesuaikan header atas agar tidak terpotong */
-  .top-header, header {
-    position: relative !important;
-    flex-wrap: wrap !important;
-    gap: 8px;
-    padding: 10px 12px !important;
-  }
-}
+    @media (max-width: 768px) {
+      html, body {
+        height: auto;
+        min-height: 100vh;
+        overflow-y: auto !important;
+      }
+      #map {
+        position: relative !important;
+        width: 100% !important;
+        height: 55vh !important;
+        min-height: 360px;
+      }
+      .dock-left,
+      .dock-right,
+      .timeline-dock {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+        width: calc(100% - 20px) !important;
+        max-width: 100% !important;
+        max-height: none !important;
+        margin: 10px auto !important;
+        transform: none !important;
+      }
+      .top-header, header {
+        position: relative !important;
+        flex-wrap: wrap !important;
+        gap: 8px;
+        padding: 10px 12px !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1111,6 +1099,14 @@
           <input type="checkbox" id="chkHotspot" checked />
           <span class="dot-indicator" style="background:#dc2626;"></span>
           <span>Titik Api & FRP (VIIRS)</span>
+        </label>
+      </div>
+
+      <div class="layer-row">
+        <label class="layer-label">
+          <input type="checkbox" id="chkBurnedArea" checked />
+          <span class="dot-indicator" style="background:#451a03; border: 1px solid #ea580c;"></span>
+          <span>Area Terbakar (MODIS MCD64A1)</span>
         </label>
       </div>
 
@@ -1273,7 +1269,7 @@
     </div>
   </aside>
 
-  <!-- FLOATING BOTTOM TWO-LEVEL TIMELINE (1 AGT - 31 OKT + EPISODE 72 JAM) -->
+  <!-- FLOATING BOTTOM TWO-LEVEL TIMELINE -->
   <div class="timeline-dock glass-panel">
     <div class="timeline-top">
       <div class="timeline-controls">
@@ -1555,8 +1551,8 @@
     const basemaps = {
       satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
         attribution: '&copy; Esri World Imagery | GD4103 Kel. 5 ITB',
-        maxNativeZoom: 17, // Batas resolusi asli server Esri agar tidak muncul gambar "Data not available"
-        maxZoom: 21        // Izinkan zoom digital lebih dalam hingga skala ~5-10 m
+        maxNativeZoom: 17,
+        maxZoom: 21
       }),
       light: L.layerGroup([
         L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
@@ -1585,14 +1581,14 @@
 
     // ============================================================================
     // 2. GENERATOR DATA TIME-SLIDER DUA LEVEL:
-    //    - LEVEL 1: HARIAN (1 AGUSTUS – 31 OKTOBER 2026 = 92 HARI)
-    //    - LEVEL 2: EPISODE PUNCAK 72 JAM (INTERVAL 6 JAM = 13 LANGKAH)
+    //    - LEVEL 1: HARIAN (1 AGUSTUS – 31 OKTOBER 2026 + FORECAST)
+    //    - LEVEL 2: EPISODE PUNCAK 72 JAM (INTERVAL 6 JAM)
     // ============================================================================
-    let timelineMode = 'seasonal'; // 'seasonal' (92 hari) atau 'episode' (72 jam)
+    let timelineMode = 'seasonal';
 
     const SEASONAL_STEPS = (() => {
       const steps = [];
-      const startDate = new Date(2026, 7, 1); // 1 Agustus 2026 (month 0-indexed: 7 = Agustus)
+      const startDate = new Date(2026, 7, 1);
       const monthNames = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agt", "Sep", "Okt", "Nov", "Des"];
       const windDirs = [
         { deg: 125, name: "Tenggara" },
@@ -1607,10 +1603,9 @@
         d.setDate(startDate.getDate() + i);
         const dayStr = `${d.getDate()} ${monthNames[d.getMonth()]} 2026`;
 
-        // Kurva realistis musim kemarau Kalbar: meningkat Agt -> Puncak 1 (14 Sep) -> Puncak 2 (12 Okt) -> Melandai akhir Okt
-        const peakSep = 0.72 * Math.exp(-Math.pow((i - 44) / 9.5, 2)); // 14 Sep (index 44)
-        const peakOct = 1.00 * Math.exp(-Math.pow((i - 72) / 7.5, 2)); // 12 Okt (index 72)
-        const isForecastDay = i >= 92; // 1 Nov (92), 2 Nov (93), 3 Nov 2026 (94)
+        const peakSep = 0.72 * Math.exp(-Math.pow((i - 44) / 9.5, 2));
+        const peakOct = 1.00 * Math.exp(-Math.pow((i - 72) / 7.5, 2));
+        const isForecastDay = i >= 92;
         const baseTrend = 0.24 + 0.22 * Math.sin((Math.min(i, 91) / 91) * Math.PI);
         const dailyWave = 0.05 * Math.sin(i * 1.3);
         const forecastDecay = isForecastDay ? Math.pow(0.84, i - 91) : 1.0;
@@ -1665,9 +1660,9 @@
       { label: "13 Okt 06:00", timestamp: "13 Okt 2026 • 06:00 WIB (H+18j)", banner: "HYSPLIT 72-Hour Episode | 13 Okt 06:00 WIB", wind: "Selatan (17 km/jam) • PBL: 690 m", windFromDeg: 175, windSpeedKmh: 17, pm25Multiplier: 1.12, windShift: [-0.07, 0.09] },
       { label: "13 Okt 12:00", timestamp: "13 Okt 2026 • 12:00 WIB (H+24j)", banner: "HYSPLIT 72-Hour Episode | 13 Okt 12:00 WIB", wind: "Barat Daya (15 km/jam) • PBL: 920 m", windFromDeg: 215, windSpeedKmh: 15, pm25Multiplier: 0.94, windShift: [-0.10, 0.11] },
       { label: "13 Okt 18:00", timestamp: "13 Okt 2026 • 18:00 WIB (H+30j)", banner: "HYSPLIT 72-Hour Episode | 13 Okt 18:00 WIB", wind: "Barat Daya (14 km/jam) • PBL: 840 m", windFromDeg: 225, windSpeedKmh: 14, pm25Multiplier: 0.82, windShift: [-0.12, 0.13] },
-      { label: "14 Okt 00:00", timestamp: "14 Okt 2026 • 00:00 WIB (H+36j)", banner: "HYSPLIT 72-Hour Episode | 14 Okt 00:00 WIB (Dispersi Mereda)", wind: "Barat Daya (13 km/jam) • PBL: 760 m", windFromDeg: 230, windSpeedKmh: 13, pm25Multiplier: 0.72, windShift: [-0.14, 0.15] }
-    , { label: "1 Nov (Forecast)", isForecast: true, timestamp: "1 Nov 2026 • FORECAST (Pasca-31 Okt)", banner: "HYSPLIT Forecast | 1 Nov 2026 (Proyeksi Awal November)", wind: "Barat Daya (12 km/jam) • PBL: 890 m • Forecast", windFromDeg: 220, windSpeedKmh: 12, pm25Multiplier: 0.42, windShift: [-0.09, 0.10] } ];
-
+      { label: "14 Okt 00:00", timestamp: "14 Okt 2026 • 00:00 WIB (H+36j)", banner: "HYSPLIT 72-Hour Episode | 14 Okt 00:00 WIB (Dispersi Mereda)", wind: "Barat Daya (13 km/jam) • PBL: 760 m", windFromDeg: 230, windSpeedKmh: 13, pm25Multiplier: 0.72, windShift: [-0.14, 0.15] },
+      { label: "1 Nov (Forecast)", isForecast: true, timestamp: "1 Nov 2026 • FORECAST (Pasca-31 Okt)", banner: "HYSPLIT Forecast | 1 Nov 2026 (Proyeksi Awal November)", wind: "Barat Daya (12 km/jam) • PBL: 890 m • Forecast", windFromDeg: 220, windSpeedKmh: 12, pm25Multiplier: 0.42, windShift: [-0.09, 0.10] }
+    ];
 
     const dummyPeatland = {
       type: "FeatureCollection",
@@ -1739,13 +1734,14 @@
     // ============================================================================
     const layerGroups = {
       peat: L.layerGroup().addTo(map),
+      burnedArea: L.layerGroup().addTo(map),
       pm25: L.layerGroup().addTo(map),
       ahp: L.layerGroup(),
       trajectory: L.layerGroup().addTo(map),
       hotspots: L.layerGroup().addTo(map),
       health: L.layerGroup().addTo(map),
       education: L.layerGroup().addTo(map),
-      airport: L.layerGroup().addTo(map),
+      airport: L.layerGroup().addTo(map)
     };
 
     function getIspuCategory(pm25) {
@@ -1942,7 +1938,7 @@
     const windLayer = new WindCanvasLayer().addTo(map);
 
     // ============================================================================
-    // 4. CHART.JS TELEMETRY BAR CHART (DARK INK LABELS FOR WHITE GLASS)
+    // 4. CHART.JS TELEMETRY BAR CHART
     // ============================================================================
     const ctx = document.getElementById('exposureChart').getContext('2d');
     const exposureChart = new Chart(ctx, {
@@ -1987,8 +1983,8 @@
         btnSeasonal.classList.add('active');
         btnEpisode.classList.remove('active');
         slider.min = 0;
-        slider.max = SEASONAL_STEPS.length - 1; // 0 .. 91 (92 hari)
-        slider.value = targetIdx !== null ? targetIdx : 72; // Default 12 Okt 2026
+        slider.max = SEASONAL_STEPS.length - 1;
+        slider.value = targetIdx !== null ? targetIdx : 72;
 
         ticksContainer.innerHTML = `
           <span class="clickable-tick" data-idx="0">1 Agt</span>
@@ -2003,8 +1999,8 @@
         btnEpisode.classList.add('active');
         btnSeasonal.classList.remove('active');
         slider.min = 0;
-        slider.max = EPISODE_STEPS.length - 1; // 0 .. 12 (72 jam per 6 jam)
-        slider.value = targetIdx !== null ? targetIdx : 6; // Default 12 Okt 12:00 WIB
+        slider.max = EPISODE_STEPS.length - 1;
+        slider.value = targetIdx !== null ? targetIdx : 6;
 
         ticksContainer.innerHTML = `
           <span class="clickable-tick" data-idx="0">11 Okt 00:00</span>
@@ -2015,7 +2011,6 @@
         `;
       }
 
-      // Pasang klik cepat pada label tick
       ticksContainer.querySelectorAll('.clickable-tick').forEach(span => {
         span.addEventListener('click', () => {
           slider.value = span.dataset.idx;
@@ -2053,7 +2048,6 @@
       document.getElementById('wFasumLabel').textContent = `${Math.round(wFasum * 100)}%`;
       document.getElementById('wDurasiLabel').textContent = `${Math.round(wDurasi * 100)}%`;
 
-      // What-If Skenario Mitigasi & Angin Manual
       const mitigationPct = parseInt(document.getElementById('mitigationSlider').value, 10);
       const emissionFactor = 1 - (mitigationPct / 100);
       const isManualWind = document.getElementById('chkManualWind').checked;
@@ -2096,7 +2090,6 @@
       renderDynamicTrajectories(activeWindFromDeg, activeWindSpeed, isManualWind);
       renderFilteredRealHotspots();
 
-      // Highlight tick terdekat pada timeline
       const ticks = document.querySelectorAll('#timeTicks .clickable-tick');
       let closestTick = null;
       let minDiff = Infinity;
@@ -2118,7 +2111,6 @@
       let totalExposedPop = 0;
       let baselineExposedPop = 0;
       let maxPm25 = 0;
-      const dangerPolygons = [];
       currentSimulationResults = [];
 
       const chartLabels = [];
@@ -2152,7 +2144,6 @@
         const isDanger = currentPm25 >= threshold;
         if (isDanger) {
           totalExposedPop += zone.pop;
-          dangerPolygons.push(polyFeature);
         }
 
         L.geoJSON(polyFeature, {
@@ -2208,13 +2199,11 @@
         });
       });
 
-      let exposedSchools = 0;
-      let exposedHealth = 0;
-
-      const scaleMultiplier = districtFilter === 'ALL' ? 16 : 6;
+      const exposedSchools = Math.max(0, Math.round((totalExposedPop / 142500) * 64));
+      const exposedHealth = Math.max(0, Math.round((totalExposedPop / 142500) * 8));
       document.getElementById('kpiPop').textContent = `~${totalExposedPop.toLocaleString('id-ID')} Jiwa`;
-      document.getElementById('kpiSchools').textContent = `${exposedSchools * scaleMultiplier} Unit`;
-      document.getElementById('kpiHealth').textContent = `${exposedHealth * (scaleMultiplier / 4)} Unit`;
+      document.getElementById('kpiSchools').textContent = `${exposedSchools} Unit`;
+      document.getElementById('kpiHealth').textContent = `${exposedHealth} Unit`;
 
       const deltaBadge = document.getElementById('popDeltaBadge');
       const diffPop = totalExposedPop - baselineExposedPop;
@@ -2309,12 +2298,11 @@
     }
 
     // ============================================================================
-    // 6. RENDER LAYER VEKTOR DASAR & 3 KATEGORI OBJEK VITAL TERDAMPAK
+    // 6. RENDER LAYER VEKTOR DASAR (LAHAN GAMBUT & TRAJECTORY)
     // ============================================================================
     function renderBaseVectorLayers(districtFilter = 'ALL') {
       layerGroups.peat.clearLayers();
       layerGroups.trajectory.clearLayers();
-      layerGroups.hotspots.clearLayers();
 
       L.geoJSON(dummyPeatland, {
         style: {
@@ -2338,122 +2326,149 @@
           l.bindPopup(`<div class="popup-header">Lintasan HYSPLIT (${f.properties.alt})</div><div class="popup-line">Sumber Emisi: ${f.properties.source}</div>`);
         }
       }).addTo(layerGroups.trajectory);
+    }
 
-      // ============================================================================
-      // 6D. MUAT & FILTER HOTSPOT VIIRS ASLI (NOAA-20, NOAA-21, SUOMI-NPP) PER TANGGAL
-      // ============================================================================
-      let allRealHotspots = [];
-      let isHotspotLoaded = false;
-  
-      // Ubah indeks/step time-slider menjadi string tanggal "DD/MM/YYYY" (sesuai kolom acq_date)
-      function getActiveDateDDMMYYYY() {
-        if (timelineMode === 'episode') {
-          const epIdx = parseInt(document.getElementById('timeSlider').value, 10);
-          if (epIdx <= 3) return '11/10/2026';
-          if (epIdx <= 7) return '12/10/2026';
-          if (epIdx <= 11) return '13/10/2026';
-          if (epIdx === 12) return '14/10/2026';
-          return '31/10/2026'; // Fallback untuk step Forecast 1 Nov
-        }
-  
-        const dayIdx = Math.min(91, Math.max(0, parseInt(document.getElementById('timeSlider').value, 10)));
-        const d = new Date(2026, 7, 1); // 1 Agustus 2026
-        d.setDate(d.getDate() + dayIdx);
-  
-        const dd = String(d.getDate()).padStart(2, '0');
-        const mm = String(d.getMonth() + 1).padStart(2, '0');
-        const yyyy = d.getFullYear();
-        return `${dd}/${mm}/${yyyy}`;
+    // ============================================================================
+    // 6D. MUAT & FILTER HOTSPOT VIIRS ASLI (NOAA-20, NOAA-21, SUOMI-NPP) PER TANGGAL
+    // ============================================================================
+    let allRealHotspots = [];
+    let isHotspotLoaded = false;
+
+    function getActiveDateDDMMYYYY() {
+      if (timelineMode === 'episode') {
+        const epIdx = parseInt(document.getElementById('timeSlider').value, 10);
+        if (epIdx <= 3) return '11/10/2026';
+        if (epIdx <= 7) return '12/10/2026';
+        if (epIdx <= 11) return '13/10/2026';
+        if (epIdx === 12) return '14/10/2026';
+        return '31/10/2026';
       }
-  
-      function renderFilteredRealHotspots() {
-        if (!isHotspotLoaded) return;
-        layerGroups.hotspots.clearLayers();
-  
-        const targetDate = getActiveDateDDMMYYYY();
-        const mitVal = document.getElementById('mitigationSlider') ? parseInt(document.getElementById('mitigationSlider').value, 10) : 0;
-  
-        // Saring fitur berdasarkan acq_date yang cocok dengan tanggal aktif time-slider
-        const filteredFeatures = allRealHotspots.filter(f => {
+
+      const dayIdx = Math.min(91, Math.max(0, parseInt(document.getElementById('timeSlider').value, 10)));
+      const d = new Date(2026, 7, 1);
+      d.setDate(d.getDate() + dayIdx);
+
+      const dd = String(d.getDate()).padStart(2, '0');
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const yyyy = d.getFullYear();
+      return `${dd}/${mm}/${yyyy}`;
+    }
+
+    function renderFilteredRealHotspots() {
+      if (!isHotspotLoaded) return;
+      layerGroups.hotspots.clearLayers();
+
+      const targetDate = getActiveDateDDMMYYYY();
+      const mitVal = document.getElementById('mitigationSlider') ? parseInt(document.getElementById('mitigationSlider').value, 10) : 0;
+
+      const filteredFeatures = allRealHotspots.filter(f => {
+        const p = f.properties || {};
+        const rawDate = String(p.acq_date || '').trim();
+        if (rawDate === targetDate) return true;
+        const [dd, mm, yyyy] = targetDate.split('/');
+        return rawDate === `${yyyy}-${mm}-${dd}`;
+      });
+
+      L.geoJSON({ type: 'FeatureCollection', features: filteredFeatures }, {
+        pointToLayer: (f, latlng) => {
           const p = f.properties || {};
-          const rawDate = String(p.acq_date || '').trim();
-          // Mendukung format "01/08/2026" maupun "2026-08-01"
-          if (rawDate === targetDate) return true;
-          const [dd, mm, yyyy] = targetDate.split('/');
-          return rawDate === `${yyyy}-${mm}-${dd}`;
-        });
-  
-        L.geoJSON({ type: 'FeatureCollection', features: filteredFeatures }, {
-          pointToLayer: (f, latlng) => {
-            const p = f.properties || {};
-            const rawFrp = parseFloat(String(p.frp || 10).replace(',', '.')) || 10;
-            const effFrp = rawFrp * (1 - mitVal / 100);
-            const radius = Math.min(9, Math.max(3.2, Math.sqrt(effFrp) * 0.42));
-  
-            // Warna merah menyala untuk FRP tinggi (>50 MW), oranye-merah untuk sedang/rendah
-            const fillCol = effFrp > 50 ? '#dc2626' : '#f97316';
-  
-            return L.circleMarker(latlng, {
-              radius: radius,
-              fillColor: fillCol,
-              color: '#ffffff',
-              weight: 0.9,
-              fillOpacity: 0.88
-            });
-          },
-          onEachFeature: (f, l) => {
-            const p = f.properties || {};
-            const satLabel = p._sourceSat || p.satellite || 'VIIRS';
-            const jamRaw = String(p.acq_time || '').padStart(4, '0');
-            const jamFormatted = jamRaw.length === 4 ? `${jamRaw.slice(0, 2)}:${jamRaw.slice(2)} UTC` : jamRaw;
-            const confMap = { h: 'Tinggi (High)', n: 'Nominal (Normal)', l: 'Rendah (Low)' };
-            const confText = confMap[String(p.confidence || '').toLowerCase()] || p.confidence || '-';
-  
-            l.bindPopup(`
-              <div class="popup-header">Hotspot Aktif (${satLabel})</div>
-              <div class="popup-line"><strong>Tanggal & Waktu:</strong> ${p.acq_date || '-'} • ${jamFormatted}</div>
-              <div class="popup-line"><strong>Radiative Power (FRP):</strong> ${p.frp ?? '-'} MW</div>
-              <div class="popup-line"><strong>Brightness Temp:</strong> ${p.brightness ?? '-'} K</div>
-              <div class="popup-line"><strong>Tingkat Kepercayaan:</strong> ${confText}</div>
-              <div class="popup-line"><strong>Koordinat:</strong> ${Number(p.latitude).toFixed(4)}, ${Number(p.longitude).toFixed(4)}</div>
-            `);
-          }
-        }).addTo(layerGroups.hotspots);
-      }
-  
-      function loadRealHotspotsFromGitHub() {
-        const BASE_HS_URL = 'https://raw.githubusercontent.com/CyberIMG05/webgis-karhutla-kalbar/main/data_pjbl/hotspot';
-        const files = [
-          { file: 'hotspot_viirs_noaa20.geojson', label: 'VIIRS NOAA-20' },
-          { file: 'hotspot_viirs_noaa21.geojson', label: 'VIIRS NOAA-21' },
-          { file: 'hotspot_viirs_snpp.geojson', label: 'VIIRS Suomi-NPP' }
-        ];
-  
-        Promise.all(
-          files.map(item =>
-            fetch(`${BASE_HS_URL}/${item.file}`)
-              .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
-              .then(geo => {
-                (geo.features || []).forEach(feat => {
-                  if (feat.properties) feat.properties._sourceSat = item.label;
-                });
-                return geo.features || [];
-              })
-              .catch(err => {
-                console.warn(`Gagal memuat ${item.file}:`, err);
-                return [];
-              })
-          )
-        ).then(results => {
-          allRealHotspots = results.flat();
-          isHotspotLoaded = true;
-          console.log(`Total hotspot VIIRS dimuat: ${allRealHotspots.length} titik.`);
-          renderFilteredRealHotspots();
-        });
-      }
-    
+          const rawFrp = parseFloat(String(p.frp || 10).replace(',', '.')) || 10;
+          const effFrp = rawFrp * (1 - mitVal / 100);
+          const radius = Math.min(9, Math.max(3.2, Math.sqrt(effFrp) * 0.42));
+          const fillCol = effFrp > 50 ? '#dc2626' : '#f97316';
 
-    // Fungsi terpisah (dipanggil 1 kali saat awal agar tidak menumpuk saat slider digeser)
+          return L.circleMarker(latlng, {
+            radius: radius,
+            fillColor: fillCol,
+            color: '#ffffff',
+            weight: 0.9,
+            fillOpacity: 0.88
+          });
+        },
+        onEachFeature: (f, l) => {
+          const p = f.properties || {};
+          const satLabel = p._sourceSat || p.satellite || 'VIIRS';
+          const jamRaw = String(p.acq_time || '').padStart(4, '0');
+          const jamFormatted = jamRaw.length === 4 ? `${jamRaw.slice(0, 2)}:${jamRaw.slice(2)} UTC` : jamRaw;
+          const confMap = { h: 'Tinggi (High)', n: 'Nominal (Normal)', l: 'Rendah (Low)' };
+          const confText = confMap[String(p.confidence || '').toLowerCase()] || p.confidence || '-';
+
+          l.bindPopup(`
+            <div class="popup-header">Hotspot Aktif (${satLabel})</div>
+            <div class="popup-line"><strong>Tanggal & Waktu:</strong> ${p.acq_date || '-'} • ${jamFormatted}</div>
+            <div class="popup-line"><strong>Radiative Power (FRP):</strong> ${p.frp ?? '-'} MW</div>
+            <div class="popup-line"><strong>Brightness Temp:</strong> ${p.brightness ?? '-'} K</div>
+            <div class="popup-line"><strong>Tingkat Kepercayaan:</strong> ${confText}</div>
+            <div class="popup-line"><strong>Koordinat:</strong> ${Number(p.latitude).toFixed(4)}, ${Number(p.longitude).toFixed(4)}</div>
+          `);
+        }
+      }).addTo(layerGroups.hotspots);
+    }
+
+    function loadRealHotspotsFromGitHub() {
+      const BASE_HS_URL = 'https://raw.githubusercontent.com/CyberIMG05/webgis-karhutla-kalbar/main/data_pjbl/hotspot';
+      const files = [
+        { file: 'hotspot_viirs_noaa20.geojson', label: 'VIIRS NOAA-20' },
+        { file: 'hotspot_viirs_noaa21.geojson', label: 'VIIRS NOAA-21' },
+        { file: 'hotspot_viirs_snpp.geojson', label: 'VIIRS Suomi-NPP' }
+      ];
+
+      Promise.all(
+        files.map(item =>
+          fetch(`${BASE_HS_URL}/${item.file}`)
+            .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+            .then(geo => {
+              (geo.features || []).forEach(feat => {
+                if (feat.properties) feat.properties._sourceSat = item.label;
+              });
+              return geo.features || [];
+            })
+            .catch(err => {
+              console.warn(`Gagal memuat ${item.file}:`, err);
+              return [];
+            })
+        )
+      ).then(results => {
+        allRealHotspots = results.flat();
+        isHotspotLoaded = true;
+        console.log(`Total hotspot VIIRS dimuat: ${allRealHotspots.length} titik.`);
+        renderFilteredRealHotspots();
+      });
+    }
+
+    // ============================================================================
+    // 6E. MUAT AREA TERBAKAR (BURNED AREA MODIS MCD64A1)
+    // ============================================================================
+    function loadBurnedAreaGeoJSON() {
+      const url = 'https://raw.githubusercontent.com/CyberIMG05/webgis-karhutla-kalbar/main/data_pjbl/burned_area_modis_mcd64a1.geojson';
+      fetch(url)
+        .then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); })
+        .then(data => {
+          layerGroups.burnedArea.clearLayers();
+          L.geoJSON(data, {
+            style: {
+              color: '#ea580c',
+              weight: 1.2,
+              fillColor: '#451a03',
+              fillOpacity: 0.55
+            },
+            onEachFeature: (feature, layer) => {
+              layer.bindPopup(`
+                <div class="popup-header">Area Terbakar (Burned Area)</div>
+                <div class="popup-line"><strong>Sumber Data:</strong> NASA MODIS MCD64A1 v061 (500 m)</div>
+                <div class="popup-line"><strong>Wilayah:</strong> Provinsi Kalimantan Barat</div>
+                <div class="popup-line"><strong>Periode Kajian:</strong> Agustus – Oktober 2026</div>
+              `);
+            }
+          }).addTo(layerGroups.burnedArea);
+          console.log('Berhasil memuat burned_area_modis_mcd64a1.geojson');
+        })
+        .catch(err => console.warn('Gagal memuat burned_area_modis_mcd64a1.geojson:', err));
+    }
+
+    // ============================================================================
+    // 6F. MUAT 3 KATEGORI OBJEK VITAL TERDAMPAK (KESEHATAN, PENDIDIKAN, BANDARA)
+    // ============================================================================
     function loadSeparatedImpactLayers() {
       const BASE_IMPACT_URL = 'https://raw.githubusercontent.com/CyberIMG05/webgis-karhutla-kalbar/main/data_pjbl/layer_dampak';
 
@@ -2565,10 +2580,10 @@
             adminBoundaryGroup.clearLayers();
             const adminGeoJson = L.geoJSON(geojsonData, {
               style: {
-                color: '#ffffff',      // Putih terang agar kontras di atas citra satelit
-                weight: 1.6,           // Ketebalan pas untuk layer di bawah
+                color: '#ffffff',
+                weight: 1.6,
                 opacity: 0.85,
-                dashArray: '5, 4',     // Pola garis putus-putus batas kab/kota
+                dashArray: '5, 4',
                 fillColor: '#64748b',
                 fillOpacity: 0.03
               },
@@ -2577,7 +2592,7 @@
                 const kabName = p.WADMKK || p.NAMOBJ || extractDistrictName(p);
                 const kodeKab = p.KDPKAB || '-';
                 const luasKm2 = p.LUASWH ? Number(p.LUASWH).toLocaleString('id-ID', { maximumFractionDigits: 2 }) : '-';
-  
+
                 layer.bindTooltip(kabName, { sticky: true, direction: 'center' });
                 layer.bindPopup(`
                   <div class="popup-header">Kabupaten/Kota ${kabName}</div>
@@ -2587,10 +2602,8 @@
                 `);
               }
             }).addTo(adminBoundaryGroup);
-  
-            // Posisikan di bawah seluruh layer asap, grid validasi, dan titik hotspot
+
             adminGeoJson.bringToBack();
-  
             console.log('Berhasil memuat Batas_KabKota_KalimantanBarat.geojson dari:', list[index]);
           })
           .catch(() => tryNext(index + 1));
@@ -2598,7 +2611,7 @@
 
       tryNext(0);
     }
-    
+
     // ============================================================================
     // 6B. MUAT CAMS_PM25.GEOJSON (PERMALINK RAW + FALLBACK RELATIVE PATH)
     // ============================================================================
@@ -2685,7 +2698,7 @@
     }
 
     // ============================================================================
-    // 6C. MUAT LAYER DAMPAK & VALIDASI MINGGUAN OTOMATIS MENGIKUTI TIME-SLIDER
+    // 6C. MUAT VALIDASI MINGGUAN OTOMATIS MENGIKUTI TIME-SLIDER
     // ============================================================================
     const BASE_PJBL_URL = 'https://raw.githubusercontent.com/CyberIMG05/webgis-karhutla-kalbar/main/data_pjbl';
     const weeklyMerraGroup = L.layerGroup();
@@ -2717,7 +2730,6 @@
       return fallback;
     }
 
-    // B. Muat File MERRA-2 PM2.5 & MODIS AOD Sesuai Minggu Aktif
     function loadWeeklyValidationLayers(periodObj) {
       const periodKey = periodObj.key;
 
@@ -2729,11 +2741,11 @@
           L.geoJSON(data, {
             style: (feature) => {
               const val = Number(extractPropValue(feature.properties, ['pm25_ugm3', 'PM25', 'pm25', 'value'], 0));
-              let ispuColor = '#10b981'; // Baik (0 - 50)
-              if (val > 300) ispuColor = '#7f1d1d';      // Berbahaya (> 300)
-              else if (val > 200) ispuColor = '#ef4444'; // Sangat Tidak Sehat (201 - 300)
-              else if (val > 100) ispuColor = '#f59e0b'; // Tidak Sehat (101 - 200)
-              else if (val > 50)  ispuColor = '#3b82f6'; // Sedang (51 - 100)
+              let ispuColor = '#10b981';
+              if (val > 300) ispuColor = '#7f1d1d';
+              else if (val > 200) ispuColor = '#ef4444';
+              else if (val > 100) ispuColor = '#f59e0b';
+              else if (val > 50)  ispuColor = '#3b82f6';
 
               return { color: '#334155', weight: 0.7, fillColor: ispuColor, fillOpacity: 0.55 };
             },
@@ -2787,7 +2799,6 @@
         .catch(() => console.warn(`File MODIS_AOD_${modisKey}.geojson belum tersedia.`));
     }
 
-    // C. Otomatis Cocokkan Posisi Time-Slider Utama dengan Urutan Minggu
     function syncValidationWithMainSlider() {
       const sliderEl = document.getElementById('timeSlider') || document.querySelector('.timeline-dock input[type="range"]');
       if (!sliderEl) return;
@@ -2805,12 +2816,13 @@
         loadWeeklyValidationLayers(targetPeriod);
       }
     }
-    
+
     // ============================================================================
     // 7. EVENT LISTENERS
     // ============================================================================
     [
       { id: 'chkHotspot', group: 'hotspots' },
+      { id: 'chkBurnedArea', group: 'burnedArea' },
       { id: 'chkPM25', group: 'pm25' },
       { id: 'chkTrajectory', group: 'trajectory' },
       { id: 'chkAHP', group: 'ahp' },
@@ -2986,12 +2998,6 @@
       else map.removeLayer(camsLayerGroup);
     });
 
-    // Kontrol Nyala/Mati Layer Dampak & Validasi Mingguan
-    document.getElementById('chkCams').addEventListener('change', (e) => {
-      if (e.target.checked) map.addLayer(camsLayerGroup);
-      else map.removeLayer(camsLayerGroup);
-    });
-
     document.getElementById('chkWeeklyMerra').addEventListener('change', (e) => {
       if (e.target.checked) map.addLayer(weeklyMerraGroup);
       else map.removeLayer(weeklyMerraGroup);
@@ -3002,18 +3008,17 @@
       else map.removeLayer(weeklyModisGroup);
     });
 
-    // Otomatis perbarui layer validasi setiap kali time-slider utama digeser atau di-play
     const mainTimeSliderEl = document.getElementById('timeSlider') || document.querySelector('.timeline-dock input[type="range"]');
     if (mainTimeSliderEl) {
       mainTimeSliderEl.addEventListener('input', syncValidationWithMainSlider);
       mainTimeSliderEl.addEventListener('change', syncValidationWithMainSlider);
-      // Pantau juga jika nilai slider berubah otomatis lewat tombol Play animasi
       setInterval(syncValidationWithMainSlider, 600);
     }
-    
+
     // Jalankan Inisialisasi
     renderBaseVectorLayers('ALL');
     loadSeparatedImpactLayers();
+    loadBurnedAreaGeoJSON();
     loadRealHotspotsFromGitHub();
     setTimelineMode('seasonal', 72);
     loadAdminBoundaryGeoJSON();
