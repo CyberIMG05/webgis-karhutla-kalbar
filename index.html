@@ -1545,7 +1545,8 @@
     const map = L.map('map', {
       center: [-0.65, 110.35],
       zoom: 7,
-      zoomControl: false
+      zoomControl: false,
+      preferCanvas: true
     });
 
     L.control.zoom({ position: 'bottomright' }).addTo(map);
@@ -1667,17 +1668,6 @@
       { label: "14 Okt 00:00", timestamp: "14 Okt 2026 • 00:00 WIB (H+36j)", banner: "HYSPLIT 72-Hour Episode | 14 Okt 00:00 WIB (Dispersi Mereda)", wind: "Barat Daya (13 km/jam) • PBL: 760 m", windFromDeg: 230, windSpeedKmh: 13, pm25Multiplier: 0.72, windShift: [-0.14, 0.15] }
     , { label: "1 Nov (Forecast)", isForecast: true, timestamp: "1 Nov 2026 • FORECAST (Pasca-31 Okt)", banner: "HYSPLIT Forecast | 1 Nov 2026 (Proyeksi Awal November)", wind: "Barat Daya (12 km/jam) • PBL: 890 m • Forecast", windFromDeg: 220, windSpeedKmh: 12, pm25Multiplier: 0.42, windShift: [-0.09, 0.10] } ];
 
-    const dummyHotspots = {
-      type: "FeatureCollection",
-      features: [
-        { type: "Feature", properties: { id: "HS-01", lokasi: "Sumber Kubu Raya", kab: "Kubu Raya", frp: 185.0, satelit: "VIIRS NOAA-21", tanggal: "12/10/2026" }, geometry: { type: "Point", coordinates: [109.48, -0.32] } },
-        { type: "Feature", properties: { id: "HS-02", lokasi: "Rasau Jaya Gambut", kab: "Kubu Raya", frp: 142.4, satelit: "VIIRS S-NPP", tanggal: "12/10/2026" }, geometry: { type: "Point", coordinates: [109.38, -0.25] } },
-        { type: "Feature", properties: { id: "HS-03", lokasi: "Kendawangan Selatan", kab: "Ketapang", frp: 843.01, satelit: "VIIRS S-NPP", tanggal: "12/10/2026" }, geometry: { type: "Point", coordinates: [110.677, -2.801] } },
-        { type: "Feature", properties: { id: "HS-04", lokasi: "Matan Hilir Selatan", kab: "Ketapang", frp: 466.56, satelit: "VIIRS NOAA-21", tanggal: "12/10/2026" }, geometry: { type: "Point", coordinates: [110.35, -2.15] } },
-        { type: "Feature", properties: { id: "HS-05", lokasi: "Sukadana Gambut", kab: "Kayong Utara", frp: 94.2, satelit: "VIIRS NOAA-20", tanggal: "14/09/2026" }, geometry: { type: "Point", coordinates: [110.05, -1.22] } },
-        { type: "Feature", properties: { id: "HS-06", lokasi: "Tempunak", kab: "Sintang", frp: 61.5, satelit: "VIIRS NOAA-21", tanggal: "12/10/2026" }, geometry: { type: "Point", coordinates: [111.42, 0.05] } }
-      ]
-    };
 
     const dummyPeatland = {
       type: "FeatureCollection",
@@ -2104,6 +2094,7 @@
       }
 
       renderDynamicTrajectories(activeWindFromDeg, activeWindSpeed, isManualWind);
+      renderFilteredRealHotspots();
 
       // Highlight tick terdekat pada timeline
       const ticks = document.querySelectorAll('#timeTicks .clickable-tick');
@@ -2348,30 +2339,119 @@
         }
       }).addTo(layerGroups.trajectory);
 
-      L.geoJSON(dummyHotspots, {
-        filter: (f) => districtFilter === 'ALL' || f.properties.kab === districtFilter,
-        pointToLayer: (f, latlng) => {
-          const mitVal = document.getElementById('mitigationSlider') ? parseInt(document.getElementById('mitigationSlider').value, 10) : 0;
-          const effFrp = f.properties.frp * (1 - mitVal / 100);
-          const radius = Math.min(13, Math.max(4.5, Math.sqrt(effFrp) * 0.5));
-          return L.circleMarker(latlng, {
-            radius: radius,
-            fillColor: '#ef4444',
-            color: '#ffffff',
-            weight: 1.6,
-            fillOpacity: 0.94
-          });
-        },
-        onEachFeature: (f, l) => {
-          l.bindPopup(`
-            <div class="popup-header">Hotspot ${f.properties.lokasi}</div>
-            <div class="popup-line"><strong>Kabupaten:</strong> ${f.properties.kab}</div>
-            <div class="popup-line"><strong>FRP:</strong> ${f.properties.frp} MW</div>
-            <div class="popup-line"><strong>Sensor:</strong> ${f.properties.satelit} (${f.properties.tanggal})</div>
-          `);
+      // ============================================================================
+      // 6D. MUAT & FILTER HOTSPOT VIIRS ASLI (NOAA-20, NOAA-21, SUOMI-NPP) PER TANGGAL
+      // ============================================================================
+      let allRealHotspots = [];
+      let isHotspotLoaded = false;
+  
+      // Ubah indeks/step time-slider menjadi string tanggal "DD/MM/YYYY" (sesuai kolom acq_date)
+      function getActiveDateDDMMYYYY() {
+        if (timelineMode === 'episode') {
+          const epIdx = parseInt(document.getElementById('timeSlider').value, 10);
+          if (epIdx <= 3) return '11/10/2026';
+          if (epIdx <= 7) return '12/10/2026';
+          if (epIdx <= 11) return '13/10/2026';
+          if (epIdx === 12) return '14/10/2026';
+          return '31/10/2026'; // Fallback untuk step Forecast 1 Nov
         }
-      }).addTo(layerGroups.hotspots);
-    }
+  
+        const dayIdx = Math.min(91, Math.max(0, parseInt(document.getElementById('timeSlider').value, 10)));
+        const d = new Date(2026, 7, 1); // 1 Agustus 2026
+        d.setDate(d.getDate() + dayIdx);
+  
+        const dd = String(d.getDate()).padStart(2, '0');
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const yyyy = d.getFullYear();
+        return `${dd}/${mm}/${yyyy}`;
+      }
+  
+      function renderFilteredRealHotspots() {
+        if (!isHotspotLoaded) return;
+        layerGroups.hotspots.clearLayers();
+  
+        const targetDate = getActiveDateDDMMYYYY();
+        const mitVal = document.getElementById('mitigationSlider') ? parseInt(document.getElementById('mitigationSlider').value, 10) : 0;
+  
+        // Saring fitur berdasarkan acq_date yang cocok dengan tanggal aktif time-slider
+        const filteredFeatures = allRealHotspots.filter(f => {
+          const p = f.properties || {};
+          const rawDate = String(p.acq_date || '').trim();
+          // Mendukung format "01/08/2026" maupun "2026-08-01"
+          if (rawDate === targetDate) return true;
+          const [dd, mm, yyyy] = targetDate.split('/');
+          return rawDate === `${yyyy}-${mm}-${dd}`;
+        });
+  
+        L.geoJSON({ type: 'FeatureCollection', features: filteredFeatures }, {
+          pointToLayer: (f, latlng) => {
+            const p = f.properties || {};
+            const rawFrp = parseFloat(String(p.frp || 10).replace(',', '.')) || 10;
+            const effFrp = rawFrp * (1 - mitVal / 100);
+            const radius = Math.min(9, Math.max(3.2, Math.sqrt(effFrp) * 0.42));
+  
+            // Warna merah menyala untuk FRP tinggi (>50 MW), oranye-merah untuk sedang/rendah
+            const fillCol = effFrp > 50 ? '#dc2626' : '#f97316';
+  
+            return L.circleMarker(latlng, {
+              radius: radius,
+              fillColor: fillCol,
+              color: '#ffffff',
+              weight: 0.9,
+              fillOpacity: 0.88
+            });
+          },
+          onEachFeature: (f, l) => {
+            const p = f.properties || {};
+            const satLabel = p._sourceSat || p.satellite || 'VIIRS';
+            const jamRaw = String(p.acq_time || '').padStart(4, '0');
+            const jamFormatted = jamRaw.length === 4 ? `${jamRaw.slice(0, 2)}:${jamRaw.slice(2)} UTC` : jamRaw;
+            const confMap = { h: 'Tinggi (High)', n: 'Nominal (Normal)', l: 'Rendah (Low)' };
+            const confText = confMap[String(p.confidence || '').toLowerCase()] || p.confidence || '-';
+  
+            l.bindPopup(`
+              <div class="popup-header">Hotspot Aktif (${satLabel})</div>
+              <div class="popup-line"><strong>Tanggal & Waktu:</strong> ${p.acq_date || '-'} • ${jamFormatted}</div>
+              <div class="popup-line"><strong>Radiative Power (FRP):</strong> ${p.frp ?? '-'} MW</div>
+              <div class="popup-line"><strong>Brightness Temp:</strong> ${p.brightness ?? '-'} K</div>
+              <div class="popup-line"><strong>Tingkat Kepercayaan:</strong> ${confText}</div>
+              <div class="popup-line"><strong>Koordinat:</strong> ${Number(p.latitude).toFixed(4)}, ${Number(p.longitude).toFixed(4)}</div>
+            `);
+          }
+        }).addTo(layerGroups.hotspots);
+      }
+  
+      function loadRealHotspotsFromGitHub() {
+        const BASE_HS_URL = 'https://raw.githubusercontent.com/CyberIMG05/webgis-karhutla-kalbar/main/data_pjbl/hotspot';
+        const files = [
+          { file: 'hotspot_viirs_noaa20.geojson', label: 'VIIRS NOAA-20' },
+          { file: 'hotspot_viirs_noaa21.geojson', label: 'VIIRS NOAA-21' },
+          { file: 'hotspot_viirs_snpp.geojson', label: 'VIIRS Suomi-NPP' }
+        ];
+  
+        Promise.all(
+          files.map(item =>
+            fetch(`${BASE_HS_URL}/${item.file}`)
+              .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+              .then(geo => {
+                (geo.features || []).forEach(feat => {
+                  if (feat.properties) feat.properties._sourceSat = item.label;
+                });
+                return geo.features || [];
+              })
+              .catch(err => {
+                console.warn(`Gagal memuat ${item.file}:`, err);
+                return [];
+              })
+          )
+        ).then(results => {
+          allRealHotspots = results.flat();
+          isHotspotLoaded = true;
+          console.log(`Total hotspot VIIRS dimuat: ${allRealHotspots.length} titik.`);
+          renderFilteredRealHotspots();
+        });
+      }
+    
 
     // Fungsi terpisah (dipanggil 1 kali saat awal agar tidak menumpuk saat slider digeser)
     function loadSeparatedImpactLayers() {
@@ -2934,6 +3014,7 @@
     // Jalankan Inisialisasi
     renderBaseVectorLayers('ALL');
     loadSeparatedImpactLayers();
+    loadRealHotspotsFromGitHub();
     setTimelineMode('seasonal', 72);
     loadAdminBoundaryGeoJSON();
     loadCamsPm25GeoJSON();
