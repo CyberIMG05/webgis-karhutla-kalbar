@@ -61,7 +61,7 @@
 
     /* REUSABLE LIGHT FROSTED GLASS MATERIAL */
     .glass-panel {
-      background: linear-gradient(165deg, rgba(255, 255, 255, 0.84) 0%, rgba(248, 250, 252, 0.74) 100%);
+      background: linear-gradient(165deg, rgba(255, 255, 255, 0.86) 0%, rgba(248, 250, 252, 0.76) 100%);
       backdrop-filter: blur(22px) saturate(165%);
       -webkit-backdrop-filter: blur(22px) saturate(165%);
       border: 1px solid var(--glass-border);
@@ -70,7 +70,7 @@
         inset 0 1px 0 0 var(--glass-highlight);
     }
 
-    /* FLOATING TOP COMMAND BAR WITH AMBIENT SMOKE & EMBER ANIMATION */
+    /* FLOATING TOP COMMAND BAR */
     .top-bar {
       position: absolute;
       top: 14px;
@@ -220,7 +220,6 @@
       border-radius: 8px;
     }
 
-    /* COMPASS DIAL IN HEADER */
     .compass-ring {
       width: 22px;
       height: 22px;
@@ -239,7 +238,6 @@
       transform-origin: center center;
     }
 
-    /* ZEN / PRESENTATION MODE BUTTON */
     .btn-zen {
       background: rgba(15, 23, 42, 0.055);
       border: 1px solid rgba(15, 23, 42, 0.14);
@@ -278,7 +276,7 @@
       top: 80px;
       left: 14px;
       bottom: 44px;
-      width: 274px;
+      width: 282px;
       display: flex;
       flex-direction: column;
       gap: 10px;
@@ -360,15 +358,15 @@
       border-radius: 5px;
     }
 
-    /* LAYER SWITCHES */
+    /* LAYER SWITCHES & CLEAN DROPDOWN ACCORDIONS */
     .layer-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 5.5px 6px;
+      padding: 5px 6px;
       border-radius: 7px;
       transition: background 0.15s;
-      font-size: 12px;
+      font-size: 11.8px;
       font-weight: 600;
       color: #090d16;
     }
@@ -380,7 +378,7 @@
     .layer-label {
       display: flex;
       align-items: center;
-      gap: 9px;
+      gap: 8px;
       cursor: pointer;
       width: 100%;
     }
@@ -390,6 +388,7 @@
       width: 14px;
       height: 14px;
       cursor: pointer;
+      flex-shrink: 0;
     }
 
     .dot-indicator {
@@ -397,6 +396,70 @@
       height: 8px;
       border-radius: 50%;
       flex-shrink: 0;
+    }
+
+    .layer-dropdown {
+      margin-top: 6px;
+      border: 1px solid rgba(15, 23, 42, 0.10);
+      background: rgba(15, 23, 42, 0.03);
+      border-radius: 9px;
+      overflow: hidden;
+    }
+
+    .layer-dropdown-header {
+      width: 100%;
+      background: transparent;
+      border: none;
+      padding: 7px 9px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: 'Google Sans', sans-serif;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #0f172a;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .layer-dropdown-header:hover {
+      background: rgba(15, 23, 42, 0.06);
+    }
+
+    .dropdown-left-title {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .dropdown-badge {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9.5px;
+      font-weight: 700;
+      background: rgba(2, 132, 199, 0.12);
+      color: #0369a1;
+      padding: 1.5px 6px;
+      border-radius: 999px;
+    }
+
+    .dropdown-chevron {
+      transition: transform 0.22s ease;
+      color: #475569;
+    }
+
+    .layer-dropdown.open .dropdown-chevron {
+      transform: rotate(180deg);
+    }
+
+    .layer-dropdown-body {
+      display: none;
+      padding: 3px 6px 7px 10px;
+      border-top: 1px solid rgba(15, 23, 42, 0.07);
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    .layer-dropdown.open .layer-dropdown-body {
+      display: block;
     }
 
     .slider-block {
@@ -459,7 +522,7 @@
 
     select {
       width: 100%;
-      background: rgba(255, 255, 255, 0.72);
+      background: rgba(255, 255, 255, 0.78);
       border: 1px solid rgba(15, 23, 42, 0.16);
       color: #090d16;
       padding: 7.5px 10px;
@@ -472,7 +535,7 @@
     }
 
     select:hover {
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(255, 255, 255, 0.96);
     }
 
     select:focus {
@@ -485,18 +548,44 @@
       color: #090d16;
     }
 
-    /* ISPU LEGEND */
+    /* DYNAMIC LEGEND STYLING */
+    .dynamic-legend-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .legend-section {
+      padding-bottom: 8px;
+      border-bottom: 1px dashed rgba(15, 23, 42, 0.12);
+    }
+
+    .legend-section:last-child {
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .legend-section-title {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
     .legend-grid {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 4.5px;
     }
 
     .legend-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 600;
       color: #090d16;
     }
@@ -504,20 +593,45 @@
     .legend-name {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 7px;
     }
 
     .legend-swatch {
       width: 12px;
       height: 12px;
       border-radius: 3px;
+      flex-shrink: 0;
+    }
+
+    .legend-circle {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 1.5px solid #ffffff;
+      box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.25);
+      flex-shrink: 0;
+    }
+
+    .legend-line {
+      width: 16px;
+      height: 3px;
+      border-radius: 2px;
+      flex-shrink: 0;
     }
 
     .legend-val {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 10.5px;
+      font-size: 10px;
       font-weight: 500;
       color: #1e293b;
+    }
+
+    .legend-empty {
+      font-size: 11px;
+      color: #64748b;
+      font-style: italic;
+      text-align: center;
+      padding: 6px 0;
     }
 
     /* FLOATING CENTER-TOP SIMULATION PILL */
@@ -940,7 +1054,7 @@
     }
 
     .leaflet-popup-content-wrapper, .leaflet-popup-tip {
-      background: rgba(255, 255, 255, 0.92);
+      background: rgba(255, 255, 255, 0.94);
       color: #090d16;
       border: 1px solid rgba(15, 23, 42, 0.15);
       border-radius: 12px;
@@ -1082,152 +1196,20 @@
   <!-- FLOATING SIMULATION PILL -->
   <div class="center-sim-pill glass-panel" id="simTitleBanner">
     <span class="sim-dot"></span>
-    <span>HYSPLIT Trajectory Simulation | 12 Okt 2026 (Puncak Emisi)</span>
+    <span>HYSPLIT Daily Reanalysis | 12 Okt 2026 (Puncak Emisi Oktober)</span>
   </div>
 
-  <!-- FLOATING LEFT DOCK: LAYER CONTROL, FILTER & ISPU LEGEND -->
+  <!-- FLOATING LEFT DOCK: WILAYAH, KONTROL LAYER (CLEAN DROPDOWN) & LEGENDA DINAMIS -->
   <aside class="dock-left">
-    <!-- KONTROL LAYER -->
-    <div class="glass-card glass-panel">
-      <div class="card-header">
-        <span class="card-title">Kontrol Layer</span>
-        <span class="card-tag">EPSG:4326</span>
-      </div>
-
-      <div class="layer-row">
-        <label class="layer-label">
-          <input type="checkbox" id="chkHotspot" checked />
-          <span class="dot-indicator" style="background:#dc2626;"></span>
-          <span>Titik Api & FRP (VIIRS)</span>
-        </label>
-      </div>
-
-      <div class="layer-row">
-        <label class="layer-label">
-          <input type="checkbox" id="chkBurnedArea" checked />
-          <span class="dot-indicator" style="background:#451a03; border: 1px solid #ea580c;"></span>
-          <span>Area Terbakar (MODIS MCD64A1)</span>
-        </label>
-      </div>
-
-      <div class="layer-row">
-        <label class="layer-label">
-          <input type="checkbox" id="chkPM25" checked />
-          <span class="dot-indicator" style="background:#d97706;"></span>
-          <span>Sebaran PM2.5 (HYSPLIT)</span>
-        </label>
-      </div>
-
-      <div class="layer-row">
-        <label class="layer-label">
-          <input type="checkbox" id="chkTrajectory" checked />
-          <span class="dot-indicator" style="background:#0284c7;"></span>
-          <span>Lintasan Partikel (20-1000m)</span>
-        </label>
-      </div>
-
-      <div class="layer-row">
-        <label class="layer-label">
-          <input type="checkbox" id="chkWind" checked />
-          <span class="dot-indicator" style="background:#0ea5e9;"></span>
-          <span>Aliran Angin (Windy Streamlines)</span>
-        </label>
-      </div>
-
-      <div class="layer-row">
-        <label class="layer-label">
-          <input type="checkbox" id="chkAHP" />
-          <span class="dot-indicator" style="background:#9333ea;"></span>
-          <span>Indeks Prioritas (AHP)</span>
-        </label>
-      </div>
-
-      <div class="layer-row">
-        <label class="layer-label">
-          <input type="checkbox" id="chkPeat" checked />
-          <span class="dot-indicator" style="background:#ca8a04;"></span>
-          <span>Lahan Gambut (KHG)</span>
-        </label>
-      </div>
-
-      <div class="layer-row">
-        <label class="layer-label">
-          <input type="checkbox" id="chkHealth" checked />
-          <span class="dot-indicator" style="background:#e11d48;"></span>
-          <span>Fasilitas Kesehatan</span>
-        </label>
-      </div>
-
-      <div class="layer-row">
-        <label class="layer-label">
-          <input type="checkbox" id="chkEducation" checked />
-          <span class="dot-indicator" style="background:#2563eb;"></span>
-          <span>Fasilitas Pendidikan</span>
-        </label>
-      </div>
-
-      <div class="layer-row">
-        <label class="layer-label">
-          <input type="checkbox" id="chkAirport" checked />
-          <span class="dot-indicator" style="background:#7c3aed;"></span>
-          <span>Bandara & Helipad</span>
-        </label>
-      </div>
-
-      <div class="layer-row">
-        <label class="layer-label">
-          <input type="checkbox" id="chkAdminBoundary" checked />
-          <span class="dot-indicator" style="background:#ffffff; border: 1px solid #94a3b8;"></span>
-          <span>Batas Kab/Kota (Kalbar)</span>
-        </label>
-      </div>
-      
-      <div class="layer-row">
-        <label class="layer-label">
-          <input type="checkbox" id="chkCams" />
-          <span class="dot-indicator" style="background:#7c3aed;"></span>
-          <span>Validasi PM2.5 (CAMS)</span>
-        </label>
-      </div>
-
-      <div class="layer-row">
-        <label class="layer-label">
-          <input type="checkbox" id="chkWeeklyMerra" />
-          <span class="dot-indicator" style="background:#9333ea;"></span>
-          <span>MERRA-2 PM2.5 (Mingguan)</span>
-        </label>
-      </div>
-
-      <div class="layer-row">
-        <label class="layer-label">
-          <input type="checkbox" id="chkWeeklyModis" />
-          <span class="dot-indicator" style="background:#d97706;"></span>
-          <span>MODIS AOD (Mingguan)</span>
-        </label>
-      </div>
-      
-      <div class="slider-block">
-        <div class="slider-label-row">
-          <span>Opacity Layer Asap</span>
-          <span class="mono-val" id="opacityVal">70%</span>
-        </div>
-        <input type="range" id="opacitySlider" min="15" max="100" value="70" />
-      </div>
-    </div>
-
-    <!-- FILTER WILAYAH & BASEMAP -->
+    <!-- FILTER WILAYAH & BASEMAP (DITARUH DI ATAS AGAR MUDAH FILTER PER KAB/KOTA) -->
     <div class="glass-card glass-panel">
       <div class="card-header">
         <span class="card-title">Wilayah & Basemap</span>
+        <span class="card-tag" id="activeRegionBadge">PROVINSI</span>
       </div>
       <div class="select-stack">
-        <select id="districtFilter">
-          <option value="ALL">Seluruh Kalimantan Barat</option>
-          <option value="Kota Pontianak">Kota Pontianak</option>
-          <option value="Kubu Raya">Kab. Kubu Raya</option>
-          <option value="Ketapang">Kab. Ketapang</option>
-          <option value="Kayong Utara">Kab. Kayong Utara</option>
-          <option value="Sintang">Kab. Sintang</option>
+        <select id="districtFilter" title="Filter seluruh layer berdasarkan Kabupaten/Kota">
+          <option value="ALL">Seluruh Kalimantan Barat (14 Kab/Kota)</option>
         </select>
 
         <select id="basemapSelect">
@@ -1239,32 +1221,172 @@
       </div>
     </div>
 
-    <!-- LEGENDA ISPU -->
+    <!-- KONTROL LAYER DENGAN KELOMPOK DROPDOWN -->
     <div class="glass-card glass-panel">
       <div class="card-header">
-        <span class="card-title">Legenda ISPU (PM2.5)</span>
+        <span class="card-title">Kontrol Layer</span>
+        <span class="card-tag">EPSG:4326</span>
       </div>
-      <div class="legend-grid">
-        <div class="legend-item">
-          <div class="legend-name"><span class="legend-swatch" style="background:#10b981;"></span><span>Baik</span></div>
-          <span class="legend-val">0–50 µg/m³</span>
+
+      <!-- LAYER UTAMA KARHUTLA & HYSPLIT -->
+      <div class="layer-row">
+        <label class="layer-label">
+          <input type="checkbox" id="chkHotspot" checked />
+          <span class="dot-indicator" style="background:#dc2626;"></span>
+          <span>Titik Api & FRP (VIIRS)</span>
+        </label>
+      </div>
+
+      <div class="layer-row">
+        <label class="layer-label">
+          <input type="checkbox" id="chkPM25" checked />
+          <span class="dot-indicator" style="background:#0070C0;"></span>
+          <span>Sebaran PM2.5 (HYSPLIT)</span>
+        </label>
+      </div>
+
+      <div class="layer-row">
+        <label class="layer-label">
+          <input type="checkbox" id="chkBurnedArea" checked />
+          <span class="dot-indicator" style="background:#451a03; border: 1px solid #ea580c;"></span>
+          <span>Area Terbakar (MODIS)</span>
+        </label>
+      </div>
+
+      <div class="layer-row">
+        <label class="layer-label">
+          <input type="checkbox" id="chkWind" checked />
+          <span class="dot-indicator" style="background:#0ea5e9;"></span>
+          <span>Aliran Angin (Streamlines)</span>
+        </label>
+      </div>
+
+      <!-- DROPDOWN 1: FASILITAS & OBJEK VITAL -->
+      <div class="layer-dropdown open" id="ddFacilities">
+        <button type="button" class="layer-dropdown-header" data-target="ddFacilities">
+          <span class="dropdown-left-title">
+            <span>Fasilitas & Objek Vital</span>
+            <span class="dropdown-badge" id="badgeFacilities">3/3</span>
+          </span>
+          <svg class="dropdown-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="layer-dropdown-body">
+          <div class="layer-row">
+            <label class="layer-label">
+              <input type="checkbox" id="chkHealth" class="fac-chk" checked />
+              <span class="dot-indicator" style="background:#e11d48;"></span>
+              <span>Fasilitas Kesehatan</span>
+            </label>
+          </div>
+          <div class="layer-row">
+            <label class="layer-label">
+              <input type="checkbox" id="chkEducation" class="fac-chk" checked />
+              <span class="dot-indicator" style="background:#2563eb;"></span>
+              <span>Fasilitas Pendidikan</span>
+            </label>
+          </div>
+          <div class="layer-row">
+            <label class="layer-label">
+              <input type="checkbox" id="chkAirport" class="fac-chk" checked />
+              <span class="dot-indicator" style="background:#7c3aed;"></span>
+              <span>Bandara & Helipad</span>
+            </label>
+          </div>
         </div>
-        <div class="legend-item">
-          <div class="legend-name"><span class="legend-swatch" style="background:#3b82f6;"></span><span>Sedang</span></div>
-          <span class="legend-val">51–100 µg/m³</span>
+      </div>
+
+      <!-- DROPDOWN 2: LINGKUNGAN, GAMBUT & BATAS WILAYAH -->
+      <div class="layer-dropdown" id="ddEnvironment">
+        <button type="button" class="layer-dropdown-header" data-target="ddEnvironment">
+          <span class="dropdown-left-title">
+            <span>Gambut, Trajektori & Batas</span>
+            <span class="dropdown-badge" id="badgeEnvironment">3/4</span>
+          </span>
+          <svg class="dropdown-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="layer-dropdown-body">
+          <div class="layer-row">
+            <label class="layer-label">
+              <input type="checkbox" id="chkPeat" class="env-chk" checked />
+              <span class="dot-indicator" style="background:#ca8a04;"></span>
+              <span>Lahan Gambut (KHG)</span>
+            </label>
+          </div>
+          <div class="layer-row">
+            <label class="layer-label">
+              <input type="checkbox" id="chkTrajectory" class="env-chk" checked />
+              <span class="dot-indicator" style="background:#0284c7;"></span>
+              <span>Lintasan Partikel (20-1000m)</span>
+            </label>
+          </div>
+          <div class="layer-row">
+            <label class="layer-label">
+              <input type="checkbox" id="chkAdminBoundary" class="env-chk" checked />
+              <span class="dot-indicator" style="background:#ffffff; border: 1px solid #94a3b8;"></span>
+              <span>Batas Kab/Kota (Kalbar)</span>
+            </label>
+          </div>
+          <div class="layer-row">
+            <label class="layer-label">
+              <input type="checkbox" id="chkAHP" class="env-chk" />
+              <span class="dot-indicator" style="background:#9333ea;"></span>
+              <span>Indeks Prioritas (AHP)</span>
+            </label>
+          </div>
         </div>
-        <div class="legend-item">
-          <div class="legend-name"><span class="legend-swatch" style="background:#f59e0b;"></span><span>Tidak Sehat</span></div>
-          <span class="legend-val">101–200 µg/m³</span>
+      </div>
+
+      <!-- DROPDOWN 3: VALIDASI SATELIT & REANALISIS -->
+      <div class="layer-dropdown" id="ddValidation">
+        <button type="button" class="layer-dropdown-header" data-target="ddValidation">
+          <span class="dropdown-left-title">
+            <span>Validasi Satelit & Reanalisis</span>
+            <span class="dropdown-badge" id="badgeValidation">0/3</span>
+          </span>
+          <svg class="dropdown-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="layer-dropdown-body">
+          <div class="layer-row">
+            <label class="layer-label">
+              <input type="checkbox" id="chkCams" class="val-chk" />
+              <span class="dot-indicator" style="background:#7c3aed;"></span>
+              <span>Validasi PM2.5 (CAMS)</span>
+            </label>
+          </div>
+          <div class="layer-row">
+            <label class="layer-label">
+              <input type="checkbox" id="chkWeeklyMerra" class="val-chk" />
+              <span class="dot-indicator" style="background:#9333ea;"></span>
+              <span>MERRA-2 PM2.5 (Mingguan)</span>
+            </label>
+          </div>
+          <div class="layer-row">
+            <label class="layer-label">
+              <input type="checkbox" id="chkWeeklyModis" class="val-chk" />
+              <span class="dot-indicator" style="background:#d97706;"></span>
+              <span>MODIS AOD (Mingguan)</span>
+            </label>
+          </div>
         </div>
-        <div class="legend-item">
-          <div class="legend-name"><span class="legend-swatch" style="background:#ef4444;"></span><span>Sangat Tidak Sehat</span></div>
-          <span class="legend-val">201–300 µg/m³</span>
+      </div>
+
+      <div class="slider-block">
+        <div class="slider-label-row">
+          <span>Opacity Layer Asap & Poligon</span>
+          <span class="mono-val" id="opacityVal">70%</span>
         </div>
-        <div class="legend-item">
-          <div class="legend-name"><span class="legend-swatch" style="background:#7f1d1d;"></span><span>Berbahaya</span></div>
-          <span class="legend-val">&gt;300 µg/m³</span>
-        </div>
+        <input type="range" id="opacitySlider" min="15" max="100" value="70" />
+      </div>
+    </div>
+
+    <!-- LEGENDA DINAMIS SESUAI LAYER AKTIF -->
+    <div class="glass-card glass-panel">
+      <div class="card-header">
+        <span class="card-title">Legenda Peta</span>
+        <span class="card-tag" id="legendActiveCount">AKTIF</span>
+      </div>
+      <div class="dynamic-legend-container" id="dynamicLegendContainer">
+        <!-- Diisi secara otomatis oleh renderDynamicLegend() -->
       </div>
     </div>
   </aside>
@@ -1303,24 +1425,24 @@
 
       <div class="kpi-row">
         <div class="kpi-tile hero">
-          <div class="kpi-name">Warga Terpapar (Zona Melebihi Ambang) <span id="popDeltaBadge"></span></div>
-          <div class="kpi-num red" id="kpiPop">~142.500 Jiwa</div>
+          <div class="kpi-name">Luas Terpapar Melebihi Ambang &amp; Est. Warga <span id="popDeltaBadge"></span></div>
+          <div class="kpi-num red" id="kpiPop">Menghitung...</div>
         </div>
         <div class="kpi-tile">
-          <div class="kpi-name">Sekolah Bahaya</div>
-          <div class="kpi-num amber" id="kpiSchools">64 Unit</div>
+          <div class="kpi-name">Sekolah Terdampak</div>
+          <div class="kpi-num amber" id="kpiSchools">0 Unit</div>
         </div>
         <div class="kpi-tile">
           <div class="kpi-name">Faskes Siaga ISPA</div>
-          <div class="kpi-num cyan" id="kpiHealth">8 Unit</div>
+          <div class="kpi-num cyan" id="kpiHealth">0 Unit</div>
         </div>
       </div>
 
       <div class="slider-label-row">
         <span>Ambang Batas Bahaya PM2.5</span>
-        <span class="mono-val" id="thresholdVal">150 µg/m³</span>
+        <span class="mono-val" id="thresholdVal">55 µg/m³</span>
       </div>
-      <input type="range" id="thresholdSlider" min="50" max="300" step="10" value="150" />
+      <input type="range" id="thresholdSlider" min="15" max="250" step="5" value="55" />
 
       <div class="chart-box">
         <canvas id="exposureChart"></canvas>
@@ -1418,8 +1540,8 @@
         <span class="card-title">Instrumen Aksi BPBD & Dinkes</span>
       </div>
       <ul class="protocol-list">
-        <li><strong>E-Learning:</strong> Rujukan sekolah BDR/daring pada zona PM2.5 &gt; 150 µg/m³.</li>
-        <li><strong>Logistik:</strong> Distribusi masker N95 prioritas zona merah Kubu Raya & Pontianak.</li>
+        <li><strong>E-Learning:</strong> Rujukan sekolah BDR/daring pada zona PM2.5 &gt; 55.4 µg/m³.</li>
+        <li><strong>Logistik:</strong> Distribusi masker N95 prioritas zona tidak sehat &amp; berbahaya.</li>
         <li><strong>Puskesmas:</strong> Pengaktifan posko oksigen & layanan darurat ISPA 24 jam.</li>
       </ul>
 
@@ -1536,7 +1658,7 @@
     })();
 
     // ============================================================================
-    // 1. INISIALISASI PETA & BASEMAP (ESRI ARCGIS TILES — NO API KEY REQUIRED)
+    // 1. INISIALISASI PETA & BASEMAP
     // ============================================================================
     const map = L.map('map', {
       center: [-0.65, 110.35],
@@ -1580,9 +1702,7 @@
     basemaps.satellite.addTo(map);
 
     // ============================================================================
-    // 2. GENERATOR DATA TIME-SLIDER DUA LEVEL:
-    //    - LEVEL 1: HARIAN (1 AGUSTUS – 31 OKTOBER 2026 + FORECAST)
-    //    - LEVEL 2: EPISODE PUNCAK 72 JAM (INTERVAL 6 JAM)
+    // 2. GENERATOR DATA TIME-SLIDER DUA LEVEL
     // ============================================================================
     let timelineMode = 'seasonal';
 
@@ -1664,22 +1784,6 @@
       { label: "1 Nov (Forecast)", isForecast: true, timestamp: "1 Nov 2026 • FORECAST (Pasca-31 Okt)", banner: "HYSPLIT Forecast | 1 Nov 2026 (Proyeksi Awal November)", wind: "Barat Daya (12 km/jam) • PBL: 890 m • Forecast", windFromDeg: 220, windSpeedKmh: 12, pm25Multiplier: 0.42, windShift: [-0.09, 0.10] }
     ];
 
-    const dummyPeatland = {
-      type: "FeatureCollection",
-      features: [
-        {
-          type: "Feature",
-          properties: { nama: "KHG Sungai Kapuas - Sungai Terentang", kedalaman: "200 - 400 cm (Sangat Dalam)" },
-          geometry: { type: "Polygon", coordinates: [[[109.18, -0.15], [109.72, -0.15], [109.85, -0.65], [109.30, -0.75], [109.18, -0.15]]] }
-        },
-        {
-          type: "Feature",
-          properties: { nama: "KHG Sungai Pawan - Sungai Pesaguan", kedalaman: "100 - 300 cm (Dalam)" },
-          geometry: { type: "Polygon", coordinates: [[[110.10, -1.75], [110.90, -1.85], [110.95, -2.95], [110.20, -2.88], [110.10, -1.75]]] }
-        }
-      ]
-    };
-
     const dummyTrajectories = {
       type: "FeatureCollection",
       features: [
@@ -1701,36 +1805,17 @@
       ]
     };
 
+    // Referensi zona simulasi untuk grafik 5 wilayah utama & fallback
     const basePlumeZones = [
-      {
-        id: "Z-01", kab: "Kota Pontianak", nama: "Koridor Kota Pontianak & Sungai Raya",
-        basePm25: 168, pop: 68500, s_pop: 5, s_fasum: 5, s_durasi: 4,
-        coords: [[[109.25, 0.06], [109.46, 0.06], [109.46, -0.14], [109.25, -0.14], [109.25, 0.06]]]
-      },
-      {
-        id: "Z-02", kab: "Kubu Raya", nama: "Zona Sumber Gambut Kubu Raya (Supadio)",
-        basePm25: 235, pop: 49200, s_pop: 4, s_fasum: 5, s_durasi: 5,
-        coords: [[[109.32, -0.14], [109.68, -0.14], [109.68, -0.48], [109.32, -0.48], [109.32, -0.14]]]
-      },
-      {
-        id: "Z-03", kab: "Ketapang", nama: "Zona Emisi Intensif Kendawangan - Ketapang",
-        basePm25: 315, pop: 24800, s_pop: 3, s_fasum: 3, s_durasi: 5,
-        coords: [[[110.20, -1.95], [110.85, -1.95], [110.85, -2.90], [110.20, -2.90], [110.20, -1.95]]]
-      },
-      {
-        id: "Z-04", kab: "Kayong Utara", nama: "Zona Dispersi Pesisir Kayong Utara",
-        basePm25: 132, pop: 18400, s_pop: 2, s_fasum: 3, s_durasi: 3,
-        coords: [[[109.85, -0.95], [110.35, -0.95], [110.35, -1.55], [109.85, -1.55], [109.85, -0.95]]]
-      },
-      {
-        id: "Z-05", kab: "Sintang", nama: "Zona Pedalaman Kapuas Tengah - Sintang",
-        basePm25: 88, pop: 15200, s_pop: 2, s_fasum: 2, s_durasi: 2,
-        coords: [[[111.20, 0.25], [111.75, 0.25], [111.75, -0.20], [111.20, -0.20], [111.20, 0.25]]]
-      }
+      { id: "Z-01", kab: "Kota Pontianak", nama: "Koridor Kota Pontianak & Sungai Raya", basePm25: 168, pop: 68500, s_pop: 5, s_fasum: 5, s_durasi: 4, coords: [[[109.25, 0.06], [109.46, 0.06], [109.46, -0.14], [109.25, -0.14], [109.25, 0.06]]] },
+      { id: "Z-02", kab: "Kubu Raya", nama: "Zona Sumber Gambut Kubu Raya (Supadio)", basePm25: 235, pop: 49200, s_pop: 4, s_fasum: 5, s_durasi: 5, coords: [[[109.32, -0.14], [109.68, -0.14], [109.68, -0.48], [109.32, -0.48], [109.32, -0.14]]] },
+      { id: "Z-03", kab: "Ketapang", nama: "Zona Emisi Intensif Kendawangan - Ketapang", basePm25: 315, pop: 24800, s_pop: 3, s_fasum: 3, s_durasi: 5, coords: [[[110.20, -1.95], [110.85, -1.95], [110.85, -2.90], [110.20, -2.90], [110.20, -1.95]]] },
+      { id: "Z-04", kab: "Kayong Utara", nama: "Zona Dispersi Pesisir Kayong Utara", basePm25: 132, pop: 18400, s_pop: 2, s_fasum: 3, s_durasi: 3, coords: [[[109.85, -0.95], [110.35, -0.95], [110.35, -1.55], [109.85, -1.55], [109.85, -0.95]]] },
+      { id: "Z-05", kab: "Sintang", nama: "Zona Pedalaman Kapuas Tengah - Sintang", basePm25: 88, pop: 15200, s_pop: 2, s_fasum: 2, s_durasi: 2, coords: [[[111.20, 0.25], [111.75, 0.25], [111.75, -0.20], [111.20, -0.20], [111.20, 0.25]]] }
     ];
 
     // ============================================================================
-    // 3. LAYER GROUPS & SKALA KLASIFIKASI
+    // 3. LAYER GROUPS, STATE DATA & SKALA KLASIFIKASI
     // ============================================================================
     const layerGroups = {
       peat: L.layerGroup().addTo(map),
@@ -1744,12 +1829,34 @@
       airport: L.layerGroup().addTo(map)
     };
 
+    const adminBoundaryGroup = L.layerGroup().addTo(map);
+    const camsLayerGroup = L.layerGroup();
+    const weeklyMerraGroup = L.layerGroup();
+    const weeklyModisGroup = L.layerGroup();
+
+    // Penyimpanan fitur asli di memori untuk filtering per tanggal & Kab/Kota
+    const dataStore = {
+      adminFeatures: [],
+      adminBoundsMap: {},
+      selectedAdminFeature: null,
+      hotspots: [],
+      hysplit: [],
+      peat: [],
+      burnedArea: [],
+      health: [],
+      education: [],
+      airport: [],
+      cams: [],
+      merra: [],
+      modis: []
+    };
+
     function getIspuCategory(pm25) {
-      if (pm25 <= 50) return { label: "Baik", color: "#10b981", score: 1 };
-      if (pm25 <= 100) return { label: "Sedang", color: "#3b82f6", score: 2 };
-      if (pm25 <= 200) return { label: "Tidak Sehat", color: "#f59e0b", score: 3 };
-      if (pm25 <= 300) return { label: "Sangat Tidak Sehat", color: "#ef4444", score: 4 };
-      return { label: "Berbahaya", color: "#7f1d1d", score: 5 };
+      if (pm25 <= 15.4) return { label: "Baik", color: "#10b981", score: 1 };
+      if (pm25 <= 55.4) return { label: "Sedang", color: "#0070C0", score: 2 };
+      if (pm25 <= 150.4) return { label: "Tidak Sehat", color: "#FFC000", score: 3 };
+      if (pm25 <= 250.4) return { label: "Sangat Tidak Sehat", color: "#FF0000", score: 4 };
+      return { label: "Berbahaya", color: "#18181b", score: 5 };
     }
 
     function getAhpColor(indexScore) {
@@ -1760,8 +1867,34 @@
       return "#a855f7";
     }
 
+    // Helper: Cek apakah suatu fitur berada di dalam Kab/Kota terpilih
+    function featureMatchesDistrict(feature, districtFilter) {
+      if (!districtFilter || districtFilter === 'ALL') return true;
+      const p = feature.properties || {};
+      const normTarget = districtFilter.toLowerCase().replace(/^kab\.\s*|^kota\s*/i, '').trim();
+
+      // 1. Cek atribut nama kabupaten jika tersedia
+      const propNames = [p.adm2_name, p.WADMKK, p.NAMOBJ, p.KAB_KOTA, p.KABUPATEN, p.kab].filter(Boolean);
+      if (propNames.length > 0) {
+        return propNames.some(val => {
+          const normVal = String(val).toLowerCase().replace(/^kab\.\s*|^kota\s*/i, '').trim();
+          return normVal === normTarget || normVal.includes(normTarget) || normTarget.includes(normVal);
+        });
+      }
+
+      // 2. Cek perpotongan spasial dengan poligon Kab/Kota menggunakan Turf.js
+      if (dataStore.selectedAdminFeature && feature.geometry && typeof turf !== 'undefined') {
+        try {
+          return turf.booleanIntersects(feature, dataStore.selectedAdminFeature);
+        } catch (e) {
+          return true;
+        }
+      }
+      return true;
+    }
+
     // ============================================================================
-    // 3B. ENGINE VISUALISASI ANGIN GAYA WINDY.COM (FLUID SILKY STREAMLINES)
+    // 3B. ENGINE VISUALISASI ANGIN (WINDY STREAMLINES)
     // ============================================================================
     const WindCanvasLayer = L.Layer.extend({
       initialize: function (options) {
@@ -1773,7 +1906,6 @@
         this._time = 0;
         this._isLightBasemap = false;
       },
-
       onAdd: function (map) {
         this._map = map;
         this._canvas = L.DomUtil.create('canvas', 'leaflet-wind-layer');
@@ -1794,7 +1926,6 @@
         map.on('movestart zoomstart', this._onMoveStart, this);
         map.on('moveend zoomend resize', this._reset, this);
       },
-
       onRemove: function (map) {
         this._stopAnimation();
         if (this._canvas && this._canvas.parentNode) {
@@ -1803,22 +1934,18 @@
         map.off('movestart zoomstart', this._onMoveStart, this);
         map.off('moveend zoomend resize', this._reset, this);
       },
-
       setWind: function (fromDeg, speedKmh) {
         this._windFromDeg = fromDeg;
         this._windSpeed = speedKmh;
       },
-
       setBasemapContrast: function (isLight) {
         this._isLightBasemap = isLight;
       },
-
       _onMoveStart: function () {
         if (this._ctx && this._canvas) {
           this._ctx.clearRect(0, 0, this._canvas.width, this._canvas.height);
         }
       },
-
       _reset: function () {
         if (!this._map || !this._canvas) return;
         const size = this._map.getSize();
@@ -1829,7 +1956,6 @@
         this._ctx.clearRect(0, 0, size.x, size.y);
         this._initParticles();
       },
-
       _initParticles: function () {
         this._particles = [];
         const w = this._canvas ? this._canvas.width : window.innerWidth;
@@ -1839,7 +1965,6 @@
           this._particles.push(this._spawnParticle(w, h, true));
         }
       },
-
       _spawnParticle: function (w, h, randomAge = false) {
         const maxAge = 75 + Math.floor(Math.random() * 65);
         return {
@@ -1850,7 +1975,6 @@
           speedScale: 0.82 + Math.random() * 0.36
         };
       },
-
       _getFieldVelocity: function (x, y) {
         const latlng = this._map.containerPointToLatLng([x, y]);
         const lat = latlng.lat;
@@ -1872,7 +1996,6 @@
           intensity: coastalBoost
         };
       },
-
       _startAnimation: function () {
         const animate = () => {
           if (!this._map || !this._ctx) return;
@@ -1926,7 +2049,6 @@
         };
         this._animId = requestAnimationFrame(animate);
       },
-
       _stopAnimation: function () {
         if (this._animId) {
           cancelAnimationFrame(this._animId);
@@ -1944,11 +2066,11 @@
     const exposureChart = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: ['Pontianak', 'Kubu Raya', 'Ketapang', 'Kayong U.', 'Sintang'],
+        labels: ['Sedang', 'Tidak Sehat', 'Sangat Tdk Sehat', 'Berbahaya'],
         datasets: [{
-          label: 'PM2.5 (µg/m³)',
-          data: [168, 235, 315, 132, 88],
-          backgroundColor: ['#f59e0b', '#ef4444', '#7f1d1d', '#f59e0b', '#3b82f6'],
+          label: 'Luas Zona (km²)',
+          data: [0, 0, 0, 0],
+          backgroundColor: ['#0070C0', '#FFC000', '#FF0000', '#18181b'],
           borderRadius: 4
         }]
       },
@@ -1958,11 +2080,11 @@
         plugins: { legend: { display: false } },
         scales: {
           x: {
-            ticks: { color: '#090d16', font: { size: 9.5, weight: '600', family: 'Google Sans' } },
+            ticks: { color: '#090d16', font: { size: 9, weight: '600', family: 'Google Sans' } },
             grid: { display: false }
           },
           y: {
-            ticks: { color: '#1e293b', font: { size: 9.5, weight: '500', family: 'IBM Plex Mono' } },
+            ticks: { color: '#1e293b', font: { size: 9, weight: '500', family: 'IBM Plex Mono' } },
             grid: { color: 'rgba(15, 23, 42, 0.08)' }
           }
         }
@@ -1970,7 +2092,593 @@
     });
 
     // ============================================================================
-    // 5. TWO-LEVEL TIMELINE CONTROLLER & ON-THE-FLY MODELING ENGINE
+    // 5. LEGENDA DINAMIS SESUAI LAYER YANG DIAKTIFKAN
+    // ============================================================================
+    function updateDropdownBadges() {
+      const facCount = document.querySelectorAll('.fac-chk:checked').length;
+      const envCount = document.querySelectorAll('.env-chk:checked').length;
+      const valCount = document.querySelectorAll('.val-chk:checked').length;
+
+      const bFac = document.getElementById('badgeFacilities');
+      const bEnv = document.getElementById('badgeEnvironment');
+      const bVal = document.getElementById('badgeValidation');
+
+      if (bFac) bFac.textContent = `${facCount}/3`;
+      if (bEnv) bEnv.textContent = `${envCount}/4`;
+      if (bVal) bVal.textContent = `${valCount}/3`;
+    }
+
+    function renderDynamicLegend() {
+      const container = document.getElementById('dynamicLegendContainer');
+      const countBadge = document.getElementById('legendActiveCount');
+      if (!container) return;
+
+      updateDropdownBadges();
+
+      const isChecked = (id) => {
+        const el = document.getElementById(id);
+        return el ? el.checked : false;
+      };
+
+      const sections = [];
+      let activeLayerCount = 0;
+
+      // 1. Sebaran PM2.5 (HYSPLIT / MERRA-2 / CAMS)
+      const pm25Active = isChecked('chkPM25');
+      const merraActive = isChecked('chkWeeklyMerra');
+      const camsActive = isChecked('chkCams');
+      if (pm25Active) activeLayerCount++;
+      if (merraActive) activeLayerCount++;
+      if (camsActive) activeLayerCount++;
+
+      if (pm25Active || merraActive || camsActive) {
+        const activeNames = [
+          pm25Active ? 'HYSPLIT' : null,
+          merraActive ? 'MERRA-2' : null,
+          camsActive ? 'CAMS' : null
+        ].filter(Boolean).join(' & ');
+
+        sections.push(`
+          <div class="legend-section">
+            <div class="legend-section-title">
+              <span>Konsentrasi PM2.5 (${activeNames})</span>
+              <span class="legend-val">µg/m³</span>
+            </div>
+            <div class="legend-grid">
+              <div class="legend-item">
+                <div class="legend-name"><span class="legend-swatch" style="background:#10b981;"></span><span>Baik</span></div>
+                <span class="legend-val">0 – 15.4</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-name"><span class="legend-swatch" style="background:#0070C0;"></span><span>Sedang</span></div>
+                <span class="legend-val">15.5 – 55.4</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-name"><span class="legend-swatch" style="background:#FFC000;"></span><span>Tidak Sehat</span></div>
+                <span class="legend-val">55.5 – 150.4</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-name"><span class="legend-swatch" style="background:#FF0000;"></span><span>Sangat Tidak Sehat</span></div>
+                <span class="legend-val">150.5 – 250.4</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-name"><span class="legend-swatch" style="background:#18181b;"></span><span>Berbahaya</span></div>
+                <span class="legend-val">&gt; 250.4</span>
+              </div>
+            </div>
+          </div>
+        `);
+      }
+
+      // 2. Titik Api VIIRS
+      if (isChecked('chkHotspot')) {
+        activeLayerCount++;
+        sections.push(`
+          <div class="legend-section">
+            <div class="legend-section-title"><span>Titik Api &amp; FRP (VIIRS 375m)</span></div>
+            <div class="legend-grid">
+              <div class="legend-item">
+                <div class="legend-name"><span class="legend-circle" style="background:#dc2626; width:12px; height:12px;"></span><span>Intensitas Tinggi</span></div>
+                <span class="legend-val">FRP &gt; 50 MW</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-name"><span class="legend-circle" style="background:#f97316; width:9px; height:9px;"></span><span>Intensitas Sedang/Rendah</span></div>
+                <span class="legend-val">FRP &le; 50 MW</span>
+              </div>
+            </div>
+          </div>
+        `);
+      }
+
+      // 3. Area Terbakar & Lahan Gambut
+      const burnedActive = isChecked('chkBurnedArea');
+      const peatActive = isChecked('chkPeat');
+      if (burnedActive) activeLayerCount++;
+      if (peatActive) activeLayerCount++;
+
+      if (burnedActive || peatActive) {
+        let items = '';
+        if (burnedActive) {
+          items += `
+            <div class="legend-item">
+              <div class="legend-name"><span class="legend-swatch" style="background:#451a03; border:1.2px solid #ea580c;"></span><span>Area Terbakar</span></div>
+              <span class="legend-val">MODIS MCD64A1</span>
+            </div>
+          `;
+        }
+        if (peatActive) {
+          items += `
+            <div class="legend-item">
+              <div class="legend-name"><span class="legend-swatch" style="background:rgba(234,179,8,0.45); border:1.2px solid #ca8a04;"></span><span>Lahan Gambut</span></div>
+              <span class="legend-val">KHG Kalbar</span>
+            </div>
+          `;
+        }
+        sections.push(`
+          <div class="legend-section">
+            <div class="legend-section-title"><span>Tutupan Lahan &amp; Bekas Kebakaran</span></div>
+            <div class="legend-grid">${items}</div>
+          </div>
+        `);
+      }
+
+      // 4. Fasilitas & Objek Vital
+      const healthActive = isChecked('chkHealth');
+      const eduActive = isChecked('chkEducation');
+      const airActive = isChecked('chkAirport');
+      if (healthActive) activeLayerCount++;
+      if (eduActive) activeLayerCount++;
+      if (airActive) activeLayerCount++;
+
+      if (healthActive || eduActive || airActive) {
+        let items = '';
+        if (healthActive) {
+          items += `
+            <div class="legend-item">
+              <div class="legend-name"><span class="legend-circle" style="background:#e11d48;"></span><span>Fasilitas Kesehatan</span></div>
+              <span class="legend-val">RS / Puskesmas</span>
+            </div>
+          `;
+        }
+        if (eduActive) {
+          items += `
+            <div class="legend-item">
+              <div class="legend-name"><span class="legend-circle" style="background:#2563eb;"></span><span>Fasilitas Pendidikan</span></div>
+              <span class="legend-val">Sekolah / Kampus</span>
+            </div>
+          `;
+        }
+        if (airActive) {
+          items += `
+            <div class="legend-item">
+              <div class="legend-name"><span class="legend-circle" style="background:#7c3aed;"></span><span>Bandara, Helipad &amp; Runway</span></div>
+              <span class="legend-val">Udara</span>
+            </div>
+          `;
+        }
+        sections.push(`
+          <div class="legend-section">
+            <div class="legend-section-title"><span>Fasilitas &amp; Objek Vital</span></div>
+            <div class="legend-grid">${items}</div>
+          </div>
+        `);
+      }
+
+      // 5. Lintasan Partikel HYSPLIT
+      if (isChecked('chkTrajectory')) {
+        activeLayerCount++;
+        sections.push(`
+          <div class="legend-section">
+            <div class="legend-section-title"><span>Lintasan Partikel HYSPLIT</span></div>
+            <div class="legend-grid">
+              <div class="legend-item">
+                <div class="legend-name"><span class="legend-line" style="background:#ef4444;"></span><span>Permukaan</span></div>
+                <span class="legend-val">20 m AMSL</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-name"><span class="legend-line" style="background:#0284c7;"></span><span>Lapisan Batas</span></div>
+                <span class="legend-val">500 m AMSL</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-name"><span class="legend-line" style="background:#10b981;"></span><span>Transpor Atas</span></div>
+                <span class="legend-val">1.000 m AMSL</span>
+              </div>
+            </div>
+          </div>
+        `);
+      }
+
+      // 6. Indeks Prioritas AHP
+      if (isChecked('chkAHP')) {
+        activeLayerCount++;
+        sections.push(`
+          <div class="legend-section">
+            <div class="legend-section-title"><span>Indeks Prioritas Dampak (AHP)</span></div>
+            <div class="legend-grid">
+              <div class="legend-item"><div class="legend-name"><span class="legend-swatch" style="background:#10b981;"></span><span>Prioritas Sangat Rendah</span></div><span class="legend-val">&lt; 2.0</span></div>
+              <div class="legend-item"><div class="legend-name"><span class="legend-swatch" style="background:#eab308;"></span><span>Prioritas Rendah</span></div><span class="legend-val">2.0 – 2.8</span></div>
+              <div class="legend-item"><div class="legend-name"><span class="legend-swatch" style="background:#f97316;"></span><span>Prioritas Sedang</span></div><span class="legend-val">2.8 – 3.6</span></div>
+              <div class="legend-item"><div class="legend-name"><span class="legend-swatch" style="background:#ef4444;"></span><span>Prioritas Tinggi</span></div><span class="legend-val">3.6 – 4.3</span></div>
+              <div class="legend-item"><div class="legend-name"><span class="legend-swatch" style="background:#a855f7;"></span><span>Prioritas Kritis</span></div><span class="legend-val">&gt; 4.3</span></div>
+            </div>
+          </div>
+        `);
+      }
+
+      // 7. MODIS AOD Mingguan
+      if (isChecked('chkWeeklyModis')) {
+        activeLayerCount++;
+        sections.push(`
+          <div class="legend-section">
+            <div class="legend-section-title"><span>NASA MODIS AOD (550 nm)</span></div>
+            <div class="legend-grid">
+              <div class="legend-item"><div class="legend-name"><span class="legend-swatch" style="background:#10b981;"></span><span>Cerah / Bersih</span></div><span class="legend-val">&lt; 0.20</span></div>
+              <div class="legend-item"><div class="legend-name"><span class="legend-swatch" style="background:#f59e0b;"></span><span>Kabut Asap Sedang</span></div><span class="legend-val">0.20 – 0.60</span></div>
+              <div class="legend-item"><div class="legend-name"><span class="legend-swatch" style="background:#dc2626;"></span><span>Asap Pekat</span></div><span class="legend-val">&gt; 0.60</span></div>
+            </div>
+          </div>
+        `);
+      }
+
+      // 8. Batas Administrasi
+      if (isChecked('chkAdminBoundary')) {
+        activeLayerCount++;
+        sections.push(`
+          <div class="legend-section">
+            <div class="legend-grid">
+              <div class="legend-item">
+                <div class="legend-name"><span class="legend-line" style="background:#94a3b8; border-top:2px dashed #090d16;"></span><span>Batas Kabupaten/Kota</span></div>
+                <span class="legend-val">Kalbar</span>
+              </div>
+            </div>
+          </div>
+        `);
+      }
+
+      if (isChecked('chkWind')) activeLayerCount++;
+
+      if (countBadge) countBadge.textContent = `${activeLayerCount} LAYER`;
+      container.innerHTML = sections.length > 0
+        ? sections.join('')
+        : `<div class="legend-empty">Tidak ada layer simbolik yang aktif. Centang layer di atas untuk menampilkan legenda.</div>`;
+    }
+
+    // ============================================================================
+    // 6. PEMUATAN & PENYARINGAN SEMUA LAYER GEOJSON (TERMASUK FILTER KAB/KOTA)
+    // ============================================================================
+    function getActiveDateDDMMYYYY() {
+      if (timelineMode === 'episode') {
+        const epIdx = parseInt(document.getElementById('timeSlider').value, 10);
+        if (epIdx <= 3) return '11/10/2026';
+        if (epIdx <= 7) return '12/10/2026';
+        if (epIdx <= 11) return '13/10/2026';
+        if (epIdx === 12) return '14/10/2026';
+        return '31/10/2026';
+      }
+
+      const dayIdx = Math.min(91, Math.max(0, parseInt(document.getElementById('timeSlider').value, 10)));
+      const d = new Date(2026, 7, 1);
+      d.setDate(d.getDate() + dayIdx);
+
+      const dd = String(d.getDate()).padStart(2, '0');
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const yyyy = d.getFullYear();
+      return `${dd}/${mm}/${yyyy}`;
+    }
+
+    // A. Render Batas Administrasi (Highlight Kab/Kota Terpilih)
+    function renderAdminBoundaries() {
+      adminBoundaryGroup.clearLayers();
+      if (!dataStore.adminFeatures.length) return;
+
+      const districtFilter = document.getElementById('districtFilter').value;
+
+      const adminGeoJson = L.geoJSON({ type: 'FeatureCollection', features: dataStore.adminFeatures }, {
+        style: (feature) => {
+          const p = feature.properties || {};
+          const kabName = p.WADMKK || p.NAMOBJ || 'Kabupaten/Kota';
+          const isSelected = districtFilter !== 'ALL' && kabName === districtFilter;
+          const isDimmed = districtFilter !== 'ALL' && kabName !== districtFilter;
+
+          return {
+            color: isSelected ? '#38bdf8' : '#ffffff',
+            weight: isSelected ? 2.8 : 1.4,
+            opacity: isDimmed ? 0.35 : 0.88,
+            dashArray: isSelected ? null : '5, 4',
+            fillColor: isSelected ? '#0284c7' : '#64748b',
+            fillOpacity: isSelected ? 0.08 : 0.02
+          };
+        },
+        onEachFeature: (feature, layer) => {
+          const p = feature.properties || {};
+          const kabName = p.WADMKK || p.NAMOBJ || 'Kabupaten/Kota';
+          const kodeKab = p.KDPKAB || '-';
+          const luasKm2 = p.LUASWH ? Number(p.LUASWH).toLocaleString('id-ID', { maximumFractionDigits: 2 }) : '-';
+
+          layer.bindTooltip(kabName, { sticky: true, direction: 'center' });
+          layer.bindPopup(`
+            <div class="popup-header">Kabupaten/Kota ${kabName}</div>
+            <div class="popup-line"><strong>Kode Wilayah:</strong> ${kodeKab}</div>
+            <div class="popup-line"><strong>Luas Wilayah:</strong> ${luasKm2} km²</div>
+            <div class="popup-line"><strong>Provinsi:</strong> ${p.WADMPR || 'Kalimantan Barat'}</div>
+          `);
+        }
+      }).addTo(adminBoundaryGroup);
+
+      adminGeoJson.bringToBack();
+    }
+
+    // B. Render Hotspot VIIRS (Tersaring Tanggal + Kab/Kota + Mitigasi)
+    function renderFilteredRealHotspots() {
+      layerGroups.hotspots.clearLayers();
+      if (!dataStore.hotspots.length) return;
+
+      const targetDate = getActiveDateDDMMYYYY();
+      const [dd, mm, yyyy] = targetDate.split('/');
+      const altDate = `${yyyy}-${mm}-${dd}`;
+      const districtFilter = document.getElementById('districtFilter').value;
+      const mitVal = parseInt(document.getElementById('mitigationSlider').value, 10) || 0;
+
+      const filteredFeatures = dataStore.hotspots.filter(f => {
+        const p = f.properties || {};
+        const rawDate = String(p.acq_date || '').trim();
+        if (rawDate !== targetDate && rawDate !== altDate) return false;
+        return featureMatchesDistrict(f, districtFilter);
+      });
+
+      L.geoJSON({ type: 'FeatureCollection', features: filteredFeatures }, {
+        pointToLayer: (f, latlng) => {
+          const p = f.properties || {};
+          const rawFrp = parseFloat(String(p.frp || 10).replace(',', '.')) || 10;
+          const effFrp = rawFrp * (1 - mitVal / 100);
+          const radius = Math.min(9, Math.max(3.2, Math.sqrt(effFrp) * 0.42));
+          const fillCol = effFrp > 50 ? '#dc2626' : '#f97316';
+
+          return L.circleMarker(latlng, {
+            radius: radius,
+            fillColor: fillCol,
+            color: '#ffffff',
+            weight: 0.9,
+            fillOpacity: 0.88
+          });
+        },
+        onEachFeature: (f, l) => {
+          const p = f.properties || {};
+          const satLabel = p._sourceSat || p.satellite || 'VIIRS';
+          const jamRaw = String(p.acq_time || '').padStart(4, '0');
+          const jamFormatted = jamRaw.length === 4 ? `${jamRaw.slice(0, 2)}:${jamRaw.slice(2)} UTC` : jamRaw;
+          const confMap = { h: 'Tinggi (High)', n: 'Nominal (Normal)', l: 'Rendah (Low)' };
+          const confText = confMap[String(p.confidence || '').toLowerCase()] || p.confidence || '-';
+
+          l.bindPopup(`
+            <div class="popup-header">Hotspot Aktif (${satLabel})</div>
+            <div class="popup-line"><strong>Tanggal &amp; Waktu:</strong> ${p.acq_date || '-'} • ${jamFormatted}</div>
+            <div class="popup-line"><strong>Radiative Power (FRP):</strong> ${p.frp ?? '-'} MW</div>
+            <div class="popup-line"><strong>Brightness Temp:</strong> ${p.brightness ?? '-'} K</div>
+            <div class="popup-line"><strong>Tingkat Kepercayaan:</strong> ${confText}</div>
+            <div class="popup-line"><strong>Koordinat:</strong> ${Number(p.latitude).toFixed(4)}, ${Number(p.longitude).toFixed(4)}</div>
+          `);
+        }
+      }).addTo(layerGroups.hotspots);
+    }
+
+    // C. Render Area Terbakar MODIS MCD64A1 (Tersaring Kab/Kota)
+    function renderFilteredBurnedArea() {
+      layerGroups.burnedArea.clearLayers();
+      if (!dataStore.burnedArea.length) return;
+
+      const districtFilter = document.getElementById('districtFilter').value;
+      const filtered = dataStore.burnedArea.filter(f => featureMatchesDistrict(f, districtFilter));
+
+      L.geoJSON({ type: 'FeatureCollection', features: filtered }, {
+        style: {
+          color: '#ea580c',
+          weight: 1.2,
+          fillColor: '#451a03',
+          fillOpacity: 0.55
+        },
+        onEachFeature: (feature, layer) => {
+          layer.bindPopup(`
+            <div class="popup-header">Area Terbakar (Burned Area)</div>
+            <div class="popup-line"><strong>Sumber Data:</strong> NASA MODIS MCD64A1 v061 (500 m)</div>
+            <div class="popup-line"><strong>Wilayah:</strong> ${districtFilter === 'ALL' ? 'Provinsi Kalimantan Barat' : districtFilter}</div>
+            <div class="popup-line"><strong>Periode Kajian:</strong> Agustus – Oktober 2026</div>
+          `);
+        }
+      }).addTo(layerGroups.burnedArea);
+    }
+
+    // D. Render Lahan Gambut KHG Asli (Tersaring Kab/Kota)
+    function renderFilteredPeatland() {
+      layerGroups.peat.clearLayers();
+      if (!dataStore.peat.length) return;
+
+      const districtFilter = document.getElementById('districtFilter').value;
+      const filtered = dataStore.peat.filter(f => featureMatchesDistrict(f, districtFilter));
+
+      L.geoJSON({ type: 'FeatureCollection', features: filtered }, {
+        style: {
+          color: '#ca8a04',
+          weight: 1.1,
+          fillColor: '#eab308',
+          fillOpacity: 0.26
+        },
+        onEachFeature: (f, l) => {
+          const p = f.properties || {};
+          const rawAreaM2 = parseFloat(String(p.shape_Area || 0).replace(',', '.'));
+          const areaHa = rawAreaM2 > 0 ? (rawAreaM2 / 10000).toLocaleString('id-ID', { maximumFractionDigits: 1 }) + ' ha' : '-';
+          const idObj = p.objectid || p.objectid_1 || '-';
+
+          l.bindPopup(`
+            <div class="popup-header">Kesatuan Hidrologis Gambut (KHG)</div>
+            <div class="popup-line"><strong>ID Poligon:</strong> #${idObj}</div>
+            <div class="popup-line"><strong>Luas Poligon:</strong> ${areaHa}</div>
+            <div class="popup-line"><strong>Wilayah:</strong> ${districtFilter === 'ALL' ? 'Kalimantan Barat' : districtFilter}</div>
+          `);
+        }
+      }).addTo(layerGroups.peat);
+    }
+
+    // E. Render 3 Kategori Fasilitas Vital (Tersaring Kab/Kota)
+    function renderFilteredFacilities() {
+      layerGroups.health.clearLayers();
+      layerGroups.education.clearLayers();
+      layerGroups.airport.clearLayers();
+
+      const districtFilter = document.getElementById('districtFilter').value;
+
+      const formatImpactPopup = (p, defaultTitle, kategoriLabel) => {
+        const nama = p.name || p.name_id || p.name_en || p.NAMOBJ || defaultTitle;
+        const jenis = p.aeroway || p.amenity || p.healthcare || kategoriLabel;
+        const desa = p.adm4_name ? `${p.adm4_name}, ` : '';
+        const kec  = p.adm3_name ? `Kec. ${p.adm3_name}, ` : '';
+        const kab  = p.adm2_name || p.WADMKK || 'Kalimantan Barat';
+
+        return `
+          <div class="popup-header">${nama}</div>
+          <div class="popup-line"><strong>Kategori:</strong> ${kategoriLabel} (${jenis})</div>
+          <div class="popup-line"><strong>Lokasi:</strong> ${desa}${kec}${kab}</div>
+          <div class="popup-line"><strong>Status:</strong> Objek Vital Pemantauan Karhutla</div>
+        `;
+      };
+
+      // 1. Kesehatan
+      const healthFiltered = dataStore.health.filter(f => featureMatchesDistrict(f, districtFilter));
+      if (healthFiltered.length) {
+        L.geoJSON({ type: 'FeatureCollection', features: healthFiltered }, {
+          pointToLayer: (f, latlng) => L.circleMarker(latlng, {
+            radius: 5.5, fillColor: '#e11d48', color: '#ffffff', weight: 1.5, fillOpacity: 0.9
+          }),
+          style: { color: '#be123c', weight: 1.5, fillColor: '#fb7185', fillOpacity: 0.45 },
+          onEachFeature: (f, l) => l.bindPopup(formatImpactPopup(f.properties || {}, 'Fasilitas Kesehatan', 'Fasilitas Kesehatan'))
+        }).addTo(layerGroups.health);
+      }
+
+      // 2. Pendidikan
+      const eduFiltered = dataStore.education.filter(f => featureMatchesDistrict(f, districtFilter));
+      if (eduFiltered.length) {
+        L.geoJSON({ type: 'FeatureCollection', features: eduFiltered }, {
+          pointToLayer: (f, latlng) => L.circleMarker(latlng, {
+            radius: 5.5, fillColor: '#2563eb', color: '#ffffff', weight: 1.5, fillOpacity: 0.9
+          }),
+          style: { color: '#1d4ed8', weight: 1.5, fillColor: '#60a5fa', fillOpacity: 0.45 },
+          onEachFeature: (f, l) => l.bindPopup(formatImpactPopup(f.properties || {}, 'Fasilitas Pendidikan', 'Fasilitas Pendidikan'))
+        }).addTo(layerGroups.education);
+      }
+
+      // 3. Bandara & Helipad
+      const airportFiltered = dataStore.airport.filter(f => featureMatchesDistrict(f, districtFilter));
+      if (airportFiltered.length) {
+        L.geoJSON({ type: 'FeatureCollection', features: airportFiltered }, {
+          pointToLayer: (f, latlng) => L.circleMarker(latlng, {
+            radius: 6.5, fillColor: '#7c3aed', color: '#ffffff', weight: 1.8, fillOpacity: 0.95
+          }),
+          style: (f) => {
+            if (f.geometry && f.geometry.type.includes('Line')) {
+              return { color: '#facc15', weight: 3.5, opacity: 0.95 };
+            }
+            return { color: '#6d28d9', weight: 1.8, fillColor: '#a78bfa', fillOpacity: 0.45 };
+          },
+          onEachFeature: (f, l) => {
+            const p = f.properties || {};
+            const defaultLabel = (p.aeroway || '').toLowerCase() === 'helipad' ? 'Helipad' : 'Bandar Udara / Landasan';
+            l.bindPopup(formatImpactPopup(p, defaultLabel, 'Transportasi Udara'));
+          }
+        }).addTo(layerGroups.airport);
+      }
+    }
+
+    // F. Render CAMS, MERRA-2, MODIS AOD (Tersaring Kab/Kota)
+    function renderFilteredValidationLayers() {
+      const districtFilter = document.getElementById('districtFilter').value;
+      const opacity = (parseInt(document.getElementById('opacitySlider').value, 10) / 100) * 0.62;
+
+      // CAMS
+      camsLayerGroup.clearLayers();
+      if (dataStore.cams.length) {
+        const filteredCams = dataStore.cams.filter(f => featureMatchesDistrict(f, districtFilter));
+        L.geoJSON({ type: 'FeatureCollection', features: filteredCams }, {
+          style: (feature) => {
+            const pmVal = extractPm25Value(feature.properties);
+            const ispu = pmVal !== null ? getIspuCategory(pmVal) : { color: '#0284c7' };
+            return { color: '#090d16', weight: 0.7, fillColor: ispu.color, fillOpacity: opacity };
+          },
+          onEachFeature: (feature, layer) => {
+            const props = feature.properties || {};
+            const pmVal = extractPm25Value(props);
+            const ispu = pmVal !== null ? getIspuCategory(pmVal) : { label: 'Tidak terdeteksi' };
+            const attrLines = Object.entries(props)
+              .map(([k, v]) => `<div class="popup-line"><strong>${k}:</strong> ${v}</div>`)
+              .join('');
+            layer.bindPopup(`
+              <div class="popup-header">CAMS PM2.5 (GeoJSON)</div>
+              <div class="popup-line"><strong>Nilai PM2.5:</strong> ${pmVal !== null ? `${pmVal} µg/m³ (${ispu.label})` : '-'}</div>
+              ${attrLines}
+            `);
+          }
+        }).addTo(camsLayerGroup);
+      }
+
+      // MERRA-2
+      weeklyMerraGroup.clearLayers();
+      if (dataStore.merra.length) {
+        const filteredMerra = dataStore.merra.filter(f => featureMatchesDistrict(f, districtFilter));
+        L.geoJSON({ type: 'FeatureCollection', features: filteredMerra }, {
+          style: (feature) => {
+            const val = Number(extractPropValue(feature.properties, ['pm25_ugm3', 'PM25', 'pm25', 'value'], 0));
+            const ispu = getIspuCategory(val);
+            return { color: '#334155', weight: 0.7, fillColor: ispu.color, fillOpacity: opacity };
+          },
+          onEachFeature: (feature, layer) => {
+            const p = feature.properties || {};
+            const rawVal = extractPropValue(p, ['pm25_ugm3', 'PM25', 'pm25', 'value']);
+            const valFormatted = typeof rawVal === 'number' ? rawVal.toFixed(2) : rawVal;
+            layer.bindPopup(`
+              <div class="popup-header">NASA MERRA-2 PM2.5</div>
+              <div class="popup-line"><strong>Periode:</strong> ${extractPropValue(p, ['periode'], activeWeeklyLabel)}</div>
+              <div class="popup-line"><strong>Konsentrasi:</strong> ${valFormatted} µg/m³</div>
+              <div class="popup-line"><strong>Kategori:</strong> ${extractPropValue(p, ['kategori'], '-')} (${extractPropValue(p, ['label_rentang'], '-')})</div>
+            `);
+          }
+        }).addTo(weeklyMerraGroup);
+      }
+
+      // MODIS AOD
+      weeklyModisGroup.clearLayers();
+      if (dataStore.modis.length) {
+        const filteredModis = dataStore.modis.filter(f => featureMatchesDistrict(f, districtFilter));
+        L.geoJSON({ type: 'FeatureCollection', features: filteredModis }, {
+          style: (feature) => {
+            const hexColor = extractPropValue(feature.properties, ['warna_hex'], '#f59e0b');
+            return { color: '#78350f', weight: 0.7, fillColor: hexColor, fillOpacity: opacity };
+          },
+          onEachFeature: (feature, layer) => {
+            const p = feature.properties || {};
+            const rawAod = extractPropValue(p, ['aod_550nm', 'aod', 'AOD', 'value']);
+            const aodFormatted = typeof rawAod === 'number' ? rawAod.toFixed(3) : rawAod;
+            layer.bindPopup(`
+              <div class="popup-header">NASA MODIS AOD</div>
+              <div class="popup-line"><strong>Periode:</strong> ${extractPropValue(p, ['periode'], activeWeeklyLabel)}</div>
+              <div class="popup-line"><strong>Nilai AOD:</strong> ${aodFormatted}</div>
+              <div class="popup-line"><strong>Kategori:</strong> ${extractPropValue(p, ['kategori'], '-')} (${extractPropValue(p, ['label_rentang'], '-')})</div>
+            `);
+          }
+        }).addTo(weeklyModisGroup);
+      }
+    }
+
+    function applyDistrictFilterToAllLayers() {
+      renderAdminBoundaries();
+      renderFilteredRealHotspots();
+      renderFilteredBurnedArea();
+      renderFilteredPeatland();
+      renderFilteredFacilities();
+      renderFilteredValidationLayers();
+      updateSimulation();
+    }
+
+    // ============================================================================
+    // 7. TWO-LEVEL TIMELINE CONTROLLER & HYSPLIT ON-THE-FLY MODELING ENGINE
     // ============================================================================
     function setTimelineMode(mode, targetIdx = null) {
       timelineMode = mode;
@@ -2066,9 +2774,9 @@
 
       const flowToDeg = (activeWindFromDeg + 180) % 360;
       const flowRad = (flowToDeg - 90) * (Math.PI / 180);
-      const windDistScale = (activeWindSpeed / 16) * 0.18;
-      const dynamicShiftLon = isManualWind ? Math.cos(flowRad) * windDistScale : step.windShift[0];
-      const dynamicShiftLat = isManualWind ? -Math.sin(flowRad) * windDistScale : step.windShift[1];
+      const windDistScale = (activeWindSpeed / 16) * 0.14;
+      const dynamicShiftLon = isManualWind ? Math.cos(flowRad) * windDistScale : 0;
+      const dynamicShiftLat = isManualWind ? -Math.sin(flowRad) * windDistScale : 0;
 
       const bannerSuffix = mitigationPct > 0 ? ` • Mitigasi Emisi -${mitigationPct}%` : '';
       const forecastBadge = step.isForecast ? `<span class="forecast-tag">FORECAST</span>` : '';
@@ -2076,9 +2784,7 @@
       document.getElementById('simTitleBanner').innerHTML = `<span class="sim-dot" style="background:${dotColor};"></span><span>${step.banner}${bannerSuffix}</span>${forecastBadge}`;
       document.getElementById('windTextContent').innerHTML = `Angin: <strong>${activeWindLabel}</strong>`;
       const needle = document.getElementById('windCompassNeedle');
-      if (needle) {
-        needle.style.transform = `rotate(${flowToDeg}deg)`;
-      }
+      if (needle) needle.style.transform = `rotate(${flowToDeg}deg)`;
       document.getElementById('currentTimestampLabel').innerHTML = step.isForecast
         ? `${step.timestamp} <span class="forecast-tag">FORECAST</span>`
         : step.timestamp;
@@ -2101,112 +2807,172 @@
           closestTick = t;
         }
       });
-      if (closestTick && minDiff <= 4) {
-        closestTick.classList.add('active');
-      }
+      if (closestTick && minDiff <= 4) closestTick.classList.add('active');
 
+      // RENDER POLIGON HYSPLIT ASLI (asap_pm25_harian_ispu.geojson)
       layerGroups.pm25.clearLayers();
       layerGroups.ahp.clearLayers();
 
-      let totalExposedPop = 0;
-      let baselineExposedPop = 0;
+      const targetDate = getActiveDateDDMMYYYY();
+      const [dd, mm, yyyy] = targetDate.split('/');
+      const altDate = `${yyyy}-${mm}-${dd}`;
+
+      let totalDangerAreaKm2 = 0;
+      let baselineDangerAreaKm2 = 0;
       let maxPm25 = 0;
+      const dangerPolygons = [];
       currentSimulationResults = [];
 
-      const chartLabels = [];
-      const chartValues = [];
-      const chartColors = [];
+      const areaByCategory = {
+        'Sedang': 0,
+        'Tidak sehat': 0,
+        'Sangat tidak sehat': 0,
+        'Berbahaya': 0
+      };
 
-      basePlumeZones.forEach(zone => {
-        if (districtFilter !== 'ALL' && zone.kab !== districtFilter) return;
-
-        const baselinePm25 = Math.round(zone.basePm25 * step.pm25Multiplier);
-        const currentPm25 = Math.max(12, Math.round(baselinePm25 * emissionFactor));
-        if (currentPm25 > maxPm25) maxPm25 = currentPm25;
-
-        const ispu = getIspuCategory(currentPm25);
-        const ahpScore = (wPm * ispu.score) + (wPop * zone.s_pop) + (wFasum * zone.s_fasum) + (wDurasi * zone.s_durasi);
-
-        const shiftedCoords = [zone.coords[0].map(pt => [
-          pt[0] + dynamicShiftLon,
-          pt[1] + dynamicShiftLat
-        ])];
-
-        const polyFeature = {
-          type: "Feature",
-          properties: { ...zone, currentPm25, ispuLabel: ispu.label, ahpScore: ahpScore.toFixed(2) },
-          geometry: { type: "Polygon", coordinates: shiftedCoords }
-        };
-
-        if (baselinePm25 >= threshold) {
-          baselineExposedPop += zone.pop;
-        }
-        const isDanger = currentPm25 >= threshold;
-        if (isDanger) {
-          totalExposedPop += zone.pop;
-        }
-
-        L.geoJSON(polyFeature, {
-          style: {
-            color: isDanger ? '#090d16' : ispu.color,
-            weight: isDanger ? 1.5 : 1.0,
-            dashArray: isDanger ? null : '4',
-            fillColor: ispu.color,
-            fillOpacity: opacity * 0.62
-          },
-          onEachFeature: (feat, layer) => {
-            layer.bindPopup(`
-              <div class="popup-header">${feat.properties.nama}</div>
-              <div class="popup-line"><strong>Wilayah:</strong> ${feat.properties.kab}</div>
-              <div class="popup-line"><strong>Konsentrasi PM2.5:</strong> ${feat.properties.currentPm25} µg/m³ (${feat.properties.ispuLabel})</div>
-              <div class="popup-line"><strong>Skor Prioritas AHP:</strong> ${feat.properties.ahpScore} / 5.00</div>
-              <div class="popup-line"><strong>Estimasi Populasi:</strong> ${feat.properties.pop.toLocaleString('id-ID')} jiwa</div>
-            `);
-          }
-        }).addTo(layerGroups.pm25);
-
-        L.geoJSON(polyFeature, {
-          style: {
-            color: '#581c87',
-            weight: 1.2,
-            fillColor: getAhpColor(ahpScore),
-            fillOpacity: opacity * 0.72
-          },
-          onEachFeature: (feat, layer) => {
-            layer.bindPopup(`
-              <div class="popup-header">Indeks Prioritas Dampak (AHP)</div>
-              <div class="popup-line"><strong>Zona:</strong> ${feat.properties.nama}</div>
-              <div class="popup-line"><strong>Skor Gabungan AHP:</strong> <b>${feat.properties.ahpScore} / 5.00</b></div>
-              <div class="popup-line"><strong>Skor Parameter (1-5):</strong> PM2.5 (${ispu.score}), Pop (${zone.s_pop}), Fasum (${zone.s_fasum}), Durasi (${zone.s_durasi})</div>
-            `);
-          }
-        }).addTo(layerGroups.ahp);
-
-        chartLabels.push(zone.kab.replace('Kota ', ''));
-        chartValues.push(currentPm25);
-        chartColors.push(ispu.color);
-
-        currentSimulationResults.push({
-          Wilayah: zone.kab,
-          Zona: zone.nama,
-          Tipe_Periode: step.isForecast ? 'FORECAST' : 'OBSERVASI_REANALISIS',
-          Waktu_Simulasi: step.timestamp,
-          PM25_ugm3: currentPm25,
-          Kategori_ISPU: ispu.label,
-          Skor_AHP: ahpScore.toFixed(2),
-          Populasi_Zona: zone.pop,
-          Status_Ambang: isDanger ? 'MELEBIHI AMBANG' : 'AMAN'
-        });
+      const matchingHysplit = dataStore.hysplit.filter(f => {
+        const p = f.properties || {};
+        const tgl = String(p.tanggal || '').trim();
+        if (tgl !== targetDate && tgl !== altDate) return false;
+        return featureMatchesDistrict(f, districtFilter);
       });
 
-      const exposedSchools = Math.max(0, Math.round((totalExposedPop / 142500) * 64));
-      const exposedHealth = Math.max(0, Math.round((totalExposedPop / 142500) * 8));
-      document.getElementById('kpiPop').textContent = `~${totalExposedPop.toLocaleString('id-ID')} Jiwa`;
-      document.getElementById('kpiSchools').textContent = `${exposedSchools} Unit`;
-      document.getElementById('kpiHealth').textContent = `${exposedHealth} Unit`;
+      if (matchingHysplit.length > 0) {
+        matchingHysplit.forEach((feat, idx) => {
+          const p = feat.properties || {};
+          const rawRata = parseFloat(String(p.pm25_rata || 0).replace(',', '.')) || 0;
+          const rawMaks = parseFloat(String(p.pm25_maks || rawRata).replace(',', '.')) || rawRata;
+          const luasKm2 = parseFloat(String(p.luas_km2 || 0).replace(',', '.')) || 0;
+
+          const effRata = Number((rawRata * emissionFactor).toFixed(1));
+          const effMaks = Number((rawMaks * emissionFactor).toFixed(1));
+          if (effMaks > maxPm25) maxPm25 = effMaks;
+
+          // Gunakan warna asli atribut jika tidak ada mitigasi/perubahan kategori, atau sesuaikan kategori ISPU
+          const ispu = getIspuCategory(effRata);
+          const fillHex = (mitigationPct === 0 && p.warna) ? p.warna : ispu.color;
+          const katLabel = mitigationPct === 0 ? (p.kategori || ispu.label) : ispu.label;
+
+          // Hitung skor AHP (1-5)
+          const areaScore = luasKm2 > 50000 ? 5 : luasKm2 > 15000 ? 4 : luasKm2 > 3000 ? 3 : 2;
+          const ahpScore = (wPm * ispu.score) + (wPop * areaScore) + (wFasum * ispu.score) + (wDurasi * (p.kode || ispu.score));
+
+          // Opsional pergeseran manual jika What-If Angin aktif
+          let displayGeometry = feat.geometry;
+          if (isManualWind && (dynamicShiftLon !== 0 || dynamicShiftLat !== 0)) {
+            const shiftRing = ring => ring.map(pt => [pt[0] + dynamicShiftLon, pt[1] + dynamicShiftLat]);
+            if (feat.geometry.type === 'Polygon') {
+              displayGeometry = { type: 'Polygon', coordinates: feat.geometry.coordinates.map(shiftRing) };
+            } else if (feat.geometry.type === 'MultiPolygon') {
+              displayGeometry = { type: 'MultiPolygon', coordinates: feat.geometry.coordinates.map(poly => poly.map(shiftRing)) };
+            }
+          }
+
+          const displayFeature = {
+            type: 'Feature',
+            properties: p,
+            geometry: displayGeometry
+          };
+
+          if (rawRata >= threshold) baselineDangerAreaKm2 += luasKm2;
+          const isDanger = effRata >= threshold;
+          if (isDanger) {
+            totalDangerAreaKm2 += luasKm2;
+            dangerPolygons.push(displayFeature);
+          }
+
+          // Rekap luas per kategori untuk grafik
+          const normKat = katLabel.toLowerCase();
+          if (normKat.includes('sangat tidak')) areaByCategory['Sangat tidak sehat'] += luasKm2;
+          else if (normKat.includes('tidak sehat')) areaByCategory['Tidak sehat'] += luasKm2;
+          else if (normKat.includes('berbahaya')) areaByCategory['Berbahaya'] += luasKm2;
+          else areaByCategory['Sedang'] += luasKm2;
+
+          L.geoJSON(displayFeature, {
+            style: {
+              color: isDanger ? '#090d16' : fillHex,
+              weight: isDanger ? 1.3 : 0.8,
+              fillColor: fillHex,
+              fillOpacity: opacity * 0.65
+            },
+            onEachFeature: (_, layer) => {
+              layer.bindPopup(`
+                <div class="popup-header">Sebaran PM2.5 HYSPLIT (${katLabel})</div>
+                <div class="popup-line"><strong>Tanggal:</strong> ${p.tanggal || targetDate}</div>
+                <div class="popup-line"><strong>PM2.5 Rata-rata:</strong> ${effRata} µg/m³ (Maks: ${effMaks} µg/m³)</div>
+                <div class="popup-line"><strong>Rentang ISPU:</strong> ${p.rentang_ugm3 || '-'} µg/m³</div>
+                <div class="popup-line"><strong>Luas Zona:</strong> ${luasKm2.toLocaleString('id-ID')} km²</div>
+                <div class="popup-line"><strong>Skor Prioritas AHP:</strong> ${ahpScore.toFixed(2)} / 5.00</div>
+              `);
+            }
+          }).addTo(layerGroups.pm25);
+
+          L.geoJSON(displayFeature, {
+            style: {
+              color: '#581c87',
+              weight: 1.0,
+              fillColor: getAhpColor(ahpScore),
+              fillOpacity: opacity * 0.72
+            },
+            onEachFeature: (_, layer) => {
+              layer.bindPopup(`
+                <div class="popup-header">Indeks Prioritas Dampak (AHP)</div>
+                <div class="popup-line"><strong>Kategori PM2.5:</strong> ${katLabel} (${effRata} µg/m³)</div>
+                <div class="popup-line"><strong>Skor Gabungan AHP:</strong> <b>${ahpScore.toFixed(2)} / 5.00</b></div>
+                <div class="popup-line"><strong>Luas Zona:</strong> ${luasKm2.toLocaleString('id-ID')} km²</div>
+              `);
+            }
+          }).addTo(layerGroups.ahp);
+
+          currentSimulationResults.push({
+            Wilayah_Filter: districtFilter,
+            Tanggal: p.tanggal || targetDate,
+            Kategori_ISPU: katLabel,
+            Rentang_ugm3: p.rentang_ugm3 || '-',
+            PM25_Rata_ugm3: effRata,
+            PM25_Maks_ugm3: effMaks,
+            Luas_km2: luasKm2,
+            Skor_AHP: ahpScore.toFixed(2),
+            Status_Ambang: isDanger ? 'MELEBIHI AMBANG' : 'AMAN'
+          });
+        });
+      }
+
+      // Hitung jumlah Sekolah & Faskes nyata yang bertampalan dengan zona melebihi ambang
+      let exposedSchoolsCount = 0;
+      let exposedHealthCount = 0;
+
+      if (dangerPolygons.length > 0 && typeof turf !== 'undefined') {
+        const eduCandidates = dataStore.education.filter(f => featureMatchesDistrict(f, districtFilter));
+        const healthCandidates = dataStore.health.filter(f => featureMatchesDistrict(f, districtFilter));
+
+        eduCandidates.forEach(fac => {
+          if (dangerPolygons.some(poly => {
+            try { return turf.booleanIntersects(fac, poly); } catch (e) { return false; }
+          })) {
+            exposedSchoolsCount++;
+          }
+        });
+
+        healthCandidates.forEach(fac => {
+          if (dangerPolygons.some(poly => {
+            try { return turf.booleanIntersects(fac, poly); } catch (e) { return false; }
+          })) {
+            exposedHealthCount++;
+          }
+        });
+      }
+
+      // Estimasi populasi berdasarkan kepadatan rata-rata Kalbar (~38 jiwa/km² pada area terdampak)
+      const estExposedPop = Math.round(totalDangerAreaKm2 * 38);
+      const baseExposedPop = Math.round(baselineDangerAreaKm2 * 38);
+
+      document.getElementById('kpiPop').textContent = `${Math.round(totalDangerAreaKm2).toLocaleString('id-ID')} km² (~${estExposedPop.toLocaleString('id-ID')} Jiwa)`;
+      document.getElementById('kpiSchools').textContent = `${exposedSchoolsCount.toLocaleString('id-ID')} Unit`;
+      document.getElementById('kpiHealth').textContent = `${exposedHealthCount.toLocaleString('id-ID')} Unit`;
 
       const deltaBadge = document.getElementById('popDeltaBadge');
-      const diffPop = totalExposedPop - baselineExposedPop;
+      const diffPop = estExposedPop - baseExposedPop;
       if (diffPop < 0) {
         deltaBadge.innerHTML = `<span class="delta-pill delta-good">↓ ${Math.abs(diffPop).toLocaleString('id-ID')} Jiwa</span>`;
       } else if (diffPop > 0) {
@@ -2217,12 +2983,12 @@
 
       const badge = document.getElementById('globalStatusBadge');
       const statusText = document.getElementById('globalStatusText');
-      if (maxPm25 > 150) {
+      if (maxPm25 > 150.4) {
         badge.style.background = 'rgba(220, 38, 38, 0.11)';
         badge.style.borderColor = 'rgba(220, 38, 38, 0.38)';
         badge.style.color = '#991b1b';
         statusText.textContent = `SIAGA DARURAT (PM2.5 Maks ${maxPm25} µg/m³)`;
-      } else if (maxPm25 > 100) {
+      } else if (maxPm25 > 55.4) {
         badge.style.background = 'rgba(217, 119, 6, 0.12)';
         badge.style.borderColor = 'rgba(217, 119, 6, 0.40)';
         badge.style.color = '#92400e';
@@ -2234,9 +3000,14 @@
         statusText.textContent = `TERKENDALI (PM2.5 Maks ${maxPm25} µg/m³)`;
       }
 
-      exposureChart.data.labels = chartLabels;
-      exposureChart.data.datasets[0].data = chartValues;
-      exposureChart.data.datasets[0].backgroundColor = chartColors;
+      exposureChart.data.labels = ['Sedang', 'Tidak Sehat', 'Sangat Tdk Sehat', 'Berbahaya'];
+      exposureChart.data.datasets[0].data = [
+        Math.round(areaByCategory['Sedang']),
+        Math.round(areaByCategory['Tidak sehat']),
+        Math.round(areaByCategory['Sangat tidak sehat']),
+        Math.round(areaByCategory['Berbahaya'])
+      ];
+      exposureChart.data.datasets[0].backgroundColor = ['#0070C0', '#FFC000', '#FF0000', '#18181b'];
       exposureChart.update();
     }
 
@@ -2244,11 +3015,7 @@
       layerGroups.trajectory.clearLayers();
       if (!isManual) {
         L.geoJSON(dummyTrajectories, {
-          style: (f) => ({
-            color: f.properties.color,
-            weight: 2.8,
-            opacity: 0.9
-          }),
+          style: (f) => ({ color: f.properties.color, weight: 2.8, opacity: 0.9 }),
           onEachFeature: (f, l) => {
             l.bindPopup(`<div class="popup-header">Lintasan HYSPLIT (${f.properties.alt})</div><div class="popup-line">Sumber Emisi: ${f.properties.source}</div>`);
           }
@@ -2278,10 +3045,7 @@
             const frac = step / 4;
             const ang = rad + layerSpec.turn * frac;
             const d = distDeg * layerSpec.scale * frac;
-            pts.push([
-              orig.lon + Math.cos(ang) * d,
-              orig.lat - Math.sin(ang) * d
-            ]);
+            pts.push([orig.lon + Math.cos(ang) * d, orig.lat - Math.sin(ang) * d]);
           }
           L.geoJSON({
             type: "Feature",
@@ -2298,115 +3062,102 @@
     }
 
     // ============================================================================
-    // 6. RENDER LAYER VEKTOR DASAR (LAHAN GAMBUT & TRAJECTORY)
+    // 8. FETCH DATA GEOJSON DARI GITHUB (1 KALI SAAT INISIALISASI)
     // ============================================================================
-    function renderBaseVectorLayers(districtFilter = 'ALL') {
-      layerGroups.peat.clearLayers();
-      layerGroups.trajectory.clearLayers();
+    const BASE_REPO_URL = 'https://raw.githubusercontent.com/CyberIMG05/webgis-karhutla-kalbar/main';
+    const BASE_PJBL_URL = `${BASE_REPO_URL}/data_pjbl`;
 
-      L.geoJSON(dummyPeatland, {
-        style: {
-          color: '#ca8a04',
-          weight: 1.2,
-          fillColor: '#eab308',
-          fillOpacity: 0.24
-        },
-        onEachFeature: (f, l) => {
-          l.bindPopup(`<div class="popup-header">${f.properties.nama}</div><div class="popup-line">Kedalaman Gambut: ${f.properties.kedalaman}</div>`);
-        }
-      }).addTo(layerGroups.peat);
-
-      L.geoJSON(dummyTrajectories, {
-        style: (f) => ({
-          color: f.properties.color,
-          weight: 2.8,
-          opacity: 0.9
-        }),
-        onEachFeature: (f, l) => {
-          l.bindPopup(`<div class="popup-header">Lintasan HYSPLIT (${f.properties.alt})</div><div class="popup-line">Sumber Emisi: ${f.properties.source}</div>`);
-        }
-      }).addTo(layerGroups.trajectory);
-    }
-
-    // ============================================================================
-    // 6D. MUAT & FILTER HOTSPOT VIIRS ASLI (NOAA-20, NOAA-21, SUOMI-NPP) PER TANGGAL
-    // ============================================================================
-    let allRealHotspots = [];
-    let isHotspotLoaded = false;
-
-    function getActiveDateDDMMYYYY() {
-      if (timelineMode === 'episode') {
-        const epIdx = parseInt(document.getElementById('timeSlider').value, 10);
-        if (epIdx <= 3) return '11/10/2026';
-        if (epIdx <= 7) return '12/10/2026';
-        if (epIdx <= 11) return '13/10/2026';
-        if (epIdx === 12) return '14/10/2026';
-        return '31/10/2026';
+    function extractPropValue(props, keys, fallback = '-') {
+      if (!props) return fallback;
+      for (const k of keys) {
+        if (props[k] !== undefined && props[k] !== null && props[k] !== '') return props[k];
       }
-
-      const dayIdx = Math.min(91, Math.max(0, parseInt(document.getElementById('timeSlider').value, 10)));
-      const d = new Date(2026, 7, 1);
-      d.setDate(d.getDate() + dayIdx);
-
-      const dd = String(d.getDate()).padStart(2, '0');
-      const mm = String(d.getMonth() + 1).padStart(2, '0');
-      const yyyy = d.getFullYear();
-      return `${dd}/${mm}/${yyyy}`;
+      return fallback;
     }
 
-    function renderFilteredRealHotspots() {
-      if (!isHotspotLoaded) return;
-      layerGroups.hotspots.clearLayers();
-
-      const targetDate = getActiveDateDDMMYYYY();
-      const mitVal = document.getElementById('mitigationSlider') ? parseInt(document.getElementById('mitigationSlider').value, 10) : 0;
-
-      const filteredFeatures = allRealHotspots.filter(f => {
-        const p = f.properties || {};
-        const rawDate = String(p.acq_date || '').trim();
-        if (rawDate === targetDate) return true;
-        const [dd, mm, yyyy] = targetDate.split('/');
-        return rawDate === `${yyyy}-${mm}-${dd}`;
-      });
-
-      L.geoJSON({ type: 'FeatureCollection', features: filteredFeatures }, {
-        pointToLayer: (f, latlng) => {
-          const p = f.properties || {};
-          const rawFrp = parseFloat(String(p.frp || 10).replace(',', '.')) || 10;
-          const effFrp = rawFrp * (1 - mitVal / 100);
-          const radius = Math.min(9, Math.max(3.2, Math.sqrt(effFrp) * 0.42));
-          const fillCol = effFrp > 50 ? '#dc2626' : '#f97316';
-
-          return L.circleMarker(latlng, {
-            radius: radius,
-            fillColor: fillCol,
-            color: '#ffffff',
-            weight: 0.9,
-            fillOpacity: 0.88
-          });
-        },
-        onEachFeature: (f, l) => {
-          const p = f.properties || {};
-          const satLabel = p._sourceSat || p.satellite || 'VIIRS';
-          const jamRaw = String(p.acq_time || '').padStart(4, '0');
-          const jamFormatted = jamRaw.length === 4 ? `${jamRaw.slice(0, 2)}:${jamRaw.slice(2)} UTC` : jamRaw;
-          const confMap = { h: 'Tinggi (High)', n: 'Nominal (Normal)', l: 'Rendah (Low)' };
-          const confText = confMap[String(p.confidence || '').toLowerCase()] || p.confidence || '-';
-
-          l.bindPopup(`
-            <div class="popup-header">Hotspot Aktif (${satLabel})</div>
-            <div class="popup-line"><strong>Tanggal & Waktu:</strong> ${p.acq_date || '-'} • ${jamFormatted}</div>
-            <div class="popup-line"><strong>Radiative Power (FRP):</strong> ${p.frp ?? '-'} MW</div>
-            <div class="popup-line"><strong>Brightness Temp:</strong> ${p.brightness ?? '-'} K</div>
-            <div class="popup-line"><strong>Tingkat Kepercayaan:</strong> ${confText}</div>
-            <div class="popup-line"><strong>Koordinat:</strong> ${Number(p.latitude).toFixed(4)}, ${Number(p.longitude).toFixed(4)}</div>
-          `);
+    function extractPm25Value(props) {
+      if (!props) return null;
+      const candidates = ['pm25', 'PM25', 'pm2_5', 'PM2_5', 'pm25_rata', 'value', 'VALUE', 'val', 'mean', 'DN', 'raster_val'];
+      for (const key of candidates) {
+        if (props[key] !== undefined && props[key] !== null && !isNaN(parseFloat(props[key]))) {
+          return parseFloat(props[key]);
         }
-      }).addTo(layerGroups.hotspots);
+      }
+      return null;
     }
 
+    // 8A. Muat Batas Administrasi & Isi Dropdown 14 Kab/Kota secara Otomatis
+    function loadAdminBoundaryGeoJSON() {
+      fetch(`${BASE_REPO_URL}/Batas_KabKota_KalimantanBarat.geojson`)
+        .then(res => { if (!res.ok) throw new Error(res.status); return res.json(); })
+        .then(geojsonData => {
+          dataStore.adminFeatures = geojsonData.features || [];
+
+          const selectEl = document.getElementById('districtFilter');
+          const districtNames = [];
+
+          dataStore.adminFeatures.forEach(feat => {
+            const p = feat.properties || {};
+            const kabName = p.WADMKK || p.NAMOBJ;
+            if (kabName) {
+              districtNames.push(kabName);
+              const tempLayer = L.geoJSON(feat);
+              dataStore.adminBoundsMap[kabName] = tempLayer.getBounds();
+            }
+          });
+
+          // Urutkan alfabetis dan masukkan ke <select id="districtFilter">
+          [...new Set(districtNames)].sort().forEach(name => {
+            const opt = document.createElement('option');
+            opt.value = name;
+            opt.textContent = name;
+            selectEl.appendChild(opt);
+          });
+
+          renderAdminBoundaries();
+          console.log(`Berhasil memuat ${dataStore.adminFeatures.length} Kab/Kota Kalbar.`);
+        })
+        .catch(err => console.warn('Gagal memuat Batas_KabKota_KalimantanBarat.geojson:', err));
+    }
+
+    // 8B. Muat Pemodelan Sebaran PM2.5 HYSPLIT Asli
+    function loadHysplitPm25GeoJSON() {
+      fetch(`${BASE_PJBL_URL}/asap_pm25_harian_ispu.geojson`)
+        .then(res => { if (!res.ok) throw new Error(res.status); return res.json(); })
+        .then(data => {
+          dataStore.hysplit = data.features || [];
+          console.log(`Berhasil memuat ${dataStore.hysplit.length} poligon HYSPLIT PM2.5.`);
+          updateSimulation();
+        })
+        .catch(err => console.warn('Gagal memuat asap_pm25_harian_ispu.geojson:', err));
+    }
+
+    // 8C. Muat Lahan Gambut KHG Asli
+    function loadPeatlandGeoJSON() {
+      fetch(`${BASE_PJBL_URL}/khg_gambut_kalbar.geojson`)
+        .then(res => { if (!res.ok) throw new Error(res.status); return res.json(); })
+        .then(data => {
+          dataStore.peat = data.features || [];
+          console.log(`Berhasil memuat ${dataStore.peat.length} poligon KHG Gambut.`);
+          renderFilteredPeatland();
+        })
+        .catch(err => console.warn('Gagal memuat khg_gambut_kalbar.geojson:', err));
+    }
+
+    // 8D. Muat Area Terbakar MODIS MCD64A1
+    function loadBurnedAreaGeoJSON() {
+      fetch(`${BASE_PJBL_URL}/burned_area_modis_mcd64a1.geojson`)
+        .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+        .then(data => {
+          dataStore.burnedArea = data.features || [];
+          console.log(`Berhasil memuat ${dataStore.burnedArea.length} poligon Burned Area.`);
+          renderFilteredBurnedArea();
+        })
+        .catch(err => console.warn('Gagal memuat burned_area_modis_mcd64a1.geojson:', err));
+    }
+
+    // 8E. Muat Hotspot VIIRS (NOAA-20, NOAA-21, Suomi-NPP)
     function loadRealHotspotsFromGitHub() {
-      const BASE_HS_URL = 'https://raw.githubusercontent.com/CyberIMG05/webgis-karhutla-kalbar/main/data_pjbl/hotspot';
       const files = [
         { file: 'hotspot_viirs_noaa20.geojson', label: 'VIIRS NOAA-20' },
         { file: 'hotspot_viirs_noaa21.geojson', label: 'VIIRS NOAA-21' },
@@ -2415,7 +3166,7 @@
 
       Promise.all(
         files.map(item =>
-          fetch(`${BASE_HS_URL}/${item.file}`)
+          fetch(`${BASE_PJBL_URL}/hotspot/${item.file}`)
             .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
             .then(geo => {
               (geo.features || []).forEach(feat => {
@@ -2429,280 +3180,56 @@
             })
         )
       ).then(results => {
-        allRealHotspots = results.flat();
-        isHotspotLoaded = true;
-        console.log(`Total hotspot VIIRS dimuat: ${allRealHotspots.length} titik.`);
+        dataStore.hotspots = results.flat();
+        console.log(`Total hotspot VIIRS dimuat: ${dataStore.hotspots.length} titik.`);
         renderFilteredRealHotspots();
       });
     }
 
-    // ============================================================================
-    // 6E. MUAT AREA TERBAKAR (BURNED AREA MODIS MCD64A1)
-    // ============================================================================
-    function loadBurnedAreaGeoJSON() {
-      const url = 'https://raw.githubusercontent.com/CyberIMG05/webgis-karhutla-kalbar/main/data_pjbl/burned_area_modis_mcd64a1.geojson';
-      fetch(url)
-        .then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); })
-        .then(data => {
-          layerGroups.burnedArea.clearLayers();
-          L.geoJSON(data, {
-            style: {
-              color: '#ea580c',
-              weight: 1.2,
-              fillColor: '#451a03',
-              fillOpacity: 0.55
-            },
-            onEachFeature: (feature, layer) => {
-              layer.bindPopup(`
-                <div class="popup-header">Area Terbakar (Burned Area)</div>
-                <div class="popup-line"><strong>Sumber Data:</strong> NASA MODIS MCD64A1 v061 (500 m)</div>
-                <div class="popup-line"><strong>Wilayah:</strong> Provinsi Kalimantan Barat</div>
-                <div class="popup-line"><strong>Periode Kajian:</strong> Agustus – Oktober 2026</div>
-              `);
-            }
-          }).addTo(layerGroups.burnedArea);
-          console.log('Berhasil memuat burned_area_modis_mcd64a1.geojson');
-        })
-        .catch(err => console.warn('Gagal memuat burned_area_modis_mcd64a1.geojson:', err));
-    }
-
-    // ============================================================================
-    // 6F. MUAT 3 KATEGORI OBJEK VITAL TERDAMPAK (KESEHATAN, PENDIDIKAN, BANDARA)
-    // ============================================================================
+    // 8F. Muat 3 Kategori Fasilitas Vital
     function loadSeparatedImpactLayers() {
-      const BASE_IMPACT_URL = 'https://raw.githubusercontent.com/CyberIMG05/webgis-karhutla-kalbar/main/data_pjbl/layer_dampak';
+      const BASE_IMPACT_URL = `${BASE_PJBL_URL}/layer_dampak`;
 
-      const formatImpactPopup = (p, defaultTitle, kategoriLabel) => {
-        const nama = p.name || p.name_id || p.name_en || p.NAMOBJ || defaultTitle;
-        const jenis = p.aeroway || p.amenity || p.healthcare || kategoriLabel;
-        const desa = p.adm4_name ? `${p.adm4_name}, ` : '';
-        const kec  = p.adm3_name ? `Kec. ${p.adm3_name}, ` : '';
-        const kab  = p.adm2_name || p.WADMKK || 'Kalimantan Barat';
-
-        return `
-          <div class="popup-header">${nama}</div>
-          <div class="popup-line"><strong>Kategori:</strong> ${kategoriLabel} (${jenis})</div>
-          <div class="popup-line"><strong>Lokasi:</strong> ${desa}${kec}${kab}</div>
-          <div class="popup-line"><strong>Status:</strong> Terdampak Sebaran Kabut Asap</div>
-        `;
-      };
-
-      // 1. Fasilitas Kesehatan
-      ['health_point.geojson', 'health_polygon.geojson'].forEach(file => {
-        fetch(`${BASE_IMPACT_URL}/${file}`)
-          .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
-          .then(data => {
-            L.geoJSON(data, {
-              pointToLayer: (f, latlng) => L.circleMarker(latlng, {
-                radius: 5.5, fillColor: '#e11d48', color: '#ffffff', weight: 1.5, fillOpacity: 0.9
-              }),
-              style: { color: '#be123c', weight: 1.5, fillColor: '#fb7185', fillOpacity: 0.45 },
-              onEachFeature: (f, l) => l.bindPopup(formatImpactPopup(f.properties || {}, 'Fasilitas Kesehatan', 'Fasilitas Kesehatan'))
-            }).addTo(layerGroups.health);
-          })
-          .catch(err => console.warn(`Gagal memuat ${file}:`, err));
+      Promise.all(
+        ['health_point.geojson', 'health_polygon.geojson'].map(f =>
+          fetch(`${BASE_IMPACT_URL}/${f}`).then(r => r.ok ? r.json() : { features: [] }).catch(() => ({ features: [] }))
+        )
+      ).then(res => {
+        dataStore.health = res.flatMap(g => g.features || []);
+        renderFilteredFacilities();
+        updateSimulation();
       });
 
-      // 2. Fasilitas Pendidikan
-      ['education_point.geojson', 'education_polygon.geojson'].forEach(file => {
-        fetch(`${BASE_IMPACT_URL}/${file}`)
-          .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
-          .then(data => {
-            L.geoJSON(data, {
-              pointToLayer: (f, latlng) => L.circleMarker(latlng, {
-                radius: 5.5, fillColor: '#2563eb', color: '#ffffff', weight: 1.5, fillOpacity: 0.9
-              }),
-              style: { color: '#1d4ed8', weight: 1.5, fillColor: '#60a5fa', fillOpacity: 0.45 },
-              onEachFeature: (f, l) => l.bindPopup(formatImpactPopup(f.properties || {}, 'Fasilitas Pendidikan', 'Fasilitas Pendidikan'))
-            }).addTo(layerGroups.education);
-          })
-          .catch(err => console.warn(`Gagal memuat ${file}:`, err));
+      Promise.all(
+        ['education_point.geojson', 'education_polygon.geojson'].map(f =>
+          fetch(`${BASE_IMPACT_URL}/${f}`).then(r => r.ok ? r.json() : { features: [] }).catch(() => ({ features: [] }))
+        )
+      ).then(res => {
+        dataStore.education = res.flatMap(g => g.features || []);
+        renderFilteredFacilities();
+        updateSimulation();
       });
 
-      // 3. Bandara & Helipad
-      ['airport_point.geojson', 'airport_polygon.geojson', 'airport_polyline.geojson'].forEach(file => {
-        fetch(`${BASE_IMPACT_URL}/${file}`)
-          .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
-          .then(data => {
-            L.geoJSON(data, {
-              pointToLayer: (f, latlng) => L.circleMarker(latlng, {
-                radius: 6.5, fillColor: '#7c3aed', color: '#ffffff', weight: 1.8, fillOpacity: 0.95
-              }),
-              style: (f) => {
-                if (f.geometry && f.geometry.type.includes('Line')) {
-                  return { color: '#facc15', weight: 3.5, opacity: 0.95 };
-                }
-                return { color: '#6d28d9', weight: 1.8, fillColor: '#a78bfa', fillOpacity: 0.45 };
-              },
-              onEachFeature: (f, l) => {
-                const p = f.properties || {};
-                const defaultLabel = (p.aeroway || '').toLowerCase() === 'helipad' ? 'Helipad' : 'Bandar Udara / Landasan';
-                l.bindPopup(formatImpactPopup(p, defaultLabel, 'Transportasi Udara'));
-              }
-            }).addTo(layerGroups.airport);
-          })
-          .catch(err => console.warn(`Gagal memuat ${file}:`, err));
+      Promise.all(
+        ['airport_point.geojson', 'airport_polygon.geojson', 'airport_polyline.geojson'].map(f =>
+          fetch(`${BASE_IMPACT_URL}/${f}`).then(r => r.ok ? r.json() : { features: [] }).catch(() => ({ features: [] }))
+        )
+      ).then(res => {
+        dataStore.airport = res.flatMap(g => g.features || []);
+        renderFilteredFacilities();
       });
     }
 
-    // ============================================================================
-    // 6A. MUAT BATAS ADMINISTRASI KAB/KOTA KALIMANTAN BARAT (GEOJSON)
-    // ============================================================================
-    const adminBoundaryGroup = L.layerGroup().addTo(map);
-
-    function extractDistrictName(props) {
-      if (!props) return 'Wilayah Administrasi';
-      const candidates = ['WADMKK', 'NAMOBJ', 'KAB_KOTA', 'KABUPATEN', 'NAMA_KAB', 'NAME_2', 'nama', 'kab_kota'];
-      for (const key of candidates) {
-        if (props[key]) return props[key];
-      }
-      return 'Kabupaten/Kota';
+    // 8G. Muat CAMS & Validasi Mingguan (MERRA-2 & MODIS AOD)
+    function loadCamsPm25GeoJSON() {
+      fetch(`${BASE_REPO_URL}/CAMS_PM25.geojson`)
+        .then(res => { if (!res.ok) throw new Error(res.status); return res.json(); })
+        .then(geojsonData => {
+          dataStore.cams = geojsonData.features || [];
+          renderFilteredValidationLayers();
+        })
+        .catch(err => console.warn('Gagal memuat CAMS_PM25.geojson:', err));
     }
-
-    function loadAdminBoundaryGeoJSON(urls = [
-      'https://raw.githubusercontent.com/CyberIMG05/webgis-karhutla-kalbar/main/Batas_KabKota_KalimantanBarat.geojson',
-      './Batas_KabKota_KalimantanBarat.geojson',
-      './data/Batas_KabKota_KalimantanBarat.geojson'
-    ]) {
-      const list = Array.isArray(urls) ? urls : [urls];
-
-      const tryNext = (index) => {
-        if (index >= list.length) {
-          console.warn('Batas_KabKota_KalimantanBarat.geojson gagal dimuat dari semua sumber.');
-          return;
-        }
-        fetch(list[index])
-          .then(res => {
-            if (!res.ok) throw new Error(`HTTP ${res.status}`);
-            return res.json();
-          })
-          .then(geojsonData => {
-            adminBoundaryGroup.clearLayers();
-            const adminGeoJson = L.geoJSON(geojsonData, {
-              style: {
-                color: '#ffffff',
-                weight: 1.6,
-                opacity: 0.85,
-                dashArray: '5, 4',
-                fillColor: '#64748b',
-                fillOpacity: 0.03
-              },
-              onEachFeature: (feature, layer) => {
-                const p = feature.properties || {};
-                const kabName = p.WADMKK || p.NAMOBJ || extractDistrictName(p);
-                const kodeKab = p.KDPKAB || '-';
-                const luasKm2 = p.LUASWH ? Number(p.LUASWH).toLocaleString('id-ID', { maximumFractionDigits: 2 }) : '-';
-
-                layer.bindTooltip(kabName, { sticky: true, direction: 'center' });
-                layer.bindPopup(`
-                  <div class="popup-header">Kabupaten/Kota ${kabName}</div>
-                  <div class="popup-line"><strong>Kode Wilayah:</strong> ${kodeKab}</div>
-                  <div class="popup-line"><strong>Luas Wilayah:</strong> ${luasKm2} km²</div>
-                  <div class="popup-line"><strong>Provinsi:</strong> ${p.WADMPR || 'Kalimantan Barat'}</div>
-                `);
-              }
-            }).addTo(adminBoundaryGroup);
-
-            adminGeoJson.bringToBack();
-            console.log('Berhasil memuat Batas_KabKota_KalimantanBarat.geojson dari:', list[index]);
-          })
-          .catch(() => tryNext(index + 1));
-      };
-
-      tryNext(0);
-    }
-
-    // ============================================================================
-    // 6B. MUAT CAMS_PM25.GEOJSON (PERMALINK RAW + FALLBACK RELATIVE PATH)
-    // ============================================================================
-    const camsLayerGroup = L.layerGroup();
-
-    function extractPm25Value(props) {
-      if (!props) return null;
-      const candidates = ['pm25', 'PM25', 'pm2_5', 'PM2_5', 'value', 'VALUE', 'val', 'mean', 'DN', 'raster_val'];
-      for (const key of candidates) {
-        if (props[key] !== undefined && props[key] !== null && !isNaN(parseFloat(props[key]))) {
-          return parseFloat(props[key]);
-        }
-      }
-      for (const [key, val] of Object.entries(props)) {
-        if (typeof val === 'number' && !isNaN(val)) return val;
-        if (typeof val === 'string' && val.trim() !== '' && !isNaN(parseFloat(val))) {
-          return parseFloat(val);
-        }
-      }
-      return null;
-    }
-
-    function renderCamsGeoJSON(geojsonData) {
-      camsLayerGroup.clearLayers();
-      const opacitySliderEl = document.getElementById('opacitySlider');
-      const opacity = (parseInt(opacitySliderEl ? opacitySliderEl.value : '70', 10) / 100) * 0.65;
-
-      L.geoJSON(geojsonData, {
-        style: (feature) => {
-          const pmVal = extractPm25Value(feature.properties);
-          const ispu = pmVal !== null ? getIspuCategory(pmVal) : { label: 'N/A', color: '#0284c7' };
-          return {
-            color: '#090d16',
-            weight: 0.7,
-            fillColor: ispu.color,
-            fillOpacity: opacity
-          };
-        },
-        onEachFeature: (feature, layer) => {
-          const props = feature.properties || {};
-          const pmVal = extractPm25Value(props);
-          const ispu = pmVal !== null ? getIspuCategory(pmVal) : { label: 'Tidak terdeteksi', color: '#0284c7' };
-          const attrLines = Object.entries(props)
-            .map(([k, v]) => `<div class="popup-line"><strong>${k}:</strong> ${v}</div>`)
-            .join('');
-
-          layer.bindPopup(`
-            <div class="popup-header">CAMS PM2.5 (GeoJSON)</div>
-            <div class="popup-line"><strong>Nilai PM2.5 Terdeteksi:</strong> ${pmVal !== null ? `${pmVal} µg/m³ (${ispu.label})` : '-'}</div>
-            ${attrLines}
-          `);
-        }
-      }).addTo(camsLayerGroup);
-    }
-
-    function loadCamsPm25GeoJSON(urls = [
-      'https://raw.githubusercontent.com/CyberIMG05/webgis-karhutla-kalbar/main/CAMS_PM25.geojson',
-      './CAMS_PM25.geojson'
-    ]) {
-      const list = Array.isArray(urls) ? urls : [urls];
-
-      const tryNext = (index) => {
-        if (index >= list.length) {
-          console.warn('CAMS_PM25.geojson gagal dimuat dari semua sumber URL.');
-          return;
-        }
-        const targetUrl = list[index];
-        fetch(targetUrl)
-          .then(res => {
-            if (!res.ok) throw new Error(`HTTP ${res.status} (${targetUrl})`);
-            return res.json();
-          })
-          .then(geojsonData => {
-            renderCamsGeoJSON(geojsonData);
-            console.log('Berhasil memuat CAMS_PM25.geojson dari:', targetUrl);
-          })
-          .catch(err => {
-            console.warn('Percobaan muat gagal:', err.message);
-            tryNext(index + 1);
-          });
-      };
-
-      tryNext(0);
-    }
-
-    // ============================================================================
-    // 6C. MUAT VALIDASI MINGGUAN OTOMATIS MENGIKUTI TIME-SLIDER
-    // ============================================================================
-    const BASE_PJBL_URL = 'https://raw.githubusercontent.com/CyberIMG05/webgis-karhutla-kalbar/main/data_pjbl';
-    const weeklyMerraGroup = L.layerGroup();
-    const weeklyModisGroup = L.layerGroup();
 
     const WEEKLY_PERIODS = [
       { key: '20260801_0807', label: '1 – 7 Agustus 2026' },
@@ -2721,86 +3248,32 @@
     ];
 
     let activeWeeklyKey = '';
-
-    function extractPropValue(props, keys, fallback = '-') {
-      if (!props) return fallback;
-      for (const k of keys) {
-        if (props[k] !== undefined && props[k] !== null && props[k] !== '') return props[k];
-      }
-      return fallback;
-    }
+    let activeWeeklyLabel = '';
 
     function loadWeeklyValidationLayers(periodObj) {
       const periodKey = periodObj.key;
+      activeWeeklyLabel = periodObj.label;
 
-      // 1. MERRA-2 PM2.5 Mingguan
       fetch(`${BASE_PJBL_URL}/merra2_mingguan/MERRA2_PM25_${periodKey}.geojson`)
-        .then(res => { if (!res.ok) throw new Error(res.status); return res.json(); })
+        .then(res => res.ok ? res.json() : { features: [] })
         .then(data => {
-          weeklyMerraGroup.clearLayers();
-          L.geoJSON(data, {
-            style: (feature) => {
-              const val = Number(extractPropValue(feature.properties, ['pm25_ugm3', 'PM25', 'pm25', 'value'], 0));
-              let ispuColor = '#10b981';
-              if (val > 300) ispuColor = '#7f1d1d';
-              else if (val > 200) ispuColor = '#ef4444';
-              else if (val > 100) ispuColor = '#f59e0b';
-              else if (val > 50)  ispuColor = '#3b82f6';
-
-              return { color: '#334155', weight: 0.7, fillColor: ispuColor, fillOpacity: 0.55 };
-            },
-            onEachFeature: (feature, layer) => {
-              const p = feature.properties || {};
-              const rawVal = extractPropValue(p, ['pm25_ugm3', 'PM25', 'pm25', 'value']);
-              const valFormatted = typeof rawVal === 'number' ? rawVal.toFixed(2) : rawVal;
-              const kategori = extractPropValue(p, ['kategori'], '-');
-              const rentang = extractPropValue(p, ['label_rentang'], '-');
-              const periode = extractPropValue(p, ['periode'], periodObj.label);
-
-              layer.bindPopup(`
-                <div class="popup-header">NASA MERRA-2 PM2.5</div>
-                <div class="popup-line"><strong>Periode:</strong> ${periode}</div>
-                <div class="popup-line"><strong>Konsentrasi:</strong> ${valFormatted} µg/m³</div>
-                <div class="popup-line"><strong>Kategori:</strong> ${kategori} (${rentang})</div>
-              `);
-            }
-          }).addTo(weeklyMerraGroup);
+          dataStore.merra = data.features || [];
+          renderFilteredValidationLayers();
         })
-        .catch(() => console.warn(`File MERRA2_PM25_${periodKey}.geojson belum tersedia.`));
+        .catch(() => {});
 
-      // 2. MODIS AOD Mingguan
       const modisKey = periodKey === '20260926_1001' ? '20260926_1002' : periodKey;
       fetch(`${BASE_PJBL_URL}/MODIS_mingguan/MODIS_AOD_${modisKey}.geojson`)
-        .then(res => { if (!res.ok) throw new Error(res.status); return res.json(); })
+        .then(res => res.ok ? res.json() : { features: [] })
         .then(data => {
-          weeklyModisGroup.clearLayers();
-          L.geoJSON(data, {
-            style: (feature) => {
-              const hexColor = extractPropValue(feature.properties, ['warna_hex'], '#f59e0b');
-              return { color: '#78350f', weight: 0.7, fillColor: hexColor, fillOpacity: 0.55 };
-            },
-            onEachFeature: (feature, layer) => {
-              const p = feature.properties || {};
-              const rawAod = extractPropValue(p, ['aod_550nm', 'aod', 'AOD', 'value']);
-              const aodFormatted = typeof rawAod === 'number' ? rawAod.toFixed(3) : rawAod;
-              const kategori = extractPropValue(p, ['kategori'], '-');
-              const rentang = extractPropValue(p, ['label_rentang'], '-');
-              const periode = extractPropValue(p, ['periode'], periodObj.label);
-
-              layer.bindPopup(`
-                <div class="popup-header">NASA MODIS AOD</div>
-                <div class="popup-line"><strong>Periode:</strong> ${periode}</div>
-                <div class="popup-line"><strong>Nilai AOD:</strong> ${aodFormatted}</div>
-                <div class="popup-line"><strong>Kategori:</strong> ${kategori} (${rentang})</div>
-              `);
-            }
-          }).addTo(weeklyModisGroup);
+          dataStore.modis = data.features || [];
+          renderFilteredValidationLayers();
         })
-        .catch(() => console.warn(`File MODIS_AOD_${modisKey}.geojson belum tersedia.`));
+        .catch(() => {});
     }
 
     function syncValidationWithMainSlider() {
-      const sliderEl = document.getElementById('timeSlider') || document.querySelector('.timeline-dock input[type="range"]');
+      const sliderEl = document.getElementById('timeSlider');
       if (!sliderEl) return;
 
       const min = Number(sliderEl.min || 0);
@@ -2818,35 +3291,71 @@
     }
 
     // ============================================================================
-    // 7. EVENT LISTENERS
+    // 9. EVENT LISTENERS (UI, DROPDOWN LAYER, FILTER KAB/KOTA, SLIDER)
     // ============================================================================
-    [
-      { id: 'chkHotspot', group: 'hotspots' },
-      { id: 'chkBurnedArea', group: 'burnedArea' },
-      { id: 'chkPM25', group: 'pm25' },
-      { id: 'chkTrajectory', group: 'trajectory' },
-      { id: 'chkAHP', group: 'ahp' },
-      { id: 'chkPeat', group: 'peat' },
-      { id: 'chkHealth', group: 'health' },
-      { id: 'chkEducation', group: 'education' },
-      { id: 'chkAirport', group: 'airport' }
-    ].forEach(item => {
-      const el = document.getElementById(item.id);
-      if (!el || !layerGroups[item.group]) return;
-      el.addEventListener('change', (e) => {
-        if (e.target.checked) map.addLayer(layerGroups[item.group]);
-        else map.removeLayer(layerGroups[item.group]);
+    // Accordion / Dropdown Toggle di Panel Kontrol Layer
+    document.querySelectorAll('.layer-dropdown-header').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.dataset.target;
+        const container = document.getElementById(targetId);
+        if (container) container.classList.toggle('open');
       });
     });
 
-    document.getElementById('chkWind').addEventListener('change', (e) => {
-      if (e.target.checked) map.addLayer(windLayer);
-      else map.removeLayer(windLayer);
+    // Checkbox Layer Toggle + Pembaruan Legenda Dinamis Otomatis
+    [
+      { id: 'chkHotspot', layer: layerGroups.hotspots },
+      { id: 'chkBurnedArea', layer: layerGroups.burnedArea },
+      { id: 'chkPM25', layer: layerGroups.pm25 },
+      { id: 'chkTrajectory', layer: layerGroups.trajectory },
+      { id: 'chkAHP', layer: layerGroups.ahp },
+      { id: 'chkPeat', layer: layerGroups.peat },
+      { id: 'chkHealth', layer: layerGroups.health },
+      { id: 'chkEducation', layer: layerGroups.education },
+      { id: 'chkAirport', layer: layerGroups.airport },
+      { id: 'chkWind', layer: windLayer },
+      { id: 'chkAdminBoundary', layer: adminBoundaryGroup },
+      { id: 'chkCams', layer: camsLayerGroup },
+      { id: 'chkWeeklyMerra', layer: weeklyMerraGroup },
+      { id: 'chkWeeklyModis', layer: weeklyModisGroup }
+    ].forEach(item => {
+      const el = document.getElementById(item.id);
+      if (!el || !item.layer) return;
+      el.addEventListener('change', (e) => {
+        if (e.target.checked) map.addLayer(item.layer);
+        else map.removeLayer(item.layer);
+        renderDynamicLegend();
+      });
+    });
+
+    // Filter Wilayah Kabupaten/Kota untuk Seluruh Layer
+    document.getElementById('districtFilter').addEventListener('change', (e) => {
+      const val = e.target.value;
+      const badge = document.getElementById('activeRegionBadge');
+
+      if (val === 'ALL') {
+        dataStore.selectedAdminFeature = null;
+        if (badge) badge.textContent = 'PROVINSI';
+        map.flyTo([-0.65, 110.35], 7, { duration: 0.8 });
+      } else {
+        dataStore.selectedAdminFeature = dataStore.adminFeatures.find(f => {
+          const p = f.properties || {};
+          return (p.WADMKK || p.NAMOBJ) === val;
+        }) || null;
+
+        if (badge) badge.textContent = 'KAB/KOTA';
+        if (dataStore.adminBoundsMap[val]) {
+          map.flyToBounds(dataStore.adminBoundsMap[val], { padding: [45, 45], duration: 0.85 });
+        }
+      }
+
+      applyDistrictFilterToAllLayers();
     });
 
     document.getElementById('opacitySlider').addEventListener('input', (e) => {
       document.getElementById('opacityVal').textContent = `${e.target.value}%`;
       updateSimulation();
+      renderFilteredValidationLayers();
     });
 
     document.getElementById('thresholdSlider').addEventListener('input', (e) => {
@@ -2854,7 +3363,10 @@
       updateSimulation();
     });
 
-    document.getElementById('timeSlider').addEventListener('input', updateSimulation);
+    document.getElementById('timeSlider').addEventListener('input', () => {
+      updateSimulation();
+      syncValidationWithMainSlider();
+    });
 
     document.getElementById('btnModeSeasonal').addEventListener('click', () => setTimelineMode('seasonal'));
     document.getElementById('btnModeEpisode').addEventListener('click', () => setTimelineMode('episode'));
@@ -2865,6 +3377,7 @@
         if (!chkAhp.checked) {
           chkAhp.checked = true;
           map.addLayer(layerGroups.ahp);
+          renderDynamicLegend();
         }
         updateSimulation();
       });
@@ -2876,24 +3389,6 @@
       document.getElementById('wFasum').value = 20;
       document.getElementById('wDurasi').value = 10;
       updateSimulation();
-    });
-
-    document.getElementById('districtFilter').addEventListener('change', (e) => {
-      const val = e.target.value;
-      renderBaseVectorLayers(val);
-      updateSimulation();
-
-      const zoomCenters = {
-        'ALL': [[-0.65, 110.35], 7],
-        'Kota Pontianak': [[-0.03, 109.34], 11],
-        'Kubu Raya': [[-0.28, 109.48], 10],
-        'Ketapang': [[-2.35, 110.45], 9],
-        'Kayong Utara': [[-1.22, 110.05], 10],
-        'Sintang': [[0.05, 111.48], 10]
-      };
-      if (zoomCenters[val]) {
-        map.flyTo(zoomCenters[val][0], zoomCenters[val][1], { duration: 0.8 });
-      }
     });
 
     document.getElementById('basemapSelect').addEventListener('change', (e) => {
@@ -2917,7 +3412,8 @@
           const maxVal = parseInt(slider.max, 10);
           slider.value = (parseInt(slider.value, 10) + 1) % (maxVal + 1);
           updateSimulation();
-        }, timelineMode === 'seasonal' ? 350 : 1400);
+          syncValidationWithMainSlider();
+        }, timelineMode === 'seasonal' ? 450 : 1400);
       }
     });
 
@@ -2932,7 +3428,7 @@
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `Laporan_Paparan_Asap_Kalbar_Kel5.csv`;
+      a.download = `Laporan_HYSPLIT_Paparan_Kalbar_Kel5.csv`;
       a.click();
       URL.revokeObjectURL(url);
     });
@@ -2941,10 +3437,8 @@
       window.print();
     });
 
-    // What-If Scenario & Mitigation Listeners
     document.getElementById('mitigationSlider').addEventListener('input', (e) => {
       document.getElementById('mitigationVal').textContent = `-${e.target.value}%`;
-      renderBaseVectorLayers(document.getElementById('districtFilter').value);
       updateSimulation();
     });
 
@@ -2978,50 +3472,25 @@
       document.getElementById('manualSpeedVal').textContent = '16 km/jam';
       document.querySelectorAll('#windDirButtons .dir-btn').forEach(b => b.classList.toggle('active', b.dataset.deg === '140'));
       document.getElementById('manualDirLabel').textContent = 'Tenggara (140°)';
-      renderBaseVectorLayers(document.getElementById('districtFilter').value);
       updateSimulation();
     });
 
-    // Zen / Focus Map Mode Toggle
     document.getElementById('toggleZenBtn').addEventListener('click', () => {
       const isZen = document.body.classList.toggle('zen-mode');
       document.getElementById('zenBtnText').textContent = isZen ? 'Tampilkan Panel' : 'Fokus Peta';
     });
 
-    document.getElementById('chkAdminBoundary').addEventListener('change', (e) => {
-      if (e.target.checked) map.addLayer(adminBoundaryGroup);
-      else map.removeLayer(adminBoundaryGroup);
-    });
-
-    document.getElementById('chkCams').addEventListener('change', (e) => {
-      if (e.target.checked) map.addLayer(camsLayerGroup);
-      else map.removeLayer(camsLayerGroup);
-    });
-
-    document.getElementById('chkWeeklyMerra').addEventListener('change', (e) => {
-      if (e.target.checked) map.addLayer(weeklyMerraGroup);
-      else map.removeLayer(weeklyMerraGroup);
-    });
-
-    document.getElementById('chkWeeklyModis').addEventListener('change', (e) => {
-      if (e.target.checked) map.addLayer(weeklyModisGroup);
-      else map.removeLayer(weeklyModisGroup);
-    });
-
-    const mainTimeSliderEl = document.getElementById('timeSlider') || document.querySelector('.timeline-dock input[type="range"]');
-    if (mainTimeSliderEl) {
-      mainTimeSliderEl.addEventListener('input', syncValidationWithMainSlider);
-      mainTimeSliderEl.addEventListener('change', syncValidationWithMainSlider);
-      setInterval(syncValidationWithMainSlider, 600);
-    }
-
-    // Jalankan Inisialisasi
-    renderBaseVectorLayers('ALL');
-    loadSeparatedImpactLayers();
-    loadBurnedAreaGeoJSON();
-    loadRealHotspotsFromGitHub();
+    // ============================================================================
+    // 10. INISIALISASI AWAL APLIKASI
+    // ============================================================================
+    renderDynamicLegend();
     setTimelineMode('seasonal', 72);
     loadAdminBoundaryGeoJSON();
+    loadHysplitPm25GeoJSON();
+    loadPeatlandGeoJSON();
+    loadBurnedAreaGeoJSON();
+    loadRealHotspotsFromGitHub();
+    loadSeparatedImpactLayers();
     loadCamsPm25GeoJSON();
     syncValidationWithMainSlider();
   </script>
