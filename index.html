@@ -1751,22 +1751,6 @@
       }
     ];
 
-    const dummyFacilities = {
-      type: "FeatureCollection",
-      features: [
-        { type: "Feature", properties: { nama: "Bandara Internasional Supadio", jenis: "Bandara", kab: "Kubu Raya", vis: "800 m (Bahaya)", rek: "Delay Penerbangan" }, geometry: { type: "Point", coordinates: [109.404, -0.148] } },
-        { type: "Feature", properties: { nama: "RSUD dr. Soedarso Pontianak", jenis: "Faskes", kab: "Kota Pontianak", vis: "1.100 m", rek: "Posko Oksigen Siaga" }, geometry: { type: "Point", coordinates: [109.362, -0.058] } },
-        { type: "Feature", properties: { nama: "SMAN 1 Pontianak", jenis: "Sekolah", kab: "Kota Pontianak", vis: "1.200 m", rek: "Rujukan BDR / Daring" }, geometry: { type: "Point", coordinates: [109.335, -0.032] } },
-        { type: "Feature", properties: { nama: "Puskesmas Sungai Raya Dalam", jenis: "Faskes", kab: "Kubu Raya", vis: "850 m", rek: "Distribusi Masker N95" }, geometry: { type: "Point", coordinates: [109.375, -0.115] } },
-        { type: "Feature", properties: { nama: "SMAN 1 Sungai Raya", jenis: "Sekolah", kab: "Kubu Raya", vis: "900 m", rek: "Rujukan BDR / Daring" }, geometry: { type: "Point", coordinates: [109.415, -0.185] } },
-        { type: "Feature", properties: { nama: "SMPN 2 Rasau Jaya", jenis: "Sekolah", kab: "Kubu Raya", vis: "750 m", rek: "Libur / BDR Darurat" }, geometry: { type: "Point", coordinates: [109.392, -0.275] } },
-        { type: "Feature", properties: { nama: "RSUD dr. Agoesdjam Ketapang", jenis: "Faskes", kab: "Ketapang", vis: "950 m", rek: "Siaga ISPA" }, geometry: { type: "Point", coordinates: [109.985, -1.845] } },
-        { type: "Feature", properties: { nama: "SMAN 1 Kendawangan", jenis: "Sekolah", kab: "Ketapang", vis: "600 m", rek: "Libur / BDR Darurat" }, geometry: { type: "Point", coordinates: [110.225, -2.525] } },
-        { type: "Feature", properties: { nama: "Puskesmas Sukadana", jenis: "Faskes", kab: "Kayong Utara", vis: "1.800 m", rek: "Pemantauan Berkala" }, geometry: { type: "Point", coordinates: [109.955, -1.245] } },
-        { type: "Feature", properties: { nama: "SMAN 1 Sintang", jenis: "Sekolah", kab: "Sintang", vis: "3.200 m", rek: "Normal Waspada" }, geometry: { type: "Point", coordinates: [111.495, 0.068] } }
-      ]
-    };
-
     // ============================================================================
     // 3. LAYER GROUPS & SKALA KLASIFIKASI
     // ============================================================================
@@ -1776,7 +1760,9 @@
       ahp: L.layerGroup(),
       trajectory: L.layerGroup().addTo(map),
       hotspots: L.layerGroup().addTo(map),
-      facilities: L.layerGroup().addTo(map)
+      health: L.layerGroup().addTo(map),
+      education: L.layerGroup().addTo(map),
+      airport: L.layerGroup().addTo(map),
     };
 
     function getIspuCategory(pm25) {
@@ -2241,15 +2227,6 @@
       let exposedSchools = 0;
       let exposedHealth = 0;
 
-      dummyFacilities.features.forEach(fac => {
-        if (districtFilter !== 'ALL' && fac.properties.kab !== districtFilter) return;
-        const insideDanger = dangerPolygons.some(poly => turf.booleanPointInPolygon(fac, poly));
-        if (insideDanger) {
-          if (fac.properties.jenis === 'Sekolah') exposedSchools++;
-          if (fac.properties.jenis === 'Faskes') exposedHealth++;
-        }
-      });
-
       const scaleMultiplier = districtFilter === 'ALL' ? 16 : 6;
       document.getElementById('kpiPop').textContent = `~${totalExposedPop.toLocaleString('id-ID')} Jiwa`;
       document.getElementById('kpiSchools').textContent = `${exposedSchools * scaleMultiplier} Unit`;
@@ -2403,27 +2380,79 @@
         }
       }).addTo(layerGroups.hotspots);
 
-      L.geoJSON(dummyFacilities, {
-        filter: (f) => districtFilter === 'ALL' || f.properties.kab === districtFilter,
-        pointToLayer: (f, latlng) => {
-          const colorMap = { Bandara: '#0284c7', Faskes: '#e11d48', Sekolah: '#059669' };
-          return L.circleMarker(latlng, {
-            radius: 6,
-            fillColor: colorMap[f.properties.jenis] || '#059669',
-            color: '#ffffff',
-            weight: 1.8,
-            fillOpacity: 0.96
-          });
-        },
-        onEachFeature: (f, l) => {
-          l.bindPopup(`
-            <div class="popup-header">${f.properties.nama}</div>
-            <div class="popup-line"><strong>Kategori:</strong> ${f.properties.jenis} (${f.properties.kab})</div>
-            <div class="popup-line"><strong>Jarak Pandang:</strong> ${f.properties.vis}</div>
-            <div class="popup-line"><strong>Rekomendasi Aksi:</strong> ${f.properties.rek}</div>
-          `);
-        }
-      }).addTo(layerGroups.facilities);
+      const BASE_IMPACT_URL = 'https://raw.githubusercontent.com/CyberIMG05/webgis-karhutla-kalbar/main/data_pjbl/layer_dampak';
+
+      const formatImpactPopup = (p, defaultTitle, kategoriLabel) => {
+        const nama = p.name || p.name_id || p.name_en || p.NAMOBJ || defaultTitle;
+        const jenis = p.aeroway || p.amenity || p.healthcare || kategoriLabel;
+        const desa = p.adm4_name ? `${p.adm4_name}, ` : '';
+        const kec  = p.adm3_name ? `Kec. ${p.adm3_name}, ` : '';
+        const kab  = p.adm2_name || p.WADMKK || 'Kalimantan Barat';
+    
+        return `
+          <div class="popup-header">${nama}</div>
+          <div class="popup-line"><strong>Kategori:</strong> ${kategoriLabel} (${jenis})</div>
+          <div class="popup-line"><strong>Lokasi:</strong> ${desa}${kec}${kab}</div>
+          <div class="popup-line"><strong>Status:</strong> Terdampak Sebaran Kabut Asap</div>
+        `;
+      };
+    
+      // 1. Fasilitas Kesehatan
+      ['health_point.geojson', 'health_polygon.geojson'].forEach(file => {
+        fetch(`${BASE_IMPACT_URL}/${file}`)
+          .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+          .then(data => {
+            L.geoJSON(data, {
+              pointToLayer: (f, latlng) => L.circleMarker(latlng, {
+                radius: 5.5, fillColor: '#e11d48', color: '#ffffff', weight: 1.5, fillOpacity: 0.9
+              }),
+              style: { color: '#be123c', weight: 1.5, fillColor: '#fb7185', fillOpacity: 0.45 },
+              onEachFeature: (f, l) => l.bindPopup(formatImpactPopup(f.properties || {}, 'Fasilitas Kesehatan', 'Fasilitas Kesehatan'))
+            }).addTo(layerGroups.health);
+          })
+          .catch(err => console.warn(`Gagal memuat ${file}:`, err));
+      });
+    
+      // 2. Fasilitas Pendidikan
+      ['education_point.geojson', 'education_polygon.geojson'].forEach(file => {
+        fetch(`${BASE_IMPACT_URL}/${file}`)
+          .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+          .then(data => {
+            L.geoJSON(data, {
+              pointToLayer: (f, latlng) => L.circleMarker(latlng, {
+                radius: 5.5, fillColor: '#2563eb', color: '#ffffff', weight: 1.5, fillOpacity: 0.9
+              }),
+              style: { color: '#1d4ed8', weight: 1.5, fillColor: '#60a5fa', fillOpacity: 0.45 },
+              onEachFeature: (f, l) => l.bindPopup(formatImpactPopup(f.properties || {}, 'Fasilitas Pendidikan', 'Fasilitas Pendidikan'))
+            }).addTo(layerGroups.education);
+          })
+          .catch(err => console.warn(`Gagal memuat ${file}:`, err));
+      });
+    
+      // 3. Bandara & Helipad
+      ['airport_point.geojson', 'airport_polygon.geojson', 'airport_polyline.geojson'].forEach(file => {
+        fetch(`${BASE_IMPACT_URL}/${file}`)
+          .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+          .then(data => {
+            L.geoJSON(data, {
+              pointToLayer: (f, latlng) => L.circleMarker(latlng, {
+                radius: 6.5, fillColor: '#7c3aed', color: '#ffffff', weight: 1.8, fillOpacity: 0.95
+              }),
+              style: (f) => {
+                if (f.geometry && f.geometry.type.includes('Line')) {
+                  return { color: '#facc15', weight: 3.5, opacity: 0.95 };
+                }
+                return { color: '#6d28d9', weight: 1.8, fillColor: '#a78bfa', fillOpacity: 0.45 };
+              },
+              onEachFeature: (f, l) => {
+                const p = f.properties || {};
+                const defaultLabel = (p.aeroway || '').toLowerCase() === 'helipad' ? 'Helipad' : 'Bandar Udara / Landasan';
+                l.bindPopup(formatImpactPopup(p, defaultLabel, 'Transportasi Udara'));
+              }
+            }).addTo(layerGroups.airport);
+          })
+          .catch(err => console.warn(`Gagal memuat ${file}:`, err));
+      });
     }
 
     // ============================================================================
@@ -2747,7 +2776,9 @@
       { id: 'chkTrajectory', group: 'trajectory' },
       { id: 'chkAHP', group: 'ahp' },
       { id: 'chkPeat', group: 'peat' },
-      { id: 'chkFacilities', group: 'facilities' }
+      { id: 'chkHealth', group: 'health' },
+      { id: 'chkEducation', group: 'education' },
+      { id: 'chkAirport', group: 'airport' }
     ].forEach(item => {
       document.getElementById(item.id).addEventListener('change', (e) => {
         if (e.target.checked) map.addLayer(layerGroups[item.group]);
