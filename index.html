@@ -2906,9 +2906,9 @@
     });
 
     // Kontrol Nyala/Mati Layer Dampak & Validasi Mingguan
-    document.getElementById('chkLayerDampak').addEventListener('change', (e) => {
-      if (e.target.checked) map.addLayer(dampakLayerGroup);
-      else map.removeLayer(dampakLayerGroup);
+    document.getElementById('chkCams').addEventListener('change', (e) => {
+      if (e.target.checked) map.addLayer(camsLayerGroup);
+      else map.removeLayer(camsLayerGroup);
     });
 
     document.getElementById('chkWeeklyMerra').addEventListener('change', (e) => {
