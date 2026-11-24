@@ -1,4 +1,4 @@
-# SDSS Mitigasi & Peringatan Dini Karhutla — Provinsi Kalimantan Barat
+# SDSS Mitigasi & Peringatan Dini Karhutla - Provinsi Kalimantan Barat
 
 **Spatial Decision Support System (SDSS)** berbasis WebGIS untuk pemantauan kejadian kebakaran hutan dan lahan (karhutla), simulasi dispersi polutan PM2.5, serta analisis dampak paparan terhadap penduduk dan fasilitas vital di Provinsi Kalimantan Barat (periode kajian Agustus – Oktober 2026).
 
