@@ -1662,6 +1662,159 @@
       }
     }
 
+
+    /* TOP 5 WILAYAH TERDAMPAK LIST */
+    .top5-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .top5-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 7px 9px;
+      border-radius: 9px;
+      background: var(--glass-tile);
+      border: 1px solid rgba(15, 23, 42, 0.10);
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+
+    .top5-item:hover {
+      background: rgba(2, 132, 199, 0.10);
+      border-color: rgba(2, 132, 199, 0.35);
+      transform: translateX(2px);
+    }
+
+    .top5-item.active-region {
+      background: rgba(2, 132, 199, 0.14);
+      border-color: var(--accent);
+    }
+
+    .top5-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .top5-rank {
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      background: #0f172a;
+      color: #ffffff;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .top5-rank.r1 { background: #dc2626; }
+    .top5-rank.r2 { background: #ea580c; }
+    .top5-rank.r3 { background: #d97706; }
+
+    .top5-info {
+      min-width: 0;
+    }
+
+    .top5-name {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #090d16;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .top5-sub {
+      font-size: 10px;
+      color: #475569;
+      margin-top: 1px;
+    }
+
+    .top5-right {
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .top5-pm {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      color: #090d16;
+    }
+
+    .risk-pill {
+      display: inline-block;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      font-weight: 700;
+      padding: 1.5px 5.5px;
+      border-radius: 4px;
+      margin-top: 2px;
+      color: #ffffff;
+    }
+
+    /* BNPB / IPCC RISK CARD */
+    .risk-formula-box {
+      background: rgba(15, 23, 42, 0.045);
+      border: 1px solid rgba(15, 23, 42, 0.11);
+      border-radius: 8px;
+      padding: 7px 9px;
+      font-size: 10.5px;
+      color: #1e293b;
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+
+    .risk-formula-box code {
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 700;
+      color: #0369a1;
+      background: rgba(2, 132, 199, 0.10);
+      padding: 1px 4px;
+      border-radius: 4px;
+    }
+
+    .risk-summary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .risk-stat-chip {
+      background: var(--glass-tile);
+      border: 1px solid rgba(15, 23, 42, 0.10);
+      border-radius: 7px;
+      padding: 6px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 10.5px;
+    }
+
+    .risk-stat-chip .rs-lbl {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: 600;
+      color: #090d16;
+    }
+
+    .risk-stat-chip .rs-val {
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 700;
+      font-size: 10.5px;
+    }
+
   </style>
 </head>
 <body>
@@ -1821,7 +1974,7 @@
         <button type="button" class="layer-dropdown-header" data-target="ddEnvironment">
           <span class="dropdown-left-title">
             <span>Gambut, Trajektori & Batas</span>
-            <span class="dropdown-badge" id="badgeEnvironment">3/4</span>
+            <span class="dropdown-badge" id="badgeEnvironment">4/5</span>
           </span>
           <svg class="dropdown-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
@@ -1849,9 +2002,16 @@
           </div>
           <div class="layer-row">
             <label class="layer-label">
-              <input type="checkbox" id="chkAHP" class="env-chk" />
-              <span class="dot-indicator" style="background:#9333ea;"></span>
-              <span>Indeks Prioritas (AHP)</span>
+              <input type="checkbox" id="chkRoiMask" class="env-chk" checked />
+              <span class="dot-indicator" style="background:#0f172a;"></span>
+              <span>Fokus Wilayah (ROI Mask)</span>
+            </label>
+          </div>
+          <div class="layer-row">
+            <label class="layer-label">
+              <input type="checkbox" id="chkRisk" class="env-chk" />
+              <span class="dot-indicator" style="background:#dc2626;"></span>
+              <span>Indeks Risiko Bencana</span>
             </label>
           </div>
         </div>
@@ -1985,6 +2145,17 @@
       </button>
     </div>
 
+    <!-- PERINGKAT OTOMATIS TOP 5 WILAYAH TERDAMPAK -->
+    <div class="glass-card glass-panel" id="top5Card">
+      <div class="card-header">
+        <span class="card-title">Top 5 Wilayah Terdampak</span>
+        <span class="card-tag" id="top5DateBadge">HARIAN</span>
+      </div>
+      <div class="top5-list" id="top5DistrictList">
+        <div class="legend-empty">Menghitung peringkat Kabupaten/Kota...</div>
+      </div>
+    </div>
+
     <!-- SIMULASI SKENARIO MITIGASI & CUACA (WHAT-IF ON-THE-FLY) -->
     <div class="glass-card glass-panel whatif-card">
       <div class="card-header">
@@ -2030,44 +2201,29 @@
       </div>
     </div>
 
-    <!-- SIMULASI BOBOT AHP ON-THE-FLY -->
+    <!-- INDEKS RISIKO BENCANA (STANDAR BNPB / IPCC) -->
     <div class="glass-card glass-panel">
       <div class="card-header">
-        <span class="card-title">Pembobotan AHP</span>
-        <button id="resetAhpBtn" style="background:none; border:none; color:#090d16; font-weight:600; font-size:10.5px; font-family:'Google Sans',sans-serif; cursor:pointer; text-decoration:underline;">Reset</button>
+        <span class="card-title">Indeks Risiko Bencana</span>
+        <span class="card-tag" style="color:#991b1b; border-color:rgba(220,38,38,0.35); background:rgba(220,38,38,0.10);">BNPB / IPCC</span>
       </div>
 
-      <div class="ahp-row">
-        <div class="slider-label-row">
-          <span>Konsentrasi PM2.5</span>
-          <span class="mono-val" id="wPm25Label">45%</span>
-        </div>
-        <input type="range" class="ahp-slider" id="wPm25" min="10" max="80" value="45" />
+      <div class="risk-formula-box">
+        <code>Risiko = Bahaya (H) &times; Kerentanan &amp; Paparan (V&amp;E)</code><br/>
+        <strong>H:</strong> Konsentrasi PM2.5 &amp; Durasi (&gt;55.4 µg/m³ sejak 1 Agt) &bull;
+        <strong>V&amp;E:</strong> Gambut KHG, Faskes/Sekolah &amp; Kepadatan Penduduk.
       </div>
 
-      <div class="ahp-row">
-        <div class="slider-label-row">
-          <span>Kepadatan Penduduk</span>
-          <span class="mono-val" id="wPopLabel">25%</span>
-        </div>
-        <input type="range" class="ahp-slider" id="wPop" min="5" max="60" value="25" />
+      <div class="risk-summary-grid" id="riskClassSummaryGrid">
+        <div class="risk-stat-chip"><span class="rs-lbl"><span class="dot-indicator" style="background:#dc2626;"></span>Kritis</span><span class="rs-val" id="riskCountCritical">0 zona</span></div>
+        <div class="risk-stat-chip"><span class="rs-lbl"><span class="dot-indicator" style="background:#f97316;"></span>Tinggi</span><span class="rs-val" id="riskCountHigh">0 zona</span></div>
+        <div class="risk-stat-chip"><span class="rs-lbl"><span class="dot-indicator" style="background:#eab308;"></span>Sedang</span><span class="rs-val" id="riskCountMed">0 zona</span></div>
+        <div class="risk-stat-chip"><span class="rs-lbl"><span class="dot-indicator" style="background:#10b981;"></span>Rendah</span><span class="rs-val" id="riskCountLow">0 zona</span></div>
       </div>
 
-      <div class="ahp-row">
-        <div class="slider-label-row">
-          <span>Fasilitas Sensitif</span>
-          <span class="mono-val" id="wFasumLabel">20%</span>
-        </div>
-        <input type="range" class="ahp-slider" id="wFasum" min="5" max="60" value="20" />
-      </div>
-
-      <div class="ahp-row">
-        <div class="slider-label-row">
-          <span>Durasi Paparan Asap</span>
-          <span class="mono-val" id="wDurasiLabel">10%</span>
-        </div>
-        <input type="range" class="ahp-slider" id="wDurasi" min="5" max="50" value="10" />
-      </div>
+      <button type="button" class="btn-open-stats-inline" id="toggleRiskLayerBtn" style="margin-top:2px;">
+        <span>Tampilkan Peta Indeks Risiko Bencana</span>
+      </button>
     </div>
 
     <!-- INSTRUMEN AKSI BPBD & DINKES -->
@@ -2147,7 +2303,7 @@
         <div class="stats-table-section">
           <h3>1. Tabel Sebaran Konsentrasi PM2.5 (HYSPLIT) &amp; Estimasi Populasi Terpapar</h3>
           <div class="table-source-note" id="tableHysplitSourceNote">
-            Sumber data: Keluaran pemodelan dispersi HYSPLIT (<code>asap_pm25_harian_ispu.geojson</code>). Estimasi populasi dihitung menggunakan kepadatan penduduk rata-rata Kalimantan Barat (~38 jiwa/km²) karena atribut jumlah penduduk per poligon tidak tersedia pada dataset GeoJSON.
+            Sumber data: Keluaran pemodelan dispersi HYSPLIT (<code>asap_pm25_harian_ispu.geojson</code>) yang ditampalkan dengan data kepadatan penduduk (<code>KEPADATAN</code>) &amp; jumlah penduduk (<code>JML_PDDK</code>) BPS per Kabupaten/Kota Kalimantan Barat.
           </div>
           <div class="table-responsive">
             <table class="data-table">
@@ -2253,7 +2409,7 @@
             <li><strong>Kalkulator Paparan &amp; Panel Statistik:</strong> Menghitung luas area dan perkiraan jumlah warga yang terpapar asap di atas batas aman, serta jumlah sekolah, faskes, dan bandara yang berada di zona terdampak. Klik tombol <strong>Statistik</strong> di header atau panel kanan untuk melihat tabel dan grafik lengkap.</li>
             <li><strong>Ambang Batas Bahaya PM2.5:</strong> Geser nilai ambang (baku 55 µg/m³) untuk menguji luas wilayah dan fasilitas yang masuk kategori berisiko pada tingkat konsentrasi tertentu.</li>
             <li><strong>Skenario Mitigasi &amp; Angin Manual:</strong> Simulasikan dampak penurunan emisi (misalnya pemadaman dini sebesar 20%–80%) atau ubah arah serta kecepatan angin secara manual untuk melihat perubahan arah sebaran asap.</li>
-            <li><strong>Pembobotan AHP:</strong> Mengatur tingkat kepentingan empat kriteria (konsentrasi PM2.5, kepadatan penduduk, fasilitas sensitif, dan durasi paparan) untuk memetakan zona prioritas penanganan.</li>
+            <li><strong>Indeks Risiko Bencana (BNPB / IPCC):</strong> Menghitung tingkat risiko secara objektif berdasarkan perkalian komponen <em>Bahaya</em> (konsentrasi PM2.5 &amp; akumulasi hari terpapar &gt; 55,4 µg/m³ sejak 1 Agustus) dengan <em>Kerentanan &amp; Keterpaparan</em> (keberadaan lahan gambut KHG, jumlah faskes/sekolah, serta kepadatan penduduk Kab/Kota).</li>
           </ul>
         </div>
 
@@ -2304,8 +2460,8 @@
               <span>Ketinggian lapisan udara terbawah tempat asap bercampur; semakin rendah PBL, asap cenderung terperangkap lebih pekat dekat permukaan tanah.</span>
             </div>
             <div class="glossary-item">
-              <strong>AHP (Analytical Hierarchy Process)</strong>
-              <span>Metode pembobotan multi-kriteria untuk menentukan wilayah mana yang paling mendesak mendapat bantuan logistik dan medis.</span>
+              <strong>Indeks Risiko Bencana (BNPB / IPCC)</strong>
+              <span>Penilaian risiko kebencanaan berdasarkan perkalian skor Bahaya (konsentrasi &amp; durasi asap) dengan skor Kerentanan &amp; Keterpaparan (gambut KHG, faskes/sekolah, dan kepadatan penduduk).</span>
             </div>
           </div>
         </div>
@@ -2557,13 +2713,13 @@
     ];
 
     // ============================================================================
-    // 3. LAYER GROUPS, STATE DATA & SKALA KLASIFIKASI
+    // 3. LAYER GROUPS, STATE DATA & SKALA RISIKO BENCANA (BNPB / IPCC)
     // ============================================================================
     const layerGroups = {
       peat: L.layerGroup().addTo(map),
       burnedArea: L.layerGroup().addTo(map),
       pm25: L.layerGroup().addTo(map),
-      ahp: L.layerGroup(),
+      risk: L.layerGroup(),
       trajectory: L.layerGroup().addTo(map),
       hotspots: L.layerGroup().addTo(map),
       health: L.layerGroup().addTo(map),
@@ -2571,8 +2727,9 @@
       airport: L.layerGroup().addTo(map)
     };
 
+    // Pane khusus ROI Spotlight Mask: tepat di atas basemap (tilePane z=200), di bawah layer data (overlayPane z=400)
     map.createPane('outsideMaskPane');
-    map.getPane('outsideMaskPane').style.zIndex = 245;
+    map.getPane('outsideMaskPane').style.zIndex = 250;
     map.getPane('outsideMaskPane').style.pointerEvents = 'none';
 
     const outsideMaskGroup = L.layerGroup().addTo(map);
@@ -2595,7 +2752,10 @@
       airport: [],
       cams: [],
       merra: [],
-      modis: []
+      modis: [],
+      era5WindByDate: {},
+      era5WindLoaded: false,
+      hysplitUnhealthyByDate: {}
     };
 
     function getIspuCategory(pm25) {
@@ -2606,12 +2766,23 @@
       return { label: "Berbahaya", color: "#18181b", score: 5 };
     }
 
-    function getAhpColor(indexScore) {
-      if (indexScore < 2.0) return "#10b981";
-      if (indexScore < 2.8) return "#eab308";
-      if (indexScore < 3.6) return "#f97316";
-      if (indexScore < 4.3) return "#ef4444";
-      return "#a855f7";
+    // Klasifikasi Risiko Bencana Standar BNPB / IPCC (skala ternormalisasi 0.00 - 1.00)
+    function getRiskClassification(normScore) {
+      if (normScore >= 0.75) return { label: "Sangat Tinggi / Kritis", shortLabel: "Kritis", color: "#dc2626", level: 4 };
+      if (normScore >= 0.50) return { label: "Tinggi", shortLabel: "Tinggi", color: "#f97316", level: 3 };
+      if (normScore >= 0.25) return { label: "Sedang", shortLabel: "Sedang", color: "#eab308", level: 2 };
+      return { label: "Rendah", shortLabel: "Rendah", color: "#10b981", level: 1 };
+    }
+
+    function normalizeDateKey(rawDateStr) {
+      const s = String(rawDateStr || '').trim();
+      if (!s) return '';
+      if (/^\d{4}-\d{2}-\d{2}/.test(s)) return s.slice(0, 10);
+      if (/^\d{2}\/\d{2}\/\d{4}/.test(s)) {
+        const [dd, mm, yyyy] = s.slice(0, 10).split('/');
+        return `${yyyy}-${mm}-${dd}`;
+      }
+      return s;
     }
 
     // Helper: Cek apakah suatu fitur berada di dalam Kab/Kota terpilih
@@ -2620,7 +2791,6 @@
       const p = feature.properties || {};
       const normTarget = districtFilter.toLowerCase().replace(/^kab\.\s*|^kota\s*/i, '').trim();
 
-      // 1. Cek atribut nama kabupaten jika tersedia
       const propNames = [p.adm2_name, p.WADMKK, p.NAMOBJ, p.KAB_KOTA, p.KABUPATEN, p.kab].filter(Boolean);
       if (propNames.length > 0) {
         return propNames.some(val => {
@@ -2629,10 +2799,13 @@
         });
       }
 
-      // 2. Cek perpotongan spasial dengan poligon Kab/Kota menggunakan Turf.js
-      if (dataStore.selectedAdminFeature && feature.geometry && typeof turf !== 'undefined') {
+      const targetAdmin = dataStore.adminFeatures.find(f => {
+        const ap = f.properties || {};
+        return (ap.WADMKK || ap.NAMOBJ) === districtFilter;
+      });
+      if (targetAdmin && feature.geometry && typeof turf !== 'undefined') {
         try {
-          return turf.booleanIntersects(feature, dataStore.selectedAdminFeature);
+          return turf.booleanIntersects(feature, targetAdmin);
         } catch (e) {
           return true;
         }
@@ -2641,13 +2814,47 @@
     }
 
     // ============================================================================
-    // 3B. ENGINE VISUALISASI ANGIN (WINDY STREAMLINES)
+    // 3B. ENGINE VISUALISASI ANGIN ERA5-LAND (INTERPOLASI BILINEAR GRID U, V)
     // ============================================================================
+    function getWindDirectionNameIndonesian(fromDeg) {
+      const dirs = [
+        { min: 337.5, max: 360, name: "Utara" },
+        { min: 0, max: 22.5, name: "Utara" },
+        { min: 22.5, max: 67.5, name: "Timur Laut" },
+        { min: 67.5, max: 112.5, name: "Timur" },
+        { min: 112.5, max: 157.5, name: "Tenggara" },
+        { min: 157.5, max: 202.5, name: "Selatan" },
+        { min: 202.5, max: 247.5, name: "Barat Daya" },
+        { min: 247.5, max: 292.5, name: "Barat" },
+        { min: 292.5, max: 337.5, name: "Barat Laut" }
+      ];
+      const deg = ((fromDeg % 360) + 360) % 360;
+      const found = dirs.find(d => deg >= d.min && deg <= d.max);
+      return found ? found.name : "Tenggara";
+    }
+
+    function uvToMeteorological(u, v) {
+      const speedMs = Math.hypot(u, v);
+      const speedKmh = Math.max(1, Math.round(speedMs * 3.6));
+      // Meteorological convention: direction wind is blowing FROM (0 = North, 90 = East)
+      const fromDeg = Math.round(((Math.atan2(-u, -v) * 180 / Math.PI) + 360) % 360);
+      return {
+        u,
+        v,
+        speedMs,
+        speedKmh,
+        fromDeg,
+        dirName: getWindDirectionNameIndonesian(fromDeg)
+      };
+    }
+
     const WindCanvasLayer = L.Layer.extend({
       initialize: function (options) {
         L.setOptions(this, options);
         this._windFromDeg = 140;
         this._windSpeed = 16;
+        this._isManualOverride = false;
+        this._activeDateIso = '2026-10-12';
         this._particles = [];
         this._animId = null;
         this._time = 0;
@@ -2681,9 +2888,11 @@
         map.off('movestart zoomstart', this._onMoveStart, this);
         map.off('moveend zoomend resize', this._reset, this);
       },
-      setWind: function (fromDeg, speedKmh) {
+      setWind: function (fromDeg, speedKmh, isManual = false, dateIso = null) {
         this._windFromDeg = fromDeg;
         this._windSpeed = speedKmh;
+        this._isManualOverride = isManual;
+        if (dateIso) this._activeDateIso = dateIso;
       },
       setBasemapContrast: function (isLight) {
         this._isLightBasemap = isLight;
@@ -2722,10 +2931,78 @@
           speedScale: 0.82 + Math.random() * 0.36
         };
       },
+      _sampleEra5Grid: function (lat, lng) {
+        const dayGrid = dataStore.era5WindByDate[this._activeDateIso];
+        if (!dayGrid || !dayGrid.lats.length || !dayGrid.lons.length) return null;
+
+        const { lats, lons, uMap, vMap } = dayGrid;
+        const minLat = lats[0], maxLat = lats[lats.length - 1];
+        const minLon = lons[0], maxLon = lons[lons.length - 1];
+
+        const cLat = Math.max(minLat, Math.min(maxLat, lat));
+        const cLon = Math.max(minLon, Math.min(maxLon, lng));
+
+        // Find bounding indices
+        let i0 = 0;
+        while (i0 < lats.length - 2 && lats[i0 + 1] <= cLat) i0++;
+        let j0 = 0;
+        while (j0 < lons.length - 2 && lons[j0 + 1] <= cLon) j0++;
+
+        const i1 = Math.min(lats.length - 1, i0 + 1);
+        const j1 = Math.min(lons.length - 1, j0 + 1);
+
+        const lat0 = lats[i0], lat1 = lats[i1];
+        const lon0 = lons[j0], lon1 = lons[j1];
+
+        const ty = lat1 !== lat0 ? (cLat - lat0) / (lat1 - lat0) : 0;
+        const tx = lon1 !== lon0 ? (cLon - lon0) / (lon1 - lon0) : 0;
+
+        const corners = [
+          { k: `${lat0.toFixed(2)}_${lon0.toFixed(2)}`, w: (1 - tx) * (1 - ty) },
+          { k: `${lat0.toFixed(2)}_${lon1.toFixed(2)}`, w: tx * (1 - ty) },
+          { k: `${lat1.toFixed(2)}_${lon0.toFixed(2)}`, w: (1 - tx) * ty },
+          { k: `${lat1.toFixed(2)}_${lon1.toFixed(2)}`, w: tx * ty }
+        ];
+
+        let uSum = 0, vSum = 0, wSum = 0;
+        for (let c = 0; c < corners.length; c++) {
+          const uVal = uMap[corners[c].k];
+          const vVal = vMap[corners[c].k];
+          if (uVal !== undefined && vVal !== undefined) {
+            uSum += uVal * corners[c].w;
+            vSum += vVal * corners[c].w;
+            wSum += corners[c].w;
+          }
+        }
+
+        if (wSum > 0.01) {
+          return { u: uSum / wSum, v: vSum / wSum };
+        }
+        // Fallback to regional mean for offshore cells where ERA5-Land is null
+        if (dayGrid.meanU !== undefined && dayGrid.meanV !== undefined) {
+          return { u: dayGrid.meanU, v: dayGrid.meanV };
+        }
+        return null;
+      },
       _getFieldVelocity: function (x, y) {
         const latlng = this._map.containerPointToLatLng([x, y]);
         const lat = latlng.lat;
         const lng = latlng.lng;
+
+        // Gunakan vektor ERA5-Land aktual jika tersedia dan tidak dalam mode simulasi manual
+        if (!this._isManualOverride && dataStore.era5WindLoaded) {
+          const uv = this._sampleEra5Grid(lat, lng);
+          if (uv) {
+            const speedMs = Math.hypot(uv.u, uv.v);
+            const scalePx = 0.72 + Math.min(2.2, speedMs * 0.42);
+            const norm = speedMs > 0.001 ? scalePx / speedMs : 0;
+            return {
+              vx: uv.u * norm,
+              vy: -uv.v * norm, // Canvas Y increases downward, +v is northward
+              intensity: speedMs > 2.2 ? 1.15 : 0.95
+            };
+          }
+        }
 
         const toDeg = (this._windFromDeg + 180) % 360;
         const baseRad = (toDeg - 90) * (Math.PI / 180);
@@ -2851,7 +3128,7 @@
       const bCmp = document.getElementById('badgeComparison');
 
       if (bFac) bFac.textContent = `${facCount}/3`;
-      if (bEnv) bEnv.textContent = `${envCount}/4`;
+      if (bEnv) bEnv.textContent = `${envCount}/5`;
       if (bCmp) bCmp.textContent = `${cmpCount}/3`;
     }
 
@@ -2917,7 +3194,23 @@
         `);
       }
 
-      // 2. Titik Api VIIRS
+      // 2. Indeks Risiko Bencana (BNPB / IPCC)
+      if (isChecked('chkRisk')) {
+        activeLayerCount++;
+        sections.push(`
+          <div class="legend-section">
+            <div class="legend-section-title"><span>Indeks Risiko Bencana (BNPB / IPCC)</span></div>
+            <div class="legend-grid">
+              <div class="legend-item"><div class="legend-name"><span class="legend-swatch" style="background:#10b981;"></span><span>Risiko Rendah</span></div><span class="legend-val">0.00 – 0.24</span></div>
+              <div class="legend-item"><div class="legend-name"><span class="legend-swatch" style="background:#eab308;"></span><span>Risiko Sedang</span></div><span class="legend-val">0.25 – 0.49</span></div>
+              <div class="legend-item"><div class="legend-name"><span class="legend-swatch" style="background:#f97316;"></span><span>Risiko Tinggi</span></div><span class="legend-val">0.50 – 0.74</span></div>
+              <div class="legend-item"><div class="legend-name"><span class="legend-swatch" style="background:#dc2626;"></span><span>Sangat Tinggi / Kritis</span></div><span class="legend-val">&ge; 0.75</span></div>
+            </div>
+          </div>
+        `);
+      }
+
+      // 3. Titik Api VIIRS
       if (isChecked('chkHotspot')) {
         activeLayerCount++;
         sections.push(`
@@ -2937,7 +3230,7 @@
         `);
       }
 
-      // 3. Area Terbakar & Lahan Gambut
+      // 4. Area Terbakar & Lahan Gambut
       const burnedActive = isChecked('chkBurnedArea');
       const peatActive = isChecked('chkPeat');
       if (burnedActive) activeLayerCount++;
@@ -2969,7 +3262,7 @@
         `);
       }
 
-      // 4. Fasilitas & Objek Vital
+      // 5. Fasilitas & Objek Vital
       const healthActive = isChecked('chkHealth');
       const eduActive = isChecked('chkEducation');
       const airActive = isChecked('chkAirport');
@@ -3011,7 +3304,7 @@
         `);
       }
 
-      // 5. Lintasan Partikel HYSPLIT
+      // 6. Lintasan Partikel HYSPLIT
       if (isChecked('chkTrajectory')) {
         activeLayerCount++;
         sections.push(`
@@ -3035,23 +3328,6 @@
         `);
       }
 
-      // 6. Indeks Prioritas AHP
-      if (isChecked('chkAHP')) {
-        activeLayerCount++;
-        sections.push(`
-          <div class="legend-section">
-            <div class="legend-section-title"><span>Indeks Prioritas Dampak (AHP)</span></div>
-            <div class="legend-grid">
-              <div class="legend-item"><div class="legend-name"><span class="legend-swatch" style="background:#10b981;"></span><span>Prioritas Sangat Rendah</span></div><span class="legend-val">&lt; 2.0</span></div>
-              <div class="legend-item"><div class="legend-name"><span class="legend-swatch" style="background:#eab308;"></span><span>Prioritas Rendah</span></div><span class="legend-val">2.0 – 2.8</span></div>
-              <div class="legend-item"><div class="legend-name"><span class="legend-swatch" style="background:#f97316;"></span><span>Prioritas Sedang</span></div><span class="legend-val">2.8 – 3.6</span></div>
-              <div class="legend-item"><div class="legend-name"><span class="legend-swatch" style="background:#ef4444;"></span><span>Prioritas Tinggi</span></div><span class="legend-val">3.6 – 4.3</span></div>
-              <div class="legend-item"><div class="legend-name"><span class="legend-swatch" style="background:#a855f7;"></span><span>Prioritas Kritis</span></div><span class="legend-val">&gt; 4.3</span></div>
-            </div>
-          </div>
-        `);
-      }
-
       // 7. MODIS AOD Mingguan
       if (isChecked('chkWeeklyModis')) {
         activeLayerCount++;
@@ -3067,17 +3343,33 @@
         `);
       }
 
-      // 8. Batas Administrasi
-      if (isChecked('chkAdminBoundary')) {
-        activeLayerCount++;
+      // 8. Batas Administrasi & ROI Mask
+      const boundaryActive = isChecked('chkAdminBoundary');
+      const roiMaskActive = isChecked('chkRoiMask');
+      if (boundaryActive) activeLayerCount++;
+      if (roiMaskActive) activeLayerCount++;
+
+      if (boundaryActive || roiMaskActive) {
+        let items = '';
+        if (boundaryActive) {
+          items += `
+            <div class="legend-item">
+              <div class="legend-name"><span class="legend-line" style="background:#94a3b8; border-top:2px dashed #090d16;"></span><span>Batas Kabupaten/Kota</span></div>
+              <span class="legend-val">Kalbar</span>
+            </div>
+          `;
+        }
+        if (roiMaskActive) {
+          items += `
+            <div class="legend-item">
+              <div class="legend-name"><span class="legend-swatch" style="background:rgba(9,13,22,0.72);"></span><span>Area Luar Fokus (ROI)</span></div>
+              <span class="legend-val">Mask 72%</span>
+            </div>
+          `;
+        }
         sections.push(`
           <div class="legend-section">
-            <div class="legend-grid">
-              <div class="legend-item">
-                <div class="legend-name"><span class="legend-line" style="background:#94a3b8; border-top:2px dashed #090d16;"></span><span>Batas Kabupaten/Kota</span></div>
-                <span class="legend-val">Kalbar</span>
-              </div>
-            </div>
+            <div class="legend-grid">${items}</div>
           </div>
         `);
       }
@@ -3091,7 +3383,7 @@
     }
 
     // ============================================================================
-    // 6. PEMUATAN & PENYARINGAN SEMUA LAYER GEOJSON (TERMASUK FILTER KAB/KOTA)
+    // 6. PEMUATAN & PENYARINGAN SEMUA LAYER GEOJSON (TERMASUK ROI MASK & KAB/KOTA)
     // ============================================================================
     function getActiveDateDDMMYYYY() {
       if (timelineMode === 'episode') {
@@ -3113,10 +3405,34 @@
       return `${dd}/${mm}/${yyyy}`;
     }
 
-    // A0. Render Efek Penggelapan Halus di Luar Batas Provinsi Kalimantan Barat
+    function getActiveDateISO() {
+      if (timelineMode === 'seasonal') {
+        const dayIdx = Math.min(94, Math.max(0, parseInt(document.getElementById('timeSlider').value, 10)));
+        const d = new Date(2026, 7, 1);
+        d.setDate(d.getDate() + dayIdx);
+        const dd = String(d.getDate()).padStart(2, '0');
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        return `${d.getFullYear()}-${mm}-${dd}`;
+      }
+      const ddmmyyyy = getActiveDateDDMMYYYY();
+      const [dd, mm, yyyy] = ddmmyyyy.split('/');
+      return `${yyyy}-${mm}-${dd}`;
+    }
+
+    // A0. Render Efek Spotlight / Inverse Polygon Masking (Dinamis mengikuti #districtFilter)
     function renderOutsideKalbarMask() {
       outsideMaskGroup.clearLayers();
       if (!dataStore.adminFeatures.length) return;
+
+      const districtFilter = document.getElementById('districtFilter').value;
+      const targetFeatures = districtFilter === 'ALL'
+        ? dataStore.adminFeatures
+        : dataStore.adminFeatures.filter(f => {
+            const p = f.properties || {};
+            return (p.WADMKK || p.NAMOBJ) === districtFilter;
+          });
+
+      if (!targetFeatures.length) return;
 
       const worldRing = [
         [-180, -85],
@@ -3125,28 +3441,28 @@
         [-180, 85],
         [-180, -85]
       ];
-      const kalbarHoles = [];
+      const roiHoles = [];
 
-      dataStore.adminFeatures.forEach(feat => {
+      targetFeatures.forEach(feat => {
         const geom = feat && feat.geometry;
         if (!geom) return;
         if (geom.type === 'Polygon' && Array.isArray(geom.coordinates) && geom.coordinates[0]) {
-          kalbarHoles.push(geom.coordinates[0]);
+          roiHoles.push(geom.coordinates[0]);
         } else if (geom.type === 'MultiPolygon' && Array.isArray(geom.coordinates)) {
           geom.coordinates.forEach(poly => {
-            if (Array.isArray(poly) && poly[0]) kalbarHoles.push(poly[0]);
+            if (Array.isArray(poly) && poly[0]) roiHoles.push(poly[0]);
           });
         }
       });
 
-      if (!kalbarHoles.length) return;
+      if (!roiHoles.length) return;
 
       const maskFeature = {
         type: 'Feature',
-        properties: { role: 'outside-kalbar-dim-mask' },
+        properties: { role: 'roi-spotlight-mask', region: districtFilter },
         geometry: {
           type: 'Polygon',
-          coordinates: [worldRing, ...kalbarHoles]
+          coordinates: [worldRing, ...roiHoles]
         }
       };
 
@@ -3155,14 +3471,14 @@
         interactive: false,
         style: {
           stroke: false,
-          fillColor: '#0f172a',
-          fillOpacity: 0.34,
+          fillColor: '#090d16',
+          fillOpacity: 0.72,
           fillRule: 'evenodd'
         }
       }).addTo(outsideMaskGroup);
     }
 
-    // A. Render Batas Administrasi (Highlight Kab/Kota Terpilih)
+    // A. Render Batas Administrasi (Highlight Kab/Kota Terpilih + Populasi BPS)
     function renderAdminBoundaries() {
       adminBoundaryGroup.clearLayers();
       if (!dataStore.adminFeatures.length) return;
@@ -3182,7 +3498,7 @@
             opacity: isDimmed ? 0.35 : 0.88,
             dashArray: isSelected ? null : '5, 4',
             fillColor: isSelected ? '#0284c7' : '#64748b',
-            fillOpacity: isSelected ? 0.08 : 0.02
+            fillOpacity: isSelected ? 0.06 : 0.01
           };
         },
         onEachFeature: (feature, layer) => {
@@ -3190,13 +3506,16 @@
           const kabName = p.WADMKK || p.NAMOBJ || 'Kabupaten/Kota';
           const kodeKab = p.KDPKAB || '-';
           const luasKm2 = p.LUASWH ? Number(p.LUASWH).toLocaleString('id-ID', { maximumFractionDigits: 2 }) : '-';
+          const jmlPddk = p.JML_PDDK !== undefined && p.JML_PDDK !== null ? Number(p.JML_PDDK).toLocaleString('id-ID') + ' jiwa' : '-';
+          const kepadatan = p.KEPADATAN !== undefined && p.KEPADATAN !== null ? Number(p.KEPADATAN).toLocaleString('id-ID') + ' jiwa/km²' : '-';
 
           layer.bindTooltip(kabName, { sticky: true, direction: 'center' });
           layer.bindPopup(`
             <div class="popup-header">Kabupaten/Kota ${kabName}</div>
             <div class="popup-line"><strong>Kode Wilayah:</strong> ${kodeKab}</div>
+            <div class="popup-line"><strong>Jumlah Penduduk (BPS):</strong> ${jmlPddk}</div>
+            <div class="popup-line"><strong>Kepadatan Penduduk:</strong> ${kepadatan}</div>
             <div class="popup-line"><strong>Luas Wilayah:</strong> ${luasKm2} km²</div>
-            <div class="popup-line"><strong>Provinsi:</strong> ${p.WADMPR || 'Kalimantan Barat'}</div>
           `);
         }
       }).addTo(adminBoundaryGroup);
@@ -3464,6 +3783,7 @@
     }
 
     function applyDistrictFilterToAllLayers() {
+      renderOutsideKalbarMask();
       renderAdminBoundaries();
       renderFilteredRealHotspots();
       renderFilteredBurnedArea();
@@ -3471,6 +3791,307 @@
       renderFilteredFacilities();
       renderFilteredComparisonLayers();
       updateSimulation();
+    }
+
+    // ============================================================================
+    // 6B. MESIN PERHITUNGAN RISIKO BENCANA (BNPB / IPCC) & TOP 5 WILAYAH
+    // ============================================================================
+    // Hitung akumulasi hari terpapar PM2.5 > 55.4 µg/m³ sejak 1 Agt 2026 hingga tanggal aktif
+    function computeExposureDurationDays(smokeFeature, activeDateIso) {
+      if (!smokeFeature || !smokeFeature.geometry || typeof turf === 'undefined') return 1;
+      const dates = Object.keys(dataStore.hysplitUnhealthyByDate).sort();
+      if (!dates.length) return 1;
+
+      let refPoint = null;
+      try {
+        refPoint = turf.pointOnFeature(smokeFeature);
+      } catch (e) {
+        return 1;
+      }
+
+      let daysCount = 0;
+      for (let i = 0; i < dates.length; i++) {
+        const dKey = dates[i];
+        if (dKey < '2026-08-01' || dKey > activeDateIso) continue;
+        const polys = dataStore.hysplitUnhealthyByDate[dKey] || [];
+        const hit = polys.some(poly => {
+          try {
+            return turf.booleanPointInPolygon(refPoint, poly) || turf.booleanIntersects(smokeFeature, poly);
+          } catch (e) {
+            return false;
+          }
+        });
+        if (hit) daysCount++;
+      }
+      return Math.max(daysCount, 0);
+    }
+
+    // Hitung Indeks Risiko Bencana BNPB/IPCC = Hazard (H) x Vulnerability & Exposure (V&E)
+    function evaluateBnpbIpccRisk(smokeFeature, effRata, effMaks, activeDateIso) {
+      // 1. Komponen Bahaya (Hazard: H, skala 1.0 - 5.0)
+      const ispuScore = getIspuCategory(effRata).score;
+      const peakBoost = effMaks > 250.4 ? 0.4 : effMaks > 150.4 ? 0.2 : 0;
+      const pmSubScore = Math.min(5, ispuScore + peakBoost);
+
+      const durationDays = effRata > 55.4 ? Math.max(1, computeExposureDurationDays(smokeFeature, activeDateIso)) : computeExposureDurationDays(smokeFeature, activeDateIso);
+      let durationSubScore = 1;
+      if (durationDays >= 15) durationSubScore = 5;
+      else if (durationDays >= 8) durationSubScore = 4;
+      else if (durationDays >= 4) durationSubScore = 3;
+      else if (durationDays >= 1) durationSubScore = 2;
+
+      const hazardScore = Number((0.65 * pmSubScore + 0.35 * durationSubScore).toFixed(2));
+
+      // 2. Komponen Kerentanan & Keterpaparan (Vulnerability & Exposure: V&E, skala 1.0 - 5.0)
+      let peatCount = 0;
+      let healthCount = 0;
+      let eduCount = 0;
+      let weightedDensity = 39;
+
+      if (smokeFeature && smokeFeature.geometry && typeof turf !== 'undefined') {
+        // 2a. Tumpang susun dengan Lahan Gambut KHG
+        for (let i = 0; i < dataStore.peat.length; i++) {
+          try {
+            if (turf.booleanIntersects(smokeFeature, dataStore.peat[i])) peatCount++;
+          } catch (e) {}
+        }
+
+        // 2b. Tumpang susun dengan Objek Vital / Kelompok Rentan (Faskes & Pendidikan)
+        for (let i = 0; i < dataStore.health.length; i++) {
+          try {
+            if (turf.booleanIntersects(smokeFeature, dataStore.health[i])) healthCount++;
+          } catch (e) {}
+        }
+        for (let i = 0; i < dataStore.education.length; i++) {
+          try {
+            if (turf.booleanIntersects(smokeFeature, dataStore.education[i])) eduCount++;
+          } catch (e) {}
+        }
+
+        // 2c. Kepadatan penduduk tertimbang dari Kab/Kota yang bertampalan
+        if (dataStore.adminFeatures.length > 0) {
+          let totalInterArea = 0;
+          let popSum = 0;
+          for (let i = 0; i < dataStore.adminFeatures.length; i++) {
+            const adm = dataStore.adminFeatures[i];
+            const dens = Number((adm.properties || {}).KEPADATAN || 39);
+            try {
+              if (turf.booleanIntersects(smokeFeature, adm)) {
+                const inter = turf.intersect(smokeFeature, adm);
+                if (inter) {
+                  const aKm2 = turf.area(inter) / 1e6;
+                  totalInterArea += aKm2;
+                  popSum += aKm2 * dens;
+                }
+              }
+            } catch (e) {}
+          }
+          if (totalInterArea > 0) {
+            weightedDensity = popSum / totalInterArea;
+          }
+        }
+      }
+
+      // Skor Gambut KHG (1-5)
+      let peatSubScore = 1;
+      if (peatCount >= 12) peatSubScore = 5;
+      else if (peatCount >= 6) peatSubScore = 4;
+      else if (peatCount >= 2) peatSubScore = 3;
+      else if (peatCount >= 1) peatSubScore = 2;
+
+      // Skor Fasilitas Rentan (Faskes + Pendidikan, 1-5)
+      const vitalCount = healthCount + eduCount;
+      let vitalSubScore = 1;
+      if (vitalCount >= 40) vitalSubScore = 5;
+      else if (vitalCount >= 15) vitalSubScore = 4;
+      else if (vitalCount >= 5) vitalSubScore = 3;
+      else if (vitalCount >= 1) vitalSubScore = 2;
+
+      // Skor Kepadatan Penduduk (1-5)
+      let popSubScore = 1;
+      if (weightedDensity >= 500) popSubScore = 5;
+      else if (weightedDensity >= 120) popSubScore = 4;
+      else if (weightedDensity >= 50) popSubScore = 3;
+      else if (weightedDensity >= 25) popSubScore = 2;
+
+      const vulnExpScore = Number((0.35 * peatSubScore + 0.35 * vitalSubScore + 0.30 * popSubScore).toFixed(2));
+
+      // 3. Indeks Risiko = H x (V&E), rentang mentah 1.0 - 25.0 -> dinormalisasi ke 0.00 - 1.00
+      const rawRiskProduct = Number((hazardScore * vulnExpScore).toFixed(2));
+      const normalizedRisk = Number(Math.min(1, Math.max(0, (rawRiskProduct - 1) / 24)).toFixed(3));
+      const riskClass = getRiskClassification(normalizedRisk);
+
+      return {
+        hazardScore,
+        pmSubScore,
+        durationDays,
+        durationSubScore,
+        vulnExpScore,
+        peatCount,
+        peatSubScore,
+        healthCount,
+        eduCount,
+        vitalCount,
+        vitalSubScore,
+        weightedDensity: Math.round(weightedDensity),
+        popSubScore,
+        rawRiskProduct,
+        normalizedRisk,
+        riskClass
+      };
+    }
+
+    // Hitung Estimasi Populasi Terpapar Berbasis Irisan Spasial & Kepadatan Penduduk BPS Kab/Kota
+    function computeArealWeightedPopulation(dangerPolygons, districtFilter) {
+      if (!dangerPolygons.length) return { exposedPop: 0, totalRefPop: 5766030 };
+
+      const targetAdmins = districtFilter === 'ALL'
+        ? dataStore.adminFeatures
+        : dataStore.adminFeatures.filter(f => {
+            const p = f.properties || {};
+            return (p.WADMKK || p.NAMOBJ) === districtFilter;
+          });
+
+      const totalRefPop = targetAdmins.reduce((sum, f) => sum + (Number((f.properties || {}).JML_PDDK) || 0), 0) || 5766030;
+
+      if (!targetAdmins.length || typeof turf === 'undefined') {
+        const fallbackArea = dangerPolygons.reduce((s, f) => s + (parseFloat(String((f.properties || {}).luas_km2 || 0).replace(',', '.')) || 0), 0);
+        return { exposedPop: Math.round(fallbackArea * 39), totalRefPop };
+      }
+
+      // Gabungkan poligon berbahaya jika lebih dari satu agar area tumpang tindih tidak dihitung ganda
+      let mergedDanger = dangerPolygons[0];
+      for (let i = 1; i < dangerPolygons.length; i++) {
+        try {
+          const u = turf.union(mergedDanger, dangerPolygons[i]);
+          if (u) mergedDanger = u;
+        } catch (e) {}
+      }
+
+      let totalExposedPop = 0;
+      targetAdmins.forEach(adm => {
+        const p = adm.properties || {};
+        const dens = Number(p.KEPADATAN || 39);
+        const maxPop = Number(p.JML_PDDK || Infinity);
+        try {
+          if (turf.booleanIntersects(mergedDanger, adm)) {
+            const inter = turf.intersect(mergedDanger, adm);
+            if (inter) {
+              const interAreaKm2 = turf.area(inter) / 1e6;
+              const estKabPop = Math.min(maxPop, Math.round(interAreaKm2 * dens));
+              totalExposedPop += estKabPop;
+            }
+          }
+        } catch (e) {}
+      });
+
+      return { exposedPop: totalExposedPop, totalRefPop };
+    }
+
+    // Hitung & Render Peringkat Otomatis Top 5 Wilayah Terdampak
+    function renderTop5AffectedDistricts(dayHotspotsAll, dayHysplitProcessed, activeDateIso) {
+      const listContainer = document.getElementById('top5DistrictList');
+      const dateBadge = document.getElementById('top5DateBadge');
+      if (!listContainer) return;
+
+      if (dateBadge) {
+        dateBadge.textContent = getActiveDateDDMMYYYY();
+      }
+
+      if (!dataStore.adminFeatures.length) {
+        listContainer.innerHTML = `<div class="legend-empty">Memuat daftar Kabupaten/Kota...</div>`;
+        return;
+      }
+
+      const currentSelected = document.getElementById('districtFilter').value;
+
+      const districtMetrics = dataStore.adminFeatures.map(adm => {
+        const p = adm.properties || {};
+        const kabName = p.WADMKK || p.NAMOBJ || 'Kabupaten/Kota';
+
+        // Hitung hotspot aktif di Kab/Kota ini
+        let hsCount = 0;
+        let hsMaxFrp = 0;
+        for (let i = 0; i < dayHotspotsAll.length; i++) {
+          const hs = dayHotspotsAll[i];
+          let inside = false;
+          if (typeof turf !== 'undefined' && hs.geometry && adm.geometry) {
+            try { inside = turf.booleanIntersects(hs, adm); } catch (e) {}
+          }
+          if (inside) {
+            hsCount++;
+            const frpVal = parseFloat(String((hs.properties || {}).frp || 0).replace(',', '.')) || 0;
+            if (frpVal > hsMaxFrp) hsMaxFrp = frpVal;
+          }
+        }
+
+        // Hitung PM2.5 maks & skor risiko tertinggi di Kab/Kota ini
+        let maxPm = 0;
+        let maxRiskNorm = 0;
+        let riskClass = getRiskClassification(0);
+
+        for (let i = 0; i < dayHysplitProcessed.length; i++) {
+          const item = dayHysplitProcessed[i];
+          let intersects = false;
+          if (typeof turf !== 'undefined' && item.feature.geometry && adm.geometry) {
+            try { intersects = turf.booleanIntersects(item.feature, adm); } catch (e) {}
+          }
+          if (intersects) {
+            if (item.effMaks > maxPm) maxPm = item.effMaks;
+            if (item.risk.normalizedRisk > maxRiskNorm) {
+              maxRiskNorm = item.risk.normalizedRisk;
+              riskClass = item.risk.riskClass;
+            }
+          }
+        }
+
+        // Skor komposit dampak wilayah untuk pengurutan Top 5
+        const compositeScore = (maxRiskNorm * 120) + (maxPm * 0.4) + (hsCount * 4.5) + (hsMaxFrp * 0.05);
+
+        return {
+          kabName,
+          hsCount,
+          maxPm,
+          maxRiskNorm,
+          riskClass,
+          compositeScore
+        };
+      });
+
+      districtMetrics.sort((a, b) => b.compositeScore - a.compositeScore);
+      const top5 = districtMetrics.slice(0, 5);
+
+      listContainer.innerHTML = top5.map((d, idx) => {
+        const rankClass = idx === 0 ? 'r1' : idx === 1 ? 'r2' : idx === 2 ? 'r3' : '';
+        const isActive = currentSelected === d.kabName ? 'active-region' : '';
+        const pmDisplay = d.maxPm > 0 ? `${d.maxPm.toFixed(1)} µg/m³` : '0.0 µg/m³';
+        return `
+          <div class="top5-item ${isActive}" data-kab="${d.kabName}" title="Klik untuk zoom & filter wilayah ${d.kabName}">
+            <div class="top5-left">
+              <span class="top5-rank ${rankClass}">${idx + 1}</span>
+              <div class="top5-info">
+                <div class="top5-name">${d.kabName}</div>
+                <div class="top5-sub">Hotspot: <strong>${d.hsCount} titik</strong> &bull; Risiko: ${d.maxRiskNorm.toFixed(2)}</div>
+              </div>
+            </div>
+            <div class="top5-right">
+              <div class="top5-pm">${pmDisplay}</div>
+              <span class="risk-pill" style="background:${d.riskClass.color};">${d.riskClass.shortLabel}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      listContainer.querySelectorAll('.top5-item').forEach(el => {
+        el.addEventListener('click', () => {
+          const targetKab = el.dataset.kab;
+          const selectEl = document.getElementById('districtFilter');
+          if (selectEl) {
+            selectEl.value = targetKab;
+            selectEl.dispatchEvent(new Event('change'));
+          }
+        });
+      });
     }
 
     // ============================================================================
@@ -3536,29 +4157,32 @@
       const opacity = parseInt(document.getElementById('opacitySlider').value, 10) / 100;
       const districtFilter = document.getElementById('districtFilter').value;
 
-      const rawPm = parseFloat(document.getElementById('wPm25').value);
-      const rawPop = parseFloat(document.getElementById('wPop').value);
-      const rawFasum = parseFloat(document.getElementById('wFasum').value);
-      const rawDurasi = parseFloat(document.getElementById('wDurasi').value);
-      const totalW = rawPm + rawPop + rawFasum + rawDurasi;
-
-      const wPm = rawPm / totalW;
-      const wPop = rawPop / totalW;
-      const wFasum = rawFasum / totalW;
-      const wDurasi = rawDurasi / totalW;
-
-      document.getElementById('wPm25Label').textContent = `${Math.round(wPm * 100)}%`;
-      document.getElementById('wPopLabel').textContent = `${Math.round(wPop * 100)}%`;
-      document.getElementById('wFasumLabel').textContent = `${Math.round(wFasum * 100)}%`;
-      document.getElementById('wDurasiLabel').textContent = `${Math.round(wDurasi * 100)}%`;
-
       const mitigationPct = parseInt(document.getElementById('mitigationSlider').value, 10);
       const emissionFactor = 1 - (mitigationPct / 100);
       const isManualWind = document.getElementById('chkManualWind').checked;
 
+      const targetDate = getActiveDateDDMMYYYY();
+      const [dd, mm, yyyy] = targetDate.split('/');
+      const altDate = `${yyyy}-${mm}-${dd}`;
+      const activeDateIso = getActiveDateISO();
+
+      // Tentukan vektor angin aktif: ERA5-Land aktual (jika tersedia) atau skenario step / simulasi manual
       let activeWindFromDeg = step.windFromDeg;
       let activeWindSpeed = step.windSpeedKmh;
       let activeWindLabel = step.wind;
+
+      if (!isManualWind && dataStore.era5WindLoaded && dataStore.era5WindByDate[activeDateIso]) {
+        const dayGrid = dataStore.era5WindByDate[activeDateIso];
+        if (dayGrid.meanU !== undefined && dayGrid.meanV !== undefined) {
+          const met = uvToMeteorological(dayGrid.meanU, dayGrid.meanV);
+          activeWindFromDeg = met.fromDeg;
+          activeWindSpeed = met.speedKmh;
+          const pblMatch = step.wind.match(/PBL:\s*[\d.]+\s*m/);
+          const pblPart = pblMatch ? ` • ${pblMatch[0]}` : '';
+          const fcPart = step.isForecast ? ' • Forecast' : ' • ERA5-Land';
+          activeWindLabel = `${met.dirName} (${met.speedKmh} km/jam)${pblPart}${fcPart}`;
+        }
+      }
 
       if (isManualWind) {
         const activeDirBtn = document.querySelector('#windDirButtons .dir-btn.active');
@@ -3586,7 +4210,7 @@
         : step.timestamp;
 
       if (typeof windLayer !== 'undefined') {
-        windLayer.setWind(activeWindFromDeg, activeWindSpeed);
+        windLayer.setWind(activeWindFromDeg, activeWindSpeed, isManualWind, activeDateIso);
       }
 
       renderDynamicTrajectories(activeWindFromDeg, activeWindSpeed, isManualWind, step, timeIdx, districtFilter);
@@ -3605,18 +4229,14 @@
       });
       if (closestTick && minDiff <= 4) closestTick.classList.add('active');
 
-      // RENDER POLIGON HYSPLIT ASLI (asap_pm25_harian_ispu.geojson)
+      // RENDER POLIGON HYSPLIT ASLI & INDEKS RISIKO BENCANA (BNPB / IPCC)
       layerGroups.pm25.clearLayers();
-      layerGroups.ahp.clearLayers();
-
-      const targetDate = getActiveDateDDMMYYYY();
-      const [dd, mm, yyyy] = targetDate.split('/');
-      const altDate = `${yyyy}-${mm}-${dd}`;
+      layerGroups.risk.clearLayers();
 
       let totalDangerAreaKm2 = 0;
-      let baselineDangerAreaKm2 = 0;
       let maxPm25 = 0;
       const dangerPolygons = [];
+      const baselineDangerPolygons = [];
       currentSimulationResults = [];
 
       const areaByCategory = {
@@ -3626,113 +4246,157 @@
         'Berbahaya': 0
       };
 
-      const matchingHysplit = dataStore.hysplit.filter(f => {
+      const riskClassCounts = {
+        critical: 0,
+        high: 0,
+        med: 0,
+        low: 0
+      };
+
+      // Seluruh poligon HYSPLIT pada tanggal aktif (untuk peringkat Top 5 Kab/Kota se-Kalbar)
+      const allDayHysplit = dataStore.hysplit.filter(f => {
         const p = f.properties || {};
         const tgl = String(p.tanggal || '').trim();
-        if (tgl !== targetDate && tgl !== altDate) return false;
-        return featureMatchesDistrict(f, districtFilter);
+        return (tgl === targetDate || tgl === altDate);
       });
 
-      if (matchingHysplit.length > 0) {
-        matchingHysplit.forEach((feat, idx) => {
-          const p = feat.properties || {};
-          const rawRata = parseFloat(String(p.pm25_rata || 0).replace(',', '.')) || 0;
-          const rawMaks = parseFloat(String(p.pm25_maks || rawRata).replace(',', '.')) || rawRata;
-          const luasKm2 = parseFloat(String(p.luas_km2 || 0).replace(',', '.')) || 0;
+      const dayHysplitProcessed = [];
 
-          const effRata = Number((rawRata * emissionFactor).toFixed(1));
-          const effMaks = Number((rawMaks * emissionFactor).toFixed(1));
-          if (effMaks > maxPm25) maxPm25 = effMaks;
+      allDayHysplit.forEach(feat => {
+        const p = feat.properties || {};
+        const rawRata = parseFloat(String(p.pm25_rata || 0).replace(',', '.')) || 0;
+        const rawMaks = parseFloat(String(p.pm25_maks || rawRata).replace(',', '.')) || rawRata;
+        const luasKm2 = parseFloat(String(p.luas_km2 || 0).replace(',', '.')) || 0;
 
-          // Gunakan warna asli atribut jika tidak ada mitigasi/perubahan kategori, atau sesuaikan kategori ISPU
-          const ispu = getIspuCategory(effRata);
-          const fillHex = (mitigationPct === 0 && p.warna) ? p.warna : ispu.color;
-          const katLabel = mitigationPct === 0 ? (p.kategori || ispu.label) : ispu.label;
+        const effRata = Number((rawRata * emissionFactor).toFixed(1));
+        const effMaks = Number((rawMaks * emissionFactor).toFixed(1));
 
-          // Hitung skor AHP (1-5)
-          const areaScore = luasKm2 > 50000 ? 5 : luasKm2 > 15000 ? 4 : luasKm2 > 3000 ? 3 : 2;
-          const ahpScore = (wPm * ispu.score) + (wPop * areaScore) + (wFasum * ispu.score) + (wDurasi * (p.kode || ispu.score));
-
-          // Opsional pergeseran manual jika What-If Angin aktif
-          let displayGeometry = feat.geometry;
-          if (isManualWind && (dynamicShiftLon !== 0 || dynamicShiftLat !== 0)) {
-            const shiftRing = ring => ring.map(pt => [pt[0] + dynamicShiftLon, pt[1] + dynamicShiftLat]);
-            if (feat.geometry.type === 'Polygon') {
-              displayGeometry = { type: 'Polygon', coordinates: feat.geometry.coordinates.map(shiftRing) };
-            } else if (feat.geometry.type === 'MultiPolygon') {
-              displayGeometry = { type: 'MultiPolygon', coordinates: feat.geometry.coordinates.map(poly => poly.map(shiftRing)) };
-            }
+        let displayGeometry = feat.geometry;
+        if (isManualWind && (dynamicShiftLon !== 0 || dynamicShiftLat !== 0)) {
+          const shiftRing = ring => ring.map(pt => [pt[0] + dynamicShiftLon, pt[1] + dynamicShiftLat]);
+          if (feat.geometry.type === 'Polygon') {
+            displayGeometry = { type: 'Polygon', coordinates: feat.geometry.coordinates.map(shiftRing) };
+          } else if (feat.geometry.type === 'MultiPolygon') {
+            displayGeometry = { type: 'MultiPolygon', coordinates: feat.geometry.coordinates.map(poly => poly.map(shiftRing)) };
           }
+        }
 
-          const displayFeature = {
-            type: 'Feature',
-            properties: p,
-            geometry: displayGeometry
-          };
+        const displayFeature = {
+          type: 'Feature',
+          properties: p,
+          geometry: displayGeometry
+        };
 
-          if (rawRata >= threshold) baselineDangerAreaKm2 += luasKm2;
-          const isDanger = effRata >= threshold;
-          if (isDanger) {
-            totalDangerAreaKm2 += luasKm2;
-            dangerPolygons.push(displayFeature);
-          }
+        const risk = evaluateBnpbIpccRisk(displayFeature, effRata, effMaks, activeDateIso);
+        const matchesFilter = featureMatchesDistrict(feat, districtFilter);
 
-          // Rekap luas per kategori untuk grafik
-          const normKat = katLabel.toLowerCase();
-          if (normKat.includes('sangat tidak')) areaByCategory['Sangat tidak sehat'] += luasKm2;
-          else if (normKat.includes('tidak sehat')) areaByCategory['Tidak sehat'] += luasKm2;
-          else if (normKat.includes('berbahaya')) areaByCategory['Berbahaya'] += luasKm2;
-          else areaByCategory['Sedang'] += luasKm2;
-
-          L.geoJSON(displayFeature, {
-            style: {
-              color: isDanger ? '#090d16' : fillHex,
-              weight: isDanger ? 1.3 : 0.8,
-              fillColor: fillHex,
-              fillOpacity: opacity * 0.65
-            },
-            onEachFeature: (_, layer) => {
-              layer.bindPopup(`
-                <div class="popup-header">Sebaran PM2.5 HYSPLIT (${katLabel})</div>
-                <div class="popup-line"><strong>Tanggal:</strong> ${p.tanggal || targetDate}</div>
-                <div class="popup-line"><strong>PM2.5 Rata-rata:</strong> ${effRata} µg/m³ (Maks: ${effMaks} µg/m³)</div>
-                <div class="popup-line"><strong>Rentang ISPU:</strong> ${p.rentang_ugm3 || '-'} µg/m³</div>
-                <div class="popup-line"><strong>Luas Zona:</strong> ${luasKm2.toLocaleString('id-ID')} km²</div>
-                <div class="popup-line"><strong>Skor Prioritas AHP:</strong> ${ahpScore.toFixed(2)} / 5.00</div>
-              `);
-            }
-          }).addTo(layerGroups.pm25);
-
-          L.geoJSON(displayFeature, {
-            style: {
-              color: '#581c87',
-              weight: 1.0,
-              fillColor: getAhpColor(ahpScore),
-              fillOpacity: opacity * 0.72
-            },
-            onEachFeature: (_, layer) => {
-              layer.bindPopup(`
-                <div class="popup-header">Indeks Prioritas Dampak (AHP)</div>
-                <div class="popup-line"><strong>Kategori PM2.5:</strong> ${katLabel} (${effRata} µg/m³)</div>
-                <div class="popup-line"><strong>Skor Gabungan AHP:</strong> <b>${ahpScore.toFixed(2)} / 5.00</b></div>
-                <div class="popup-line"><strong>Luas Zona:</strong> ${luasKm2.toLocaleString('id-ID')} km²</div>
-              `);
-            }
-          }).addTo(layerGroups.ahp);
-
-          currentSimulationResults.push({
-            Wilayah_Filter: districtFilter,
-            Tanggal: p.tanggal || targetDate,
-            Kategori_ISPU: katLabel,
-            Rentang_ugm3: p.rentang_ugm3 || '-',
-            PM25_Rata_ugm3: effRata,
-            PM25_Maks_ugm3: effMaks,
-            Luas_km2: luasKm2,
-            Skor_AHP: ahpScore.toFixed(2),
-            Status_Ambang: isDanger ? 'MELEBIHI AMBANG' : 'AMAN'
-          });
+        dayHysplitProcessed.push({
+          feature: displayFeature,
+          props: p,
+          rawRata,
+          effRata,
+          effMaks,
+          luasKm2,
+          risk,
+          matchesFilter
         });
-      }
+      });
+
+      // Render poligon yang lolos filter Kab/Kota ke peta dan tabel statistik
+      dayHysplitProcessed.filter(item => item.matchesFilter).forEach(item => {
+        const { feature: displayFeature, props: p, rawRata, effRata, effMaks, luasKm2, risk } = item;
+        if (effMaks > maxPm25) maxPm25 = effMaks;
+
+        const ispu = getIspuCategory(effRata);
+        const fillHex = (mitigationPct === 0 && p.warna) ? p.warna : ispu.color;
+        const katLabel = mitigationPct === 0 ? (p.kategori || ispu.label) : ispu.label;
+
+        if (rawRata >= threshold) baselineDangerPolygons.push(displayFeature);
+        const isDanger = effRata >= threshold;
+        if (isDanger) {
+          totalDangerAreaKm2 += luasKm2;
+          dangerPolygons.push(displayFeature);
+        }
+
+        // Rekap luas per kategori ISPU
+        const normKat = katLabel.toLowerCase();
+        if (normKat.includes('sangat tidak')) areaByCategory['Sangat tidak sehat'] += luasKm2;
+        else if (normKat.includes('tidak sehat')) areaByCategory['Tidak sehat'] += luasKm2;
+        else if (normKat.includes('berbahaya')) areaByCategory['Berbahaya'] += luasKm2;
+        else areaByCategory['Sedang'] += luasKm2;
+
+        // Rekap kelas risiko BNPB / IPCC
+        if (risk.riskClass.level === 4) riskClassCounts.critical++;
+        else if (risk.riskClass.level === 3) riskClassCounts.high++;
+        else if (risk.riskClass.level === 2) riskClassCounts.med++;
+        else riskClassCounts.low++;
+
+        L.geoJSON(displayFeature, {
+          style: {
+            color: isDanger ? '#090d16' : fillHex,
+            weight: isDanger ? 1.3 : 0.8,
+            fillColor: fillHex,
+            fillOpacity: opacity * 0.65
+          },
+          onEachFeature: (_, layer) => {
+            layer.bindPopup(`
+              <div class="popup-header">Sebaran PM2.5 HYSPLIT (${katLabel})</div>
+              <div class="popup-line"><strong>Tanggal:</strong> ${p.tanggal || targetDate}</div>
+              <div class="popup-line"><strong>PM2.5 Rata-rata:</strong> ${effRata} µg/m³ (Maks: ${effMaks} µg/m³)</div>
+              <div class="popup-line"><strong>Rentang ISPU:</strong> ${p.rentang_ugm3 || '-'} µg/m³</div>
+              <div class="popup-line"><strong>Luas Zona:</strong> ${luasKm2.toLocaleString('id-ID')} km²</div>
+              <div class="popup-line"><strong>Kelas Risiko BNPB/IPCC:</strong> <b>${risk.riskClass.label}</b> (${risk.normalizedRisk.toFixed(2)})</div>
+            `);
+          }
+        }).addTo(layerGroups.pm25);
+
+        L.geoJSON(displayFeature, {
+          style: {
+            color: '#090d16',
+            weight: 1.1,
+            fillColor: risk.riskClass.color,
+            fillOpacity: opacity * 0.74
+          },
+          onEachFeature: (_, layer) => {
+            layer.bindPopup(`
+              <div class="popup-header">Indeks Risiko Bencana — ${risk.riskClass.label}</div>
+              <div class="popup-line"><strong>Indeks Risiko (H &times; V&amp;E):</strong> <b>${risk.normalizedRisk.toFixed(2)}</b> (Skor Mentah: ${risk.rawRiskProduct} / 25)</div>
+              <div class="popup-line"><strong>1. Skor Bahaya (H):</strong> ${risk.hazardScore} / 5.00 (PM2.5: ${effRata} µg/m³ &bull; Durasi: <b>${risk.durationDays} hari</b> &gt;55.4 µg/m³)</div>
+              <div class="popup-line"><strong>2. Kerentanan &amp; Paparan (V&amp;E):</strong> ${risk.vulnExpScore} / 5.00</div>
+              <div class="popup-line" style="padding-left:8px;">&bull; Poligon Gambut KHG: <b>${risk.peatCount} KHG</b> &bull; Kepadatan: <b>${risk.weightedDensity.toLocaleString('id-ID')} jiwa/km²</b></div>
+              <div class="popup-line" style="padding-left:8px;">&bull; Fasilitas Rentan: <b>${risk.vitalCount} unit</b> (${risk.healthCount} Faskes, ${risk.eduCount} Sekolah)</div>
+            `);
+          }
+        }).addTo(layerGroups.risk);
+
+        currentSimulationResults.push({
+          Wilayah_Filter: districtFilter,
+          Tanggal: p.tanggal || targetDate,
+          Kategori_ISPU: katLabel,
+          Rentang_ugm3: p.rentang_ugm3 || '-',
+          PM25_Rata_ugm3: effRata,
+          PM25_Maks_ugm3: effMaks,
+          Luas_km2: luasKm2,
+          Durasi_Paparan_Hari: risk.durationDays,
+          Skor_Bahaya_H: risk.hazardScore.toFixed(2),
+          Poligon_Gambut_KHG: risk.peatCount,
+          Fasilitas_Rentan_Unit: risk.vitalCount,
+          Skor_Kerentanan_Paparan_VE: risk.vulnExpScore.toFixed(2),
+          Indeks_Risiko_BNPB_IPCC: risk.normalizedRisk.toFixed(3),
+          Kelas_Risiko: risk.riskClass.label,
+          Status_Ambang: isDanger ? 'MELEBIHI AMBANG' : 'AMAN'
+        });
+      });
+
+      // Update ringkasan kelas risiko pada panel kanan
+      const elCrit = document.getElementById('riskCountCritical');
+      const elHigh = document.getElementById('riskCountHigh');
+      const elMed = document.getElementById('riskCountMed');
+      const elLow = document.getElementById('riskCountLow');
+      if (elCrit) elCrit.textContent = `${riskClassCounts.critical} zona`;
+      if (elHigh) elHigh.textContent = `${riskClassCounts.high} zona`;
+      if (elMed) elMed.textContent = `${riskClassCounts.med} zona`;
+      if (elLow) elLow.textContent = `${riskClassCounts.low} zona`;
 
       // Hitung jumlah Sekolah & Faskes nyata yang bertampalan dengan zona melebihi ambang
       let exposedSchoolsCount = 0;
@@ -3759,9 +4423,12 @@
         });
       }
 
-      // Estimasi populasi berdasarkan kepadatan rata-rata Kalbar (~38 jiwa/km² pada area terdampak)
-      const estExposedPop = Math.round(totalDangerAreaKm2 * 38);
-      const baseExposedPop = Math.round(baselineDangerAreaKm2 * 38);
+      // Estimasi populasi terpapar menggunakan kepadatan penduduk & jumlah penduduk BPS per Kab/Kota
+      const popCalc = computeArealWeightedPopulation(dangerPolygons, districtFilter);
+      const basePopCalc = computeArealWeightedPopulation(baselineDangerPolygons, districtFilter);
+      const estExposedPop = popCalc.exposedPop;
+      const baseExposedPop = basePopCalc.exposedPop;
+      const popPct = popCalc.totalRefPop > 0 ? ((estExposedPop / popCalc.totalRefPop) * 100).toFixed(1) : '0.0';
 
       let exposedAirportCount = 0;
       if (dangerPolygons.length > 0 && typeof turf !== 'undefined') {
@@ -3775,17 +4442,17 @@
         });
       }
 
-      const activeDateStr = getActiveDateDDMMYYYY();
-      const [aDd, aMm, aYyyy] = activeDateStr.split('/');
-      const activeIsoStr = `${aYyyy}-${aMm}-${aDd}`;
-      const activeDayHotspots = dataStore.hotspots.filter(f => {
+      const allDayHotspots = dataStore.hotspots.filter(f => {
         const p = f.properties || {};
         const rawDate = String(p.acq_date || '').trim();
-        if (rawDate !== activeDateStr && rawDate !== activeIsoStr) return false;
-        return featureMatchesDistrict(f, districtFilter);
+        return (rawDate === targetDate || rawDate === altDate);
       });
+      const activeDayHotspots = allDayHotspots.filter(f => featureMatchesDistrict(f, districtFilter));
 
-      document.getElementById('kpiPop').textContent = `${Math.round(totalDangerAreaKm2).toLocaleString('id-ID')} km² (~${estExposedPop.toLocaleString('id-ID')} Jiwa)`;
+      // Render otomatis Top 5 Wilayah Terdampak
+      renderTop5AffectedDistricts(allDayHotspots, dayHysplitProcessed, activeDateIso);
+
+      document.getElementById('kpiPop').textContent = `${Math.round(totalDangerAreaKm2).toLocaleString('id-ID')} km² (~${estExposedPop.toLocaleString('id-ID')} Jiwa | ${popPct}%)`;
       document.getElementById('kpiSchools').textContent = `${exposedSchoolsCount.toLocaleString('id-ID')} Unit`;
       document.getElementById('kpiHealth').textContent = `${exposedHealthCount.toLocaleString('id-ID')} Unit`;
       const kpiAirportEl = document.getElementById('kpiAirport');
@@ -3800,12 +4467,15 @@
       window._latestExposureSummary = {
         totalDangerAreaKm2,
         estExposedPop,
+        totalRefPop: popCalc.totalRefPop,
+        popPct,
         exposedSchoolsCount,
         exposedHealthCount,
         exposedAirportCount,
         activeDayHotspotsCount: activeDayHotspots.length,
         maxPm25,
         activeWindLabel,
+        riskClassCounts,
         step
       };
 
@@ -3859,7 +4529,6 @@
       const toDeg = (fromDeg + 180) % 360;
       const rad = (toDeg - 90) * (Math.PI / 180);
       const mult = stepObj ? (stepObj.pm25Multiplier || 0.7) : 0.7;
-      // Panjang & kelengkungan lintasan berubah dinamis mengikuti kecepatan angin & step time-slider
       const distDeg = (speedKmh / 14) * (1.35 + mult * 1.15);
       const temporalCurve = Math.sin(timeIdx * 0.45) * 0.11;
 
@@ -3869,7 +4538,6 @@
         { alt: "1000 M AMSL (Transpor Lintas Batas)", color: "#10b981", turn: 0.19 + temporalCurve * 0.6, scale: 1.22 }
       ];
 
-      // Cari titik sumber emisi dari hotspot aktif pada tanggal tersebut (jika ada), agar lintasan berpindah sesuai kejadian api
       let origins = [];
       if (dataStore.hotspots && dataStore.hotspots.length > 0) {
         const targetDate = getActiveDateDDMMYYYY();
@@ -3884,7 +4552,6 @@
         });
 
         if (dayHotspots.length > 0) {
-          // Urutkan berdasarkan FRP tertinggi & ambil hingga 2 klaster sumber terpisah
           const sorted = [...dayHotspots].sort((a, b) => {
             const fa = parseFloat(String((a.properties || {}).frp || 0).replace(',', '.')) || 0;
             const fb = parseFloat(String((b.properties || {}).frp || 0).replace(',', '.')) || 0;
@@ -3921,7 +4588,6 @@
       const modeLabel = isManual ? 'Simulasi Angin Manual' : (stepObj ? stepObj.label : 'Dinamis');
 
       origins.forEach(orig => {
-        // Titik awal pelepasan partikel (source marker)
         L.circleMarker([orig.lat, orig.lon], {
           radius: 4.5,
           fillColor: '#ffffff',
@@ -3963,7 +4629,6 @@
             }
           }).addTo(layerGroups.trajectory);
 
-          // Simpul penanda posisi partikel bergerak sepanjang lintasan sesuai timeIdx
           const pulseIdx = 1 + ((timeIdx + Math.round(layerSpec.scale * 3)) % (totalSegments - 1));
           const endPt = pts[pts.length - 1];
           const pulsePt = pts[pulseIdx];
@@ -3989,7 +4654,7 @@
     }
 
     // ============================================================================
-    // 8. FETCH DATA GEOJSON DARI GITHUB (1 KALI SAAT INISIALISASI)
+    // 8. FETCH DATA GEOJSON & CSV ERA5-LAND DARI GITHUB (1 KALI SAAT INISIALISASI)
     // ============================================================================
     const BASE_REPO_URL = 'https://raw.githubusercontent.com/CyberIMG05/webgis-karhutla-kalbar/main';
     const BASE_PJBL_URL = `${BASE_REPO_URL}/data_pjbl`;
@@ -4013,7 +4678,32 @@
       return null;
     }
 
-    // 8A. Muat Batas Administrasi & Isi Dropdown 14 Kab/Kota secara Otomatis
+    // RFC-4180 CSV line splitter (menangani tanda koma di dalam kolom .geo yang diapit tanda kutip)
+    function parseCsvLineRfc4180(line) {
+      const result = [];
+      let cur = '';
+      let inQuotes = false;
+      for (let i = 0; i < line.length; i++) {
+        const ch = line[i];
+        if (ch === '"') {
+          if (inQuotes && line[i + 1] === '"') {
+            cur += '"';
+            i++;
+          } else {
+            inQuotes = !inQuotes;
+          }
+        } else if (ch === ',' && !inQuotes) {
+          result.push(cur);
+          cur = '';
+        } else {
+          cur += ch;
+        }
+      }
+      result.push(cur);
+      return result;
+    }
+
+    // 8A. Muat Batas Administrasi (dengan atribut JML_PDDK & KEPADATAN BPS) & Isi Dropdown 14 Kab/Kota
     function loadAdminBoundaryGeoJSON() {
       fetch(`${BASE_REPO_URL}/Batas_KabKota_KalimantanBarat.geojson`)
         .then(res => { if (!res.ok) throw new Error(res.status); return res.json(); })
@@ -4033,7 +4723,6 @@
             }
           });
 
-          // Urutkan alfabetis dan masukkan ke <select id="districtFilter">
           [...new Set(districtNames)].sort().forEach(name => {
             const opt = document.createElement('option');
             opt.value = name;
@@ -4043,17 +4732,32 @@
 
           renderOutsideKalbarMask();
           renderAdminBoundaries();
-          console.log(`Berhasil memuat ${dataStore.adminFeatures.length} Kab/Kota Kalbar.`);
+          updateSimulation();
+          console.log(`Berhasil memuat ${dataStore.adminFeatures.length} Kab/Kota Kalbar (dengan data penduduk BPS).`);
         })
         .catch(err => console.warn('Gagal memuat Batas_KabKota_KalimantanBarat.geojson:', err));
     }
 
-    // 8B. Muat Pemodelan Sebaran PM2.5 HYSPLIT Asli
+    // 8B. Muat Pemodelan Sebaran PM2.5 HYSPLIT Asli & Bangun Indeks Durasi Paparan
     function loadHysplitPm25GeoJSON() {
       fetch(`${BASE_PJBL_URL}/asap_pm25_harian_ispu.geojson`)
         .then(res => { if (!res.ok) throw new Error(res.status); return res.json(); })
         .then(data => {
           dataStore.hysplit = data.features || [];
+          dataStore.hysplitUnhealthyByDate = {};
+
+          dataStore.hysplit.forEach(feat => {
+            const p = feat.properties || {};
+            const dateIso = normalizeDateKey(p.tanggal);
+            const pmRata = parseFloat(String(p.pm25_rata || 0).replace(',', '.')) || 0;
+            if (dateIso && pmRata > 55.4) {
+              if (!dataStore.hysplitUnhealthyByDate[dateIso]) {
+                dataStore.hysplitUnhealthyByDate[dateIso] = [];
+              }
+              dataStore.hysplitUnhealthyByDate[dateIso].push(feat);
+            }
+          });
+
           console.log(`Berhasil memuat ${dataStore.hysplit.length} poligon HYSPLIT PM2.5.`);
           updateSimulation();
         })
@@ -4068,6 +4772,7 @@
           dataStore.peat = data.features || [];
           console.log(`Berhasil memuat ${dataStore.peat.length} poligon KHG Gambut.`);
           renderFilteredPeatland();
+          updateSimulation();
         })
         .catch(err => console.warn('Gagal memuat khg_gambut_kalbar.geojson:', err));
     }
@@ -4084,7 +4789,7 @@
         .catch(err => console.warn('Gagal memuat burned_area_modis_mcd64a1.geojson:', err));
     }
 
-    // 8E. Muat Hotspot VIIRS (NOAA-20, NOAA-21, Suomi-NPP)
+    // 8E. Muat Hotspot VIIRS (NOAA-20, NOAA-21 jika ada, Suomi-NPP)
     function loadRealHotspotsFromGitHub() {
       const files = [
         { file: 'hotspot_viirs_noaa20.geojson', label: 'VIIRS NOAA-20' },
@@ -4102,10 +4807,7 @@
               });
               return geo.features || [];
             })
-            .catch(err => {
-              console.warn(`Gagal memuat ${item.file}:`, err);
-              return [];
-            })
+            .catch(() => [])
         )
       ).then(results => {
         dataStore.hotspots = results.flat();
@@ -4148,7 +4850,84 @@
       });
     }
 
-    // 8G. Muat CAMS & Data Pembanding Mingguan (MERRA-2 & MODIS AOD)
+    // 8G. Muat Grid Angin ERA5-Land Harian (ERA5_Wind_UV_Kalbar_2026.csv)
+    function loadEra5WindCsv() {
+      fetch(`${BASE_PJBL_URL}/ERA5_Wind_UV_Kalbar_2026.csv`)
+        .then(res => { if (!res.ok) throw new Error(res.status); return res.text(); })
+        .then(csvText => {
+          const lines = csvText.split(/\r?\n/).filter(l => l.trim().length > 0);
+          if (lines.length < 2) return;
+
+          const headers = parseCsvLineRfc4180(lines[0]).map(h => h.trim());
+          const idxDate = headers.findIndex(h => h.toLowerCase() === 'tanggal');
+          const idxLat = headers.findIndex(h => h.toLowerCase() === 'lat');
+          const idxLon = headers.findIndex(h => h.toLowerCase() === 'lon');
+          const idxU = headers.findIndex(h => h.toLowerCase().includes('u_component'));
+          const idxV = headers.findIndex(h => h.toLowerCase().includes('v_component'));
+
+          if (idxDate === -1 || idxLat === -1 || idxLon === -1 || idxU === -1 || idxV === -1) {
+            console.warn('Header kolom ERA5_Wind_UV_Kalbar_2026.csv tidak sesuai:', headers);
+            return;
+          }
+
+          const rawByDate = {};
+          for (let i = 1; i < lines.length; i++) {
+            const cols = parseCsvLineRfc4180(lines[i]);
+            if (cols.length <= Math.max(idxDate, idxLat, idxLon, idxU, idxV)) continue;
+
+            const dIso = normalizeDateKey(cols[idxDate]);
+            const lat = parseFloat(cols[idxLat]);
+            const lon = parseFloat(cols[idxLon]);
+            const u = parseFloat(cols[idxU]);
+            const v = parseFloat(cols[idxV]);
+
+            if (!dIso || isNaN(lat) || isNaN(lon)) continue;
+            if (!rawByDate[dIso]) {
+              rawByDate[dIso] = {
+                latSet: new Set(),
+                lonSet: new Set(),
+                uMap: {},
+                vMap: {},
+                uSum: 0,
+                vSum: 0,
+                validCount: 0
+              };
+            }
+
+            const entry = rawByDate[dIso];
+            entry.latSet.add(Number(lat.toFixed(2)));
+            entry.lonSet.add(Number(lon.toFixed(2)));
+
+            if (!isNaN(u) && !isNaN(v)) {
+              const key = `${lat.toFixed(2)}_${lon.toFixed(2)}`;
+              entry.uMap[key] = u;
+              entry.vMap[key] = v;
+              entry.uSum += u;
+              entry.vSum += v;
+              entry.validCount++;
+            }
+          }
+
+          Object.keys(rawByDate).forEach(dIso => {
+            const e = rawByDate[dIso];
+            dataStore.era5WindByDate[dIso] = {
+              lats: Array.from(e.latSet).sort((a, b) => a - b),
+              lons: Array.from(e.lonSet).sort((a, b) => a - b),
+              uMap: e.uMap,
+              vMap: e.vMap,
+              meanU: e.validCount > 0 ? e.uSum / e.validCount : undefined,
+              meanV: e.validCount > 0 ? e.vSum / e.validCount : undefined
+            };
+          });
+
+          dataStore.era5WindLoaded = Object.keys(dataStore.era5WindByDate).length > 0;
+          console.log(`Berhasil memuat grid angin ERA5-Land untuk ${Object.keys(dataStore.era5WindByDate).length} hari.`);
+          updateSimulation();
+        })
+        .catch(err => console.warn('Gagal memuat ERA5_Wind_UV_Kalbar_2026.csv:', err));
+    }
+
+    // 8H. Muat CAMS & Data Pembanding Mingguan (MERRA-2 & MODIS AOD)
     function loadCamsPm25GeoJSON() {
       fetch(`${BASE_REPO_URL}/CAMS_PM25.geojson`)
         .then(res => { if (!res.ok) throw new Error(res.status); return res.json(); })
@@ -4222,7 +5001,7 @@
     }
 
     // ============================================================================
-    // 8H. MESIN STATISTIK TERPADU (TANPA REKAYASA NILAI) & LAPORAN LANDSCAPE
+    // 8I. MESIN STATISTIK TERPADU (TANPA REKAYASA NILAI) & LAPORAN LANDSCAPE
     // ============================================================================
     let statsSensorChartInstance = null;
     let statsIspuChartInstance = null;
@@ -4316,11 +5095,14 @@
       const expSummary = window._latestExposureSummary || {
         totalDangerAreaKm2: 0,
         estExposedPop: 0,
+        totalRefPop: 5766030,
+        popPct: '0.0',
         exposedSchoolsCount: 0,
         exposedHealthCount: 0,
         exposedAirportCount: 0,
         maxPm25: 0,
-        activeWindLabel: step ? step.wind : '-'
+        activeWindLabel: step ? step.wind : '-',
+        riskClassCounts: { critical: 0, high: 0, med: 0, low: 0 }
       };
 
       // 5. Ringkasan Data Pembanding (MERRA-2, MODIS AOD, CAMS)
@@ -4361,7 +5143,7 @@
         const maxVal = Number(row.PM25_Maks_ugm3) || 0;
 
         ispuBreakdown[key].area += areaVal;
-        ispuBreakdown[key].pop += Math.round(areaVal * 38);
+        ispuBreakdown[key].pop += Math.round(areaVal * 39);
         ispuBreakdown[key].meanList.push(meanVal);
         if (maxVal > ispuBreakdown[key].max) ispuBreakdown[key].max = maxVal;
       });
@@ -4419,7 +5201,6 @@
       document.getElementById('statsModalSubtitle').textContent =
         `Wilayah: ${st.regionLabel} • Tanggal: ${st.step ? st.step.timestamp : st.targetDate} • Ambang Bahaya PM2.5: ${st.threshold} µg/m³`;
 
-      // 1. Render KPI Cards
       const kpiGrid = document.getElementById('statsKpiGrid');
       const hotspotSub = st.hotspot.isForecastDay
         ? 'Tanggal proyeksi (observasi satelit VIIRS hanya 1 Agt – 31 Okt 2026)'
@@ -4430,8 +5211,8 @@
       kpiGrid.innerHTML = `
         <div class="stats-kpi-card">
           <div class="s-label">Estimasi Populasi Terpapar (&ge; ${st.threshold} µg/m³)</div>
-          <div class="s-val" style="color:#b91c1c;">${st.expSummary.estExposedPop.toLocaleString('id-ID')} Jiwa</div>
-          <div class="s-sub">Luas zona melebihi ambang: ${Math.round(st.expSummary.totalDangerAreaKm2).toLocaleString('id-ID')} km² (est. 38 jiwa/km²)</div>
+          <div class="s-val" style="color:#b91c1c;">${st.expSummary.estExposedPop.toLocaleString('id-ID')} Jiwa (${st.expSummary.popPct}%)</div>
+          <div class="s-sub">Luas zona terdampak: ${Math.round(st.expSummary.totalDangerAreaKm2).toLocaleString('id-ID')} km² &bull; Populasi wilayah: ${st.expSummary.totalRefPop.toLocaleString('id-ID')} jiwa (BPS)</div>
         </div>
         <div class="stats-kpi-card">
           <div class="s-label">Total Titik Api Aktif (VIIRS 375 m)</div>
@@ -4450,7 +5231,7 @@
         </div>
       `;
 
-      // 2. Render Tabel 1: HYSPLIT PM2.5 & Populasi
+      // Tabel 1: HYSPLIT PM2.5 & Risiko BNPB/IPCC
       const hysplitBody = document.getElementById('statsHysplitTableBody');
       if (!st.rows.length) {
         hysplitBody.innerHTML = `
@@ -4468,13 +5249,13 @@
             <td class="mono-cell">${Number(r.PM25_Rata_ugm3).toFixed(1)}</td>
             <td class="mono-cell">${Number(r.PM25_Maks_ugm3).toFixed(1)}</td>
             <td class="mono-cell">${Number(r.Luas_km2).toLocaleString('id-ID', { maximumFractionDigits: 1 })}</td>
-            <td class="mono-cell">${Math.round(Number(r.Luas_km2) * 38).toLocaleString('id-ID')}</td>
-            <td><strong>${r.Status_Ambang}</strong></td>
+            <td class="mono-cell">${r.Durasi_Paparan_Hari} hari</td>
+            <td><strong>${r.Kelas_Risiko}</strong> (${r.Indeks_Risiko_BNPB_IPCC})</td>
           </tr>
         `).join('');
       }
 
-      // 3. Render Tabel 2: Ringkasan Lingkungan, Hotspot & Objek Vital
+      // Tabel 2: Ringkasan Lingkungan, Hotspot & Objek Vital
       const envBody = document.getElementById('statsEnvTableBody');
       const hotspotCountText = st.hotspot.isForecastDay
         ? 'Tidak tersedia (tanggal proyeksi)'
@@ -4537,7 +5318,7 @@
         </tr>
       `;
 
-      // 4. Render Tabel 3: Data Pembanding Satelit & Reanalisis
+      // Tabel 3: Data Pembanding Satelit & Reanalisis
       const cmpBody = document.getElementById('statsComparisonTableBody');
       const formatStatRow = (name, period, statObj, unitNote, digits = 2) => {
         if (!statObj || statObj.count === 0) {
@@ -4570,12 +5351,10 @@
         formatStatRow('Copernicus CAMS PM2.5 (Data Pembanding)', 'Cakupan Dataset CAMS', st.comparison.cams, 'µg/m³ • Model komposisi atmosfer CAMS', 2)
       ].join('');
 
-      // 5. Render 3 Grafik Statistik (Chart.js)
       renderStatsCharts(st);
     }
 
     function renderStatsCharts(st) {
-      // Chart 1: Hotspot per Sensor
       const ctxSensor = document.getElementById('statsSensorChart');
       if (ctxSensor) {
         if (statsSensorChartInstance) statsSensorChartInstance.destroy();
@@ -4613,7 +5392,6 @@
         });
       }
 
-      // Chart 2: Luas Sebaran PM2.5 per Kategori ISPU
       const ctxIspu = document.getElementById('statsIspuChart');
       if (ctxIspu) {
         if (statsIspuChartInstance) statsIspuChartInstance.destroy();
@@ -4648,7 +5426,6 @@
         });
       }
 
-      // Chart 3: Kurva Tren Musiman 1 Agt - 3 Nov 2026
       const ctxTrend = document.getElementById('statsTrendChart');
       if (ctxTrend) {
         if (statsTrendChartInstance) statsTrendChartInstance.destroy();
@@ -4696,7 +5473,7 @@
       }
     }
 
-    // 8I. EKSPOR CSV LENGKAP & CETAK LAPORAN LANDSCAPE TERSTRUKTUR
+    // 8J. EKSPOR CSV LENGKAP & CETAK LAPORAN LANDSCAPE TERSTRUKTUR
     function downloadComprehensiveCsv() {
       const st = computeComprehensiveStats();
       const modeName = timelineMode === 'seasonal' ? 'Harian (1 Agt - 3 Nov 2026)' : 'Episode Puncak 72 Jam';
@@ -4713,13 +5490,18 @@
         PM25_Rata_ugm3: 0,
         PM25_Maks_ugm3: 0,
         Luas_km2: 0,
-        Skor_AHP: '-',
+        Durasi_Paparan_Hari: 0,
+        Skor_Bahaya_H: '1.00',
+        Poligon_Gambut_KHG: 0,
+        Fasilitas_Rentan_Unit: 0,
+        Skor_Kerentanan_Paparan_VE: '1.00',
+        Indeks_Risiko_BNPB_IPCC: '0.000',
+        Kelas_Risiko: 'Rendah',
         Status_Ambang: 'AMAN'
       }];
 
       const exportObjects = baseRows.map(r => {
         const areaKm2 = Number(r.Luas_km2) || 0;
-        const estPopZone = Math.round(areaKm2 * 38);
         return {
           Wilayah_Analisis: st.regionLabel,
           Tanggal_Simulasi: st.targetDate,
@@ -4729,12 +5511,18 @@
           PM25_Rata_Rata_ug_m3: r.PM25_Rata_ugm3,
           PM25_Maksimum_ug_m3: r.PM25_Maks_ugm3,
           Luas_Zona_km2: areaKm2,
-          Estimasi_Populasi_Zona_Jiwa: estPopZone,
           Ambang_Bahaya_PM25_ug_m3: st.threshold,
           Status_Ambang: r.Status_Ambang,
           Total_Luas_Melebihi_Ambang_km2: Math.round(st.expSummary.totalDangerAreaKm2),
           Total_Estimasi_Populasi_Terpapar_Jiwa: st.expSummary.estExposedPop,
-          Skor_Prioritas_AHP_Maks5: r.Skor_AHP,
+          Persentase_Populasi_Terpapar_Persen: st.expSummary.popPct,
+          Durasi_Paparan_Hari_Sejak_1Agt: r.Durasi_Paparan_Hari,
+          Skor_Bahaya_H_Maks5: r.Skor_Bahaya_H,
+          Poligon_Gambut_KHG_Bertampalan: r.Poligon_Gambut_KHG,
+          Fasilitas_Rentan_Dalam_Zona_Unit: r.Fasilitas_Rentan_Unit,
+          Skor_Kerentanan_Paparan_VE_Maks5: r.Skor_Kerentanan_Paparan_VE,
+          Indeks_Risiko_BNPB_IPCC_0_1: r.Indeks_Risiko_BNPB_IPCC,
+          Kelas_Risiko_BNPB_IPCC: r.Kelas_Risiko,
           Total_Hotspot_VIIRS_Titik: totalHotspotStr,
           Hotspot_NOAA20_Titik: st.hotspot.isForecastDay ? 'Tidak tersedia' : st.hotspot.bySensor['VIIRS NOAA-20'],
           Hotspot_NOAA21_Titik: st.hotspot.isForecastDay ? 'Tidak tersedia' : st.hotspot.bySensor['VIIRS NOAA-21'],
@@ -4749,7 +5537,7 @@
           Pembanding_MERRA2_PM25_Rata_ug_m3: merraMeanStr,
           Pembanding_MODIS_AOD_550nm_Rata: modisMeanStr,
           Pembanding_CAMS_PM25_Rata_ug_m3: camsMeanStr,
-          Sumber_Data: 'HYSPLIT; NASA FIRMS VIIRS 375m; KHG Gambut; MODIS MCD64A1; MERRA-2; MODIS AOD; CAMS'
+          Sumber_Data: 'HYSPLIT; ERA5-Land Wind; BPS Kalbar; NASA FIRMS VIIRS 375m; KHG Gambut; MODIS MCD64A1; MERRA-2; MODIS AOD; CAMS'
         };
       });
 
@@ -4766,13 +5554,12 @@
       const safeRegion = st.districtFilter === 'ALL' ? 'Kalbar' : st.districtFilter.replace(/\s+/g, '_');
       const safeDate = st.targetDate.replace(/\//g, '-');
       a.href = url;
-      a.download = `Laporan_Statistik_Karhutla_${safeRegion}_${safeDate}.csv`;
+      a.download = `Laporan_Risiko_Karhutla_${safeRegion}_${safeDate}.csv`;
       a.click();
       URL.revokeObjectURL(url);
     }
 
     function generateAndPrintLandscapeReport() {
-      // Pastikan grafik statistik ter-render agar gambar grafik dapat disematkan ke laporan
       renderStatsModalContent();
       const st = computeComprehensiveStats();
 
@@ -4784,22 +5571,17 @@
         timeStyle: 'short'
       });
 
-      const wPm = document.getElementById('wPm25Label').textContent;
-      const wPop = document.getElementById('wPopLabel').textContent;
-      const wFasum = document.getElementById('wFasumLabel').textContent;
-      const wDurasi = document.getElementById('wDurasiLabel').textContent;
-
       const hysplitRowsHtml = st.rows.length > 0
         ? st.rows.map(r => `
             <tr>
               <td><strong>${r.Kategori_ISPU}</strong></td>
               <td>${r.Rentang_ugm3}</td>
               <td>${Number(r.PM25_Rata_ugm3).toFixed(1)}</td>
-              <td>${Number(r.PM25_Maks_ugm3).toFixed(1)}</td>
               <td>${Number(r.Luas_km2).toLocaleString('id-ID', { maximumFractionDigits: 1 })}</td>
-              <td>${Math.round(Number(r.Luas_km2) * 38).toLocaleString('id-ID')}</td>
-              <td>${r.Skor_AHP}</td>
-              <td><strong>${r.Status_Ambang}</strong></td>
+              <td>${r.Durasi_Paparan_Hari} hr</td>
+              <td>${r.Skor_Bahaya_H}</td>
+              <td>${r.Skor_Kerentanan_Paparan_VE}</td>
+              <td><strong>${r.Kelas_Risiko}</strong> (${r.Indeks_Risiko_BNPB_IPCC})</td>
             </tr>
           `).join('')
         : `<tr><td colspan="8" style="text-align:center;">Tidak terdeteksi poligon sebaran PM2.5 pada tanggal dan wilayah terpilih.</td></tr>`;
@@ -4821,12 +5603,14 @@
         ? 'Observasi satelit hanya 1 Agt–31 Okt'
         : `NOAA-20: ${st.hotspot.bySensor['VIIRS NOAA-20']}, NOAA-21: ${st.hotspot.bySensor['VIIRS NOAA-21']}, SNPP: ${st.hotspot.bySensor['VIIRS Suomi-NPP']}`;
 
+      const rc = st.expSummary.riskClassCounts || { critical: 0, high: 0, med: 0, low: 0 };
+
       const reportContainer = document.getElementById('printableReport');
       reportContainer.innerHTML = `
         <div class="rep-header">
           <div>
-            <h1>LAPORAN ANALISIS SEBARAN ASAP KARHUTLA &amp; DAMPAK PAPARAN</h1>
-            <p>Sistem Pendukung Keputusan Spasial (SDSS) — Pemodelan HYSPLIT, Titik Api VIIRS &amp; Data Pembanding Satelit</p>
+            <h1>LAPORAN ANALISIS SEBARAN ASAP KARHUTLA &amp; RISIKO BENCANA</h1>
+            <p>Sistem Pendukung Keputusan Spasial (SDSS) — Pemodelan HYSPLIT, Angin ERA5-Land, Titik Api VIIRS &amp; Indeks Risiko BNPB/IPCC</p>
             <p style="margin-top:2px;"><strong>Wilayah Kajian:</strong> ${st.regionLabel} &bull; <strong>Kelompok 5 (GD4103 Sistem Informasi Geografis — ITB)</strong></p>
           </div>
           <div class="rep-meta-box">
@@ -4840,8 +5624,8 @@
         <div class="rep-kpi-row">
           <div class="rep-kpi danger">
             <div class="rk-title">Estimasi Populasi Terpapar (&ge; ${st.threshold} µg/m³)</div>
-            <div class="rk-val">${st.expSummary.estExposedPop.toLocaleString('id-ID')} Jiwa</div>
-            <div class="rk-note">Luas terdampak: ${Math.round(st.expSummary.totalDangerAreaKm2).toLocaleString('id-ID')} km²</div>
+            <div class="rk-val">${st.expSummary.estExposedPop.toLocaleString('id-ID')} Jiwa (${st.expSummary.popPct}%)</div>
+            <div class="rk-note">Luas terdampak: ${Math.round(st.expSummary.totalDangerAreaKm2).toLocaleString('id-ID')} km² (Data BPS)</div>
           </div>
           <div class="rep-kpi">
             <div class="rk-title">Total Titik Api Aktif (VIIRS 375 m)</div>
@@ -4859,26 +5643,26 @@
             <div class="rk-note">${st.peat.count} poligon KHG (${st.peat.areaKm2.toFixed(1)} km²)</div>
           </div>
           <div class="rep-kpi">
-            <div class="rk-title">Area Terbakar MODIS (Agt–Okt)</div>
-            <div class="rk-val">${st.burned.areaKm2.toFixed(1)} km²</div>
-            <div class="rk-note">${st.burned.count} poligon (${Math.round(st.burned.areaHa).toLocaleString('id-ID')} ha)</div>
+            <div class="rk-title">Distribusi Kelas Risiko (BNPB/IPCC)</div>
+            <div class="rk-val">${rc.critical + rc.high} Zona Tinggi/Kritis</div>
+            <div class="rk-note">Kritis: ${rc.critical} | Tinggi: ${rc.high} | Sedang: ${rc.med} | Rendah: ${rc.low}</div>
           </div>
         </div>
 
         <div class="rep-two-col">
           <div>
-            <div class="rep-section-title">1. Tabel Sebaran PM2.5 (Model HYSPLIT) &amp; Estimasi Populasi Terpapar</div>
+            <div class="rep-section-title">1. Tabel Sebaran PM2.5 (Model HYSPLIT) &amp; Indeks Risiko Bencana (BNPB / IPCC)</div>
             <table class="rep-table">
               <thead>
                 <tr>
                   <th>Kategori ISPU</th>
                   <th>Rentang (µg/m³)</th>
-                  <th>Rata-rata (µg/m³)</th>
-                  <th>Maks (µg/m³)</th>
+                  <th>Rata-rata</th>
                   <th>Luas (km²)</th>
-                  <th>Est. Populasi (Jiwa)</th>
-                  <th>Skor AHP</th>
-                  <th>Status</th>
+                  <th>Durasi</th>
+                  <th>Skor H</th>
+                  <th>Skor V&amp;E</th>
+                  <th>Kelas Risiko (Indeks)</th>
                 </tr>
               </thead>
               <tbody>${hysplitRowsHtml}</tbody>
@@ -4943,10 +5727,10 @@
                 <td>Copernicus Atmosphere Monitoring Service (Data Pembanding)</td>
               </tr>
               <tr>
-                <td>Pembobotan AHP &amp; Angin</td>
-                <td>Bobot Prioritas &amp; Kondisi Meteorologi</td>
-                <td>PM2.5: ${wPm} | Penduduk: ${wPop} | Fasum: ${wFasum} | Durasi: ${wDurasi} &bull; ${st.expSummary.activeWindLabel}</td>
-                <td>Parameter simulasi aktif pada WebGIS SDSS</td>
+                <td>Meteorologi &amp; Risiko Bencana</td>
+                <td>Vektor Angin Dominan &amp; Formula Risiko</td>
+                <td>${st.expSummary.activeWindLabel} &bull; Risiko = Bahaya (H) &times; Kerentanan &amp; Paparan (V&amp;E)</td>
+                <td>Grid Angin ECMWF ERA5-Land &amp; Standar BNPB / IPCC</td>
               </tr>
             </tbody>
           </table>
@@ -4954,11 +5738,11 @@
 
         <div class="rep-footer-notes">
           <strong>Keterangan Sumber Data &amp; Catatan Metodologi:</strong>
-          (1) Sebaran PM2.5 harian bersumber dari keluaran model dispersi HYSPLIT (<code>asap_pm25_harian_ispu.geojson</code>).
-          (2) Titik api aktif bersumber dari NASA FIRMS VIIRS 375 m (NOAA-20, NOAA-21, Suomi-NPP) periode 1 Agustus – 31 Oktober 2026.
+          (1) Sebaran PM2.5 harian bersumber dari keluaran model dispersi HYSPLIT (<code>asap_pm25_harian_ispu.geojson</code>) dan medan angin dari reanalisis ECMWF ERA5-Land (<code>ERA5_Wind_UV_Kalbar_2026.csv</code>).
+          (2) Titik api aktif bersumber dari NASA FIRMS VIIRS 375 m periode 1 Agustus – 31 Oktober 2026.
           (3) Area bekas terbakar bersumber dari NASA MODIS MCD64A1 dan lahan gambut dari peta Kesatuan Hidrologis Gambut (KHG) Kalimantan Barat.
           (4) Dataset CAMS PM2.5, MERRA-2 PM2.5, dan MODIS AOD disajikan sebagai <strong>data pembanding</strong> spasial untuk melihat kesesuaian pola sebaran asap, bukan sebagai ukuran kebenaran mutlak di lapangan.
-          (5) Estimasi populasi terpapar dihitung dari luas zona terdampak dikalikan kepadatan penduduk rata-rata Kalimantan Barat (~38 jiwa/km²) karena data sensus penduduk rinci per poligon tidak tersedia pada atribut GeoJSON.
+          (5) Estimasi populasi terpapar dihitung dari irisan spasial zona terdampak dengan batas Kabupaten/Kota berdasarkan atribut kepadatan penduduk (<code>KEPADATAN</code>) dan jumlah penduduk (<code>JML_PDDK</code>) BPS Kalimantan Barat.
         </div>
       `;
 
@@ -4970,7 +5754,6 @@
     // ============================================================================
     // 9. EVENT LISTENERS (UI, DROPDOWN LAYER, FILTER KAB/KOTA, SLIDER, MODALS)
     // ============================================================================
-    // Accordion / Dropdown Toggle di Panel Kontrol Layer
     document.querySelectorAll('.layer-dropdown-header').forEach(btn => {
       btn.addEventListener('click', () => {
         const targetId = btn.dataset.target;
@@ -4979,19 +5762,19 @@
       });
     });
 
-    // Checkbox Layer Toggle + Pembaruan Legenda Dinamis Otomatis
     [
       { id: 'chkHotspot', layer: layerGroups.hotspots },
       { id: 'chkBurnedArea', layer: layerGroups.burnedArea },
       { id: 'chkPM25', layer: layerGroups.pm25 },
       { id: 'chkTrajectory', layer: layerGroups.trajectory },
-      { id: 'chkAHP', layer: layerGroups.ahp },
+      { id: 'chkRisk', layer: layerGroups.risk },
       { id: 'chkPeat', layer: layerGroups.peat },
       { id: 'chkHealth', layer: layerGroups.health },
       { id: 'chkEducation', layer: layerGroups.education },
       { id: 'chkAirport', layer: layerGroups.airport },
       { id: 'chkWind', layer: windLayer },
       { id: 'chkAdminBoundary', layer: adminBoundaryGroup },
+      { id: 'chkRoiMask', layer: outsideMaskGroup },
       { id: 'chkCams', layer: camsLayerGroup },
       { id: 'chkWeeklyMerra', layer: weeklyMerraGroup },
       { id: 'chkWeeklyModis', layer: weeklyModisGroup }
@@ -5005,7 +5788,25 @@
       });
     });
 
-    // Filter Wilayah Kabupaten/Kota untuk Seluruh Layer
+    // Tombol cepat tampilkan/sembunyikan layer Indeks Risiko Bencana di kartu BNPB/IPCC
+    const toggleRiskBtn = document.getElementById('toggleRiskLayerBtn');
+    if (toggleRiskBtn) {
+      toggleRiskBtn.addEventListener('click', () => {
+        const chkRisk = document.getElementById('chkRisk');
+        if (!chkRisk) return;
+        chkRisk.checked = !chkRisk.checked;
+        if (chkRisk.checked) {
+          map.addLayer(layerGroups.risk);
+          toggleRiskBtn.querySelector('span').textContent = 'Sembunyikan Peta Indeks Risiko';
+        } else {
+          map.removeLayer(layerGroups.risk);
+          toggleRiskBtn.querySelector('span').textContent = 'Tampilkan Peta Indeks Risiko Bencana';
+        }
+        renderDynamicLegend();
+      });
+    }
+
+    // Filter Wilayah Kabupaten/Kota untuk Seluruh Layer & ROI Spotlight Mask
     document.getElementById('districtFilter').addEventListener('change', (e) => {
       const val = e.target.value;
       const badge = document.getElementById('activeRegionBadge');
@@ -5047,26 +5848,6 @@
 
     document.getElementById('btnModeSeasonal').addEventListener('click', () => setTimelineMode('seasonal'));
     document.getElementById('btnModeEpisode').addEventListener('click', () => setTimelineMode('episode'));
-
-    document.querySelectorAll('.ahp-slider').forEach(slider => {
-      slider.addEventListener('input', () => {
-        const chkAhp = document.getElementById('chkAHP');
-        if (!chkAhp.checked) {
-          chkAhp.checked = true;
-          map.addLayer(layerGroups.ahp);
-          renderDynamicLegend();
-        }
-        updateSimulation();
-      });
-    });
-
-    document.getElementById('resetAhpBtn').addEventListener('click', () => {
-      document.getElementById('wPm25').value = 45;
-      document.getElementById('wPop').value = 25;
-      document.getElementById('wFasum').value = 20;
-      document.getElementById('wDurasi').value = 10;
-      updateSimulation();
-    });
 
     document.getElementById('basemapSelect').addEventListener('change', (e) => {
       const val = e.target.value;
@@ -5133,7 +5914,6 @@
       if (e.target === e.currentTarget) closeGuideModal();
     });
 
-    // Tutup modal dengan tombol Escape
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         closeStatsModal();
@@ -5195,6 +5975,7 @@
     loadBurnedAreaGeoJSON();
     loadRealHotspotsFromGitHub();
     loadSeparatedImpactLayers();
+    loadEra5WindCsv();
     loadCamsPm25GeoJSON();
     syncComparisonWithMainSlider();
   </script>
