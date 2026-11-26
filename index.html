@@ -1107,17 +1107,47 @@
       }
     }
 
+    @media (max-width: 1180px) {
+      .dock-left,
+      .dock-right {
+        width: clamp(235px, 24vw, 290px);
+      }
+      .timeline-dock {
+        width: min(560px, calc(100vw - 520px));
+        min-width: 300px;
+      }
+    }
+
     @media (max-width: 768px) {
       html, body {
         height: auto;
         min-height: 100vh;
         overflow-y: auto !important;
       }
+      .top-bar {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        right: auto !important;
+        height: auto !important;
+        flex-wrap: wrap !important;
+        gap: 8px;
+        padding: 10px 12px !important;
+      }
+      .center-sim-pill {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        transform: none !important;
+        width: calc(100% - 20px) !important;
+        margin: 8px auto 0 auto !important;
+        justify-content: center;
+      }
       #map {
         position: relative !important;
         width: 100% !important;
-        height: 55vh !important;
-        min-height: 360px;
+        height: 52vh !important;
+        min-height: 320px;
       }
       .dock-left,
       .dock-right,
@@ -1129,15 +1159,30 @@
         bottom: auto !important;
         width: calc(100% - 20px) !important;
         max-width: 100% !important;
+        min-width: 0 !important;
         max-height: none !important;
         margin: 10px auto !important;
         transform: none !important;
       }
-      .top-header, header {
-        position: relative !important;
+      .timeline-top,
+      .timeline-controls,
+      .mode-pills,
+      .timeline-ticks {
         flex-wrap: wrap !important;
-        gap: 8px;
-        padding: 10px 12px !important;
+        gap: 6px;
+      }
+      .modal-dialog,
+      .modal-dialog.guide-dialog,
+      .modal-dialog.welcome-dialog {
+        width: 96vw !important;
+        max-height: 92vh !important;
+      }
+      .welcome-actions {
+        flex-wrap: wrap;
+        justify-content: stretch;
+      }
+      .welcome-actions button {
+        flex: 1 1 140px;
       }
     }
 
@@ -1356,6 +1401,42 @@
 
     .btn-welcome-secondary:hover {
       background: #f1f5f9;
+    }
+
+    .btn-welcome-primary:disabled,
+    .btn-welcome-secondary:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .welcome-progress-wrap {
+      margin: 10px 0 12px 0;
+    }
+
+    .welcome-progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      font-weight: 600;
+      color: #475569;
+      margin-bottom: 5px;
+    }
+
+    .welcome-progress-track {
+      width: 100%;
+      height: 6px;
+      border-radius: 999px;
+      background: #e2e8f0;
+      overflow: hidden;
+    }
+
+    .welcome-progress-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #0284c7, #10b981);
+      transition: width 0.2s linear;
     }
 
     /* GLOBAL LOADING INDICATOR SAAT PROSES BERAT */
@@ -1646,8 +1727,8 @@
     }
 
     @page {
-      size: A4 landscape;
-      margin: 10mm 12mm;
+      size: A4 portrait;
+      margin: 10mm 11mm;
     }
 
     @media print {
@@ -1680,81 +1761,89 @@
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
+        gap: 14px;
         border-bottom: 2px solid #0f172a;
-        padding-bottom: 8px;
-        margin-bottom: 10px;
+        padding-bottom: 10px;
+        margin-bottom: 14px;
       }
       .rep-header h1 {
-        font-size: 15pt;
+        font-size: 13.5pt;
         font-weight: 700;
         color: #090d16;
-        margin: 0 0 3px 0;
+        margin: 0 0 4px 0;
+        line-height: 1.25;
       }
       .rep-header p {
-        font-size: 9pt;
+        font-size: 8.5pt;
         color: #334155;
         margin: 0;
+        line-height: 1.4;
       }
       .rep-meta-box {
-        text-align: right;
-        font-size: 8.5pt;
+        flex-shrink: 0;
+        min-width: 205px;
+        text-align: left;
+        font-size: 8pt;
         font-family: 'IBM Plex Mono', monospace;
-        background: #f1f5f9;
-        padding: 6px 10px;
-        border-radius: 6px;
+        background: #f8fafc;
+        padding: 8px 11px;
+        border-radius: 7px;
         border: 1px solid #cbd5e1;
+        line-height: 1.5;
       }
       .rep-kpi-row {
         display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        gap: 8px;
-        margin-bottom: 10px;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+      .rep-kpi.danger {
+        grid-column: span 2;
       }
       .rep-kpi {
         border: 1px solid #cbd5e1;
-        border-left: 3.5px solid #0284c7;
-        border-radius: 6px;
-        padding: 6px 8px;
+        border-left: 4px solid #0284c7;
+        border-radius: 7px;
+        padding: 8px 11px;
         background: #f8fafc;
         page-break-inside: avoid;
       }
       .rep-kpi.danger { border-left-color: #dc2626; }
       .rep-kpi .rk-title { font-size: 7.5pt; color: #475569; font-weight: 600; }
-      .rep-kpi .rk-val { font-size: 11pt; font-weight: 700; font-family: 'IBM Plex Mono', monospace; margin: 2px 0; }
-      .rep-kpi .rk-note { font-size: 7pt; color: #64748b; }
+      .rep-kpi .rk-val { font-size: 11.5pt; font-weight: 700; font-family: 'IBM Plex Mono', monospace; margin: 3px 0; }
+      .rep-kpi .rk-note { font-size: 7.5pt; color: #64748b; }
       .rep-two-col {
         display: grid;
-        grid-template-columns: 1.35fr 1fr;
-        gap: 12px;
-        margin-bottom: 10px;
-        page-break-inside: avoid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+        margin-bottom: 14px;
       }
       .rep-section {
-        margin-bottom: 10px;
+        margin-bottom: 14px;
         page-break-inside: avoid;
       }
       .rep-section-title {
         font-size: 10pt;
         font-weight: 700;
         color: #0f172a;
-        border-bottom: 1px solid #cbd5e1;
-        padding-bottom: 3px;
-        margin-bottom: 6px;
+        border-bottom: 1.5px solid #cbd5e1;
+        padding-bottom: 4px;
+        margin-bottom: 8px;
       }
       .rep-table {
         width: 100%;
         border-collapse: collapse;
-        font-size: 8pt;
+        font-size: 8.5pt;
       }
       .rep-table th {
         background: #0f172a;
         color: #ffffff;
-        padding: 4.5px 6px;
+        padding: 6px 8px;
         text-align: left;
       }
       .rep-table td {
         border: 1px solid #cbd5e1;
-        padding: 4px 6px;
+        padding: 5.5px 8px;
       }
       .rep-table tr:nth-child(even) td {
         background: #f8fafc;
@@ -1762,34 +1851,52 @@
       .rep-charts-pair {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 8px;
+        gap: 12px;
       }
       .rep-chart-box {
         border: 1px solid #cbd5e1;
-        border-radius: 6px;
-        padding: 6px;
+        border-radius: 7px;
+        padding: 9px;
         text-align: center;
         background: #ffffff;
       }
       .rep-chart-box img {
-        max-width: 100%;
-        max-height: 135px;
+        width: 100%;
+        max-height: 175px;
         object-fit: contain;
       }
       .rep-chart-box .rc-cap {
-        font-size: 7.5pt;
+        font-size: 8pt;
         font-weight: 600;
         color: #1e293b;
-        margin-bottom: 3px;
+        margin-bottom: 6px;
       }
       .rep-footer-notes {
         font-size: 7.5pt;
         color: #334155;
         background: #f8fafc;
         border: 1px solid #cbd5e1;
-        border-radius: 6px;
-        padding: 6px 9px;
-        line-height: 1.4;
+        border-radius: 7px;
+        padding: 8px 11px;
+        line-height: 1.5;
+        page-break-inside: avoid;
+      }
+      .rep-exec-summary {
+        background: #eff6ff;
+        border: 1px solid #bfdbfe;
+        border-left: 4px solid #0284c7;
+        border-radius: 7px;
+        padding: 9px 12px;
+        margin-bottom: 14px;
+        font-size: 8.5pt;
+        line-height: 1.5;
+        color: #0f172a;
+        page-break-inside: avoid;
+      }
+      .rep-exec-summary.alert {
+        background: #fef2f2;
+        border-color: #fecaca;
+        border-left-color: #dc2626;
       }
     }
 
@@ -2373,7 +2480,7 @@
 
         <div class="slider-label-row" style="margin-top:4px; margin-bottom:2px;">
           <span>Kecepatan Angin</span>
-          <span class="mono-val" id="manualSpeedVal">16 km/jam</span>
+          <span class="mono-val" id="manualSpeedVal">16 km/jam (4.4 m/s)</span>
         </div>
         <input type="range" id="manualSpeedSlider" min="5" max="40" step="1" value="16" />
       </div>
@@ -2580,9 +2687,18 @@
             <div><strong>Kalkulator Paparan &amp; Top 5 Wilayah:</strong> Sengaja dijeda saat awal agar peta tetap ringan. Centang kotak di panel kanan kapan saja untuk menghitung statistik paparan.</div>
           </div>
         </div>
+        <div class="welcome-progress-wrap" id="welcomeProgressWrap">
+          <div class="welcome-progress-label">
+            <span id="welcomeProgressText">Menyiapkan peta &amp; medan angin ERA5...</span>
+            <span id="welcomeCountdownText">5 dtk</span>
+          </div>
+          <div class="welcome-progress-track">
+            <div class="welcome-progress-fill" id="welcomeProgressFill"></div>
+          </div>
+        </div>
         <div class="welcome-actions">
-          <button type="button" class="btn-welcome-secondary" id="welcomeOpenGuideBtn">Buka Panduan Lengkap</button>
-          <button type="button" class="btn-welcome-primary" id="welcomeStartBtn">Mulai Eksplorasi</button>
+          <button type="button" class="btn-welcome-secondary" id="welcomeOpenGuideBtn" disabled>Buka Panduan Lengkap</button>
+          <button type="button" class="btn-welcome-primary" id="welcomeStartBtn" disabled>Menyiapkan Peta (5s)...</button>
         </div>
       </div>
     </div>
@@ -4755,13 +4871,17 @@
         const dayGrid = dataStore.era5WindByDate[targetWindIso];
         if (dayGrid && dayGrid.meanU !== undefined && dayGrid.meanV !== undefined) {
           const met = uvToMeteorological(dayGrid.meanU, dayGrid.meanV);
-          const dispSpdKmh = (dayGrid.meanSpdKmh !== undefined && !isNaN(dayGrid.meanSpdKmh))
-            ? Math.max(1, Math.round(dayGrid.meanSpdKmh))
+          const exactKmh = (dayGrid.meanSpdKmh !== undefined && !isNaN(dayGrid.meanSpdKmh))
+            ? dayGrid.meanSpdKmh
             : met.speedKmh;
+          const dispSpdKmh = exactKmh.toFixed(2);
+          const dispSpdMs = (dayGrid.meanSpdMs !== undefined && !isNaN(dayGrid.meanSpdMs))
+            ? dayGrid.meanSpdMs.toFixed(2)
+            : (exactKmh / 3.6).toFixed(2);
           activeWindFromDeg = met.fromDeg;
-          activeWindSpeed = dispSpdKmh;
-          const fcPart = step.isForecast ? ' • Forecast' : ' • ERA5-Land';
-          activeWindLabel = `${met.dirName} (${dispSpdKmh} km/jam)${fcPart}`;
+          activeWindSpeed = exactKmh;
+          const fcPart = step.isForecast ? ' • Forecast' : ' • ERA5';
+          activeWindLabel = `${met.dirName} (${dispSpdKmh} km/jam • ${dispSpdMs} m/s)${fcPart}`;
         }
       }
 
@@ -4770,7 +4890,8 @@
         activeWindFromDeg = activeDirBtn ? parseInt(activeDirBtn.dataset.deg, 10) : 140;
         const dirName = activeDirBtn ? activeDirBtn.dataset.name : 'Tenggara';
         activeWindSpeed = parseInt(document.getElementById('manualSpeedSlider').value, 10);
-        activeWindLabel = `${dirName} (${activeWindSpeed} km/jam) • Simulasi Manual`;
+        const manualMs = (activeWindSpeed / 3.6).toFixed(1);
+        activeWindLabel = `${dirName} (${activeWindSpeed} km/jam • ${manualMs} m/s) • Simulasi Manual`;
       }
 
       return { activeWindFromDeg, activeWindSpeed, activeWindLabel };
@@ -5391,7 +5512,7 @@
                 <div class="popup-header">Lintasan Partikel HYSPLIT (${f.properties.alt})</div>
                 <div class="popup-line"><strong>Sumber Emisi:</strong> ${f.properties.source}</div>
                 <div class="popup-line"><strong>Waktu / Mode:</strong> ${modeLabel}</div>
-                <div class="popup-line"><strong>Vektor Angin:</strong> ${speedKmh} km/jam (Dari ${fromDeg}°)</div>
+                <div class="popup-line"><strong>Vektor Angin:</strong> ${Number(speedKmh).toFixed(2)} km/jam (${(Number(speedKmh) / 3.6).toFixed(2)} m/s) &bull; Dari ${fromDeg}°</div>
               `);
             }
           }).addTo(layerGroups.trajectory);
@@ -5498,12 +5619,14 @@
           });
 
           clearSpatialAnalysisCaches();
-          retagAllLoadedDatasets();
-          _era5InlandCoordCache.clear();
-          recomputeEra5LandMeanWind();
           renderOutsideKalbarMask();
           renderAdminBoundaries();
-          requestSimulationUpdate(true);
+          requestAnimationFrame(() => setTimeout(() => {
+            retagAllLoadedDatasets();
+            _era5InlandCoordCache.clear();
+            recomputeEra5LandMeanWind();
+            requestSimulationUpdate(false);
+          }, 0));
           console.log(`Berhasil memuat ${dataStore.adminFeatures.length} Kab/Kota Kalbar (dengan data penduduk BPS).`);
         })
         .catch(err => console.warn('Gagal memuat Batas_KabKota_KalimantanBarat.geojson:', err));
@@ -5538,7 +5661,7 @@
           clearSpatialAnalysisCaches();
           buildExposureDurationGrid();
           console.log(`Berhasil memuat ${dataStore.hysplit.length} poligon HYSPLIT PM2.5.`);
-          requestSimulationUpdate(true);
+          requestSimulationUpdate(false);
         })
         .catch(err => console.warn('Gagal memuat asap_pm25_harian_ispu.geojson:', err));
     }
@@ -5551,8 +5674,10 @@
           spatialGrids.peat = buildSpatialGridIndex(dataStore.peat);
           tagFeaturesWithDistricts(dataStore.peat);
           console.log(`Berhasil memuat ${dataStore.peat.length} poligon KHG Gambut.`);
-          renderFilteredPeatland();
-          requestSimulationUpdate(true);
+          requestAnimationFrame(() => {
+            renderFilteredPeatland();
+            requestSimulationUpdate(false);
+          });
         })
         .catch(err => console.warn('Gagal memuat khg_gambut_kalbar.geojson:', err));
     }
@@ -5602,7 +5727,17 @@
         }
         tagFeaturesWithDistricts(dataStore.hotspots);
         console.log(`Total hotspot VIIRS dimuat: ${dataStore.hotspots.length} titik.`);
-        requestSimulationUpdate(true);
+        requestSimulationUpdate(false);
+      });
+    }
+
+    let _facilitiesRenderRaf = null;
+    function scheduleFacilitiesRender() {
+      if (_facilitiesRenderRaf) return;
+      _facilitiesRenderRaf = requestAnimationFrame(() => {
+        _facilitiesRenderRaf = null;
+        renderFilteredFacilities();
+        requestSimulationUpdate(false);
       });
     }
 
@@ -5616,8 +5751,7 @@
       ).then(res => {
         dataStore.health = sanitizeGeoJsonFeatures(res.flatMap(g => g.features || []));
         spatialGrids.health = buildSpatialGridIndex(dataStore.health);
-        renderFilteredFacilities();
-        requestSimulationUpdate(true);
+        scheduleFacilitiesRender();
       });
 
       Promise.all(
@@ -5627,8 +5761,7 @@
       ).then(res => {
         dataStore.education = sanitizeGeoJsonFeatures(res.flatMap(g => g.features || []));
         spatialGrids.education = buildSpatialGridIndex(dataStore.education);
-        renderFilteredFacilities();
-        requestSimulationUpdate(true);
+        scheduleFacilitiesRender();
       });
 
       Promise.all(
@@ -5638,7 +5771,7 @@
       ).then(res => {
         dataStore.airport = sanitizeGeoJsonFeatures(res.flatMap(g => g.features || []));
         spatialGrids.airport = buildSpatialGridIndex(dataStore.airport);
-        renderFilteredFacilities();
+        scheduleFacilitiesRender();
       });
     }
 
@@ -5648,9 +5781,10 @@
       const key = `${lat.toFixed(2)}_${lon.toFixed(2)}`;
       if (_era5InlandCoordCache.has(key)) return _era5InlandCoordCache.get(key);
 
+      const simpAdmins = getSimplifiedAdminFeatures();
       let inside = false;
-      for (let i = 0; i < dataStore.adminFeatures.length; i++) {
-        const adm = dataStore.adminFeatures[i];
+      for (let i = 0; i < simpAdmins.length; i++) {
+        const adm = simpAdmins[i].geomFeat;
         const box = getFeatureBbox(adm);
         if (box && (lon < box[0] || lon > box[2] || lat < box[1] || lat > box[3])) continue;
         try {
@@ -6523,13 +6657,95 @@
       URL.revokeObjectURL(url);
     }
 
+    function renderOffscreenChartPng(config, width = 520, height = 250) {
+      if (typeof Chart === 'undefined') return '';
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      const cfg = {
+        ...config,
+        options: {
+          ...(config.options || {}),
+          responsive: false,
+          animation: false,
+          devicePixelRatio: 2
+        }
+      };
+      const chart = new Chart(ctx, cfg);
+      const dataUrl = chart.toBase64Image('image/png', 1.0);
+      chart.destroy();
+      return dataUrl && dataUrl.length > 32 ? dataUrl : '';
+    }
+
     function generateAndPrintLandscapeReport() {
       syncComparisonWithMainSlider(true);
       renderStatsModalContent();
       const st = computeComprehensiveStats();
 
-      const sensorChartImg = statsSensorChartInstance ? statsSensorChartInstance.toBase64Image() : '';
-      const ispuChartImg = statsIspuChartInstance ? statsIspuChartInstance.toBase64Image() : '';
+      const ispuAreaMap = {
+        'Sedang': 0,
+        'Tidak sehat': 0,
+        'Sangat tidak sehat': 0,
+        'Berbahaya': 0
+      };
+      (st.rows || []).forEach(r => {
+        const key = String(r.Kategori_ISPU || '').trim();
+        const areaVal = Number(r.Luas_km2) || 0;
+        if (key in ispuAreaMap) {
+          ispuAreaMap[key] += areaVal;
+        }
+      });
+
+      const ispuChartImg = renderOffscreenChartPng({
+        type: 'bar',
+        data: {
+          labels: ['Sedang', 'Tdk Sehat', 'Sgt Tdk Sehat', 'Berbahaya'],
+          datasets: [{
+            label: 'Luas (km²)',
+            data: [
+              Math.round(ispuAreaMap['Sedang']),
+              Math.round(ispuAreaMap['Tidak sehat']),
+              Math.round(ispuAreaMap['Sangat tidak sehat']),
+              Math.round(ispuAreaMap['Berbahaya'])
+            ],
+            backgroundColor: ['#0070C0', '#FFC000', '#FF0000', '#18181b'],
+            borderRadius: 4
+          }]
+        },
+        options: {
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { beginAtZero: true, ticks: { font: { size: 11 } } },
+            x: { ticks: { font: { size: 11 } } }
+          }
+        }
+      });
+
+      const bySensor = (st.hotspot && st.hotspot.bySensor) || {};
+      const sensorChartImg = renderOffscreenChartPng({
+        type: 'bar',
+        data: {
+          labels: ['NOAA-20', 'NOAA-21', 'Suomi-NPP'],
+          datasets: [{
+            label: 'Jumlah Titik Api',
+            data: [
+              bySensor['VIIRS NOAA-20'] || 0,
+              bySensor['VIIRS NOAA-21'] || 0,
+              bySensor['VIIRS Suomi-NPP'] || 0
+            ],
+            backgroundColor: ['#ef4444', '#f97316', '#eab308'],
+            borderRadius: 4
+          }]
+        },
+        options: {
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { beginAtZero: true, ticks: { precision: 0, font: { size: 11 } } },
+            x: { ticks: { font: { size: 11 } } }
+          }
+        }
+      });
 
       const nowStr = new Date().toLocaleString('id-ID', {
         dateStyle: 'long',
@@ -6544,12 +6760,10 @@
               <td>${Number(r.PM25_Rata_ugm3).toFixed(1)}</td>
               <td>${Number(r.Luas_km2).toLocaleString('id-ID', { maximumFractionDigits: 1 })}</td>
               <td>${r.Durasi_Paparan_Hari} hr</td>
-              <td>${r.Skor_Bahaya_H}</td>
-              <td>${r.Skor_Kerentanan_Paparan_VE}</td>
               <td><strong>${r.Kelas_Risiko}</strong> (${r.Indeks_Risiko_BNPB_IPCC})</td>
             </tr>
           `).join('')
-        : `<tr><td colspan="8" style="text-align:center;">Tidak terdeteksi poligon sebaran PM2.5 pada tanggal dan wilayah terpilih.</td></tr>`;
+        : `<tr><td colspan="6" style="text-align:center;">Tidak terdeteksi poligon sebaran PM2.5 pada tanggal dan wilayah terpilih.</td></tr>`;
 
       const merraSummary = st.comparison.merra.count > 0
         ? `${st.comparison.merra.mean.toFixed(2)} µg/m³ (Min: ${st.comparison.merra.min.toFixed(2)}, Maks: ${st.comparison.merra.max.toFixed(2)}, N=${st.comparison.merra.count})`
@@ -6569,13 +6783,29 @@
         : `NOAA-20: ${st.hotspot.bySensor['VIIRS NOAA-20']}, NOAA-21: ${st.hotspot.bySensor['VIIRS NOAA-21']}, SNPP: ${st.hotspot.bySensor['VIIRS Suomi-NPP']}`;
 
       const rc = st.expSummary.riskClassCounts || { critical: 0, high: 0, med: 0, low: 0 };
+      const maxPmVal = Number(st.expSummary.maxPm25 || 0);
+      const isAlertCondition = maxPmVal > 55.4 || st.expSummary.estExposedPop > 0;
+      const airQualityDesc = maxPmVal > 250.4
+        ? 'Berbahaya'
+        : maxPmVal > 150.4
+          ? 'Sangat Tidak Sehat'
+          : maxPmVal > 55.4
+            ? 'Tidak Sehat'
+            : maxPmVal > 15.4
+              ? 'Sedang'
+              : 'Baik';
+      const actionAdvice = maxPmVal > 150.4
+        ? 'Disarankan pembatasan aktivitas luar ruangan, penggunaan masker N95/KF94, dan kesiapsiagaan fasilitas kesehatan untuk penanganan ISPA.'
+        : maxPmVal > 55.4
+          ? 'Kelompok rentan (anak, lansia, penderita asma/ISPA) disarankan mengurangi aktivitas luar ruangan dan memakai masker.'
+          : 'Kondisi udara relatif terkendali; tetap lakukan pemantauan rutin titik api dan arah angin.';
 
       const reportContainer = document.getElementById('printableReport');
       reportContainer.innerHTML = `
         <div class="rep-header">
           <div>
             <h1>LAPORAN ANALISIS SEBARAN ASAP KARHUTLA &amp; RISIKO BENCANA</h1>
-            <p>Sistem Pendukung Keputusan Spasial (SDSS) — Pemodelan HYSPLIT, Angin ERA5-Land, Titik Api VIIRS &amp; Indeks Risiko BNPB/IPCC</p>
+            <p>Sistem Pendukung Keputusan Spasial (SDSS) — Pemodelan HYSPLIT, Angin ERA5, Titik Api VIIRS &amp; Indeks Risiko BNPB/IPCC</p>
             <p style="margin-top:2px;"><strong>Wilayah Kajian:</strong> ${st.regionLabel} &bull; <strong>Kelompok 5 (GD4103 Sistem Informasi Geografis — ITB)</strong></p>
           </div>
           <div class="rep-meta-box">
@@ -6584,6 +6814,13 @@
             <div><strong>Skenario Mitigasi:</strong> -${st.mitigationPct}% Emisi</div>
             <div><strong>Dicetak:</strong> ${nowStr} WIB</div>
           </div>
+        </div>
+
+        <div class="rep-exec-summary ${isAlertCondition ? 'alert' : ''}">
+          <strong>Ringkasan Kondisi &amp; Rekomendasi Singkat:</strong>
+          Pada tanggal simulasi ini di wilayah <strong>${st.regionLabel}</strong>, kualitas udara tertinggi berada pada kategori <strong>${airQualityDesc}</strong> (PM2.5 maks. <strong>${maxPmVal.toFixed(1)} µg/m³</strong>) dengan angin dominan <strong>${st.expSummary.activeWindLabel}</strong>${st.hotspot.isForecastDay ? '' : ` serta terpantau <strong>${st.hotspot.total.toLocaleString('id-ID')} titik api</strong>`}.
+          ${st.expSummary.estExposedPop > 0 ? `Diperkirakan sekitar <strong>${st.expSummary.estExposedPop.toLocaleString('id-ID')} jiwa (${st.expSummary.popPct}%)</strong> berada di zona melebihi ambang batas &ge; ${st.threshold} µg/m³.` : `Belum ada populasi yang masuk zona melebihi ambang batas &ge; ${st.threshold} µg/m³.`}
+          <em>Rekomendasi:</em> ${actionAdvice}
         </div>
 
         <div class="rep-kpi-row">
@@ -6620,14 +6857,12 @@
             <table class="rep-table">
               <thead>
                 <tr>
-                  <th>Kategori ISPU</th>
+                  <th>Kategori Kualitas Udara</th>
                   <th>Rentang (µg/m³)</th>
                   <th>Rata-rata</th>
-                  <th>Luas (km²)</th>
+                  <th>Luas Area (km²)</th>
                   <th>Durasi</th>
-                  <th>Skor H</th>
-                  <th>Skor V&amp;E</th>
-                  <th>Kelas Risiko (Indeks)</th>
+                  <th>Tingkat Risiko (Indeks)</th>
                 </tr>
               </thead>
               <tbody>${hysplitRowsHtml}</tbody>
@@ -6695,19 +6930,19 @@
                 <td>Meteorologi &amp; Risiko Bencana</td>
                 <td>Vektor Angin Dominan &amp; Formula Risiko</td>
                 <td>${st.expSummary.activeWindLabel} &bull; Risiko = Bahaya (H) &times; Kerentanan &amp; Paparan (V&amp;E)</td>
-                <td>Grid Angin ECMWF ERA5-Land &amp; Standar BNPB / IPCC</td>
+                <td>Grid Angin ECMWF ERA5 (Darat &amp; Laut) &amp; Standar BNPB / IPCC</td>
               </tr>
             </tbody>
           </table>
         </div>
 
         <div class="rep-footer-notes">
-          <strong>Keterangan Sumber Data &amp; Catatan Metodologi:</strong>
-          (1) Sebaran PM2.5 harian bersumber dari keluaran model dispersi HYSPLIT (<code>asap_pm25_harian_ispu.geojson</code>) dan medan angin dari reanalisis ECMWF ERA5-Land (<code>ERA5_Wind_UV_Kalbar_2026.csv</code>).
-          (2) Titik api aktif bersumber dari NASA FIRMS VIIRS 375 m periode 1 Agustus – 31 Oktober 2026.
-          (3) Area bekas terbakar bersumber dari NASA MODIS MCD64A1 dan lahan gambut dari peta Kesatuan Hidrologis Gambut (KHG) Kalimantan Barat.
-          (4) Dataset CAMS PM2.5, MERRA-2 PM2.5, dan MODIS AOD disajikan sebagai <strong>data pembanding</strong> spasial untuk melihat kesesuaian pola sebaran asap, bukan sebagai ukuran kebenaran mutlak di lapangan.
-          (5) Estimasi populasi terpapar dihitung dari irisan spasial zona terdampak dengan batas Kabupaten/Kota berdasarkan atribut kepadatan penduduk (<code>KEPADATAN</code>) dan jumlah penduduk (<code>JML_PDDK</code>) BPS Kalimantan Barat.
+          <strong>Panduan Membaca &amp; Sumber Data:</strong>
+          (1) <em>Bahaya (H)</em> menunjukkan intensitas konsentrasi &amp; durasi asap PM2.5; <em>Kerentanan &amp; Paparan (V&amp;E)</em> menunjukkan kepadatan penduduk, lahan gambut, dan fasilitas vital di area tersebut; <em>Risiko = H &times; V&amp;E</em>.
+          (2) Sebaran PM2.5 harian bersumber dari keluaran model dispersi HYSPLIT (<code>asap_pm25_harian_ispu.geojson</code>) dan medan angin darat–laut dari reanalisis ECMWF ERA5 (<code>ERA5_Wind_UV_Kalbar_Buffer_2026_Indexed.json</code>).
+          (3) Titik api aktif bersumber dari NASA FIRMS VIIRS 375 m periode 1 Agustus – 31 Oktober 2026; area terbakar dari NASA MODIS MCD64A1; lahan gambut dari peta KHG Kalimantan Barat.
+          (4) Dataset CAMS PM2.5, MERRA-2 PM2.5, dan MODIS AOD disajikan sebagai <strong>data pembanding</strong> spasial untuk melihat kesesuaian pola sebaran asap.
+          (5) Estimasi populasi terpapar dihitung dari irisan spasial zona terdampak dengan batas Kabupaten/Kota berdasarkan data kepadatan dan jumlah penduduk BPS Kalimantan Barat.
         </div>
       `;
 
@@ -6749,7 +6984,16 @@
       el.addEventListener('change', (e) => {
         if (e.target.checked) {
           map.addLayer(item.layer);
-          if (item.id === 'chkRisk') requestSimulationUpdate(true);
+          if (item.id === 'chkRisk') {
+            showHeavyLoading('Memuat Peta Indeks Risiko Bencana...');
+            requestAnimationFrame(() => setTimeout(() => {
+              try {
+                updateSimulation();
+              } finally {
+                hideHeavyLoading();
+              }
+            }, 0));
+          }
           if (item.id === 'chkWeeklyMerra' || item.id === 'chkWeeklyModis') {
             syncComparisonWithMainSlider(true);
           }
@@ -6769,13 +7013,21 @@
         chkRisk.checked = !chkRisk.checked;
         if (chkRisk.checked) {
           map.addLayer(layerGroups.risk);
-          requestSimulationUpdate(true);
           toggleRiskBtn.querySelector('span').textContent = 'Sembunyikan Peta Indeks Risiko';
+          renderDynamicLegend();
+          showHeavyLoading('Memuat Peta Indeks Risiko Bencana...');
+          requestAnimationFrame(() => setTimeout(() => {
+            try {
+              updateSimulation();
+            } finally {
+              hideHeavyLoading();
+            }
+          }, 0));
         } else {
           map.removeLayer(layerGroups.risk);
           toggleRiskBtn.querySelector('span').textContent = 'Tampilkan Peta Indeks Risiko Bencana';
+          renderDynamicLegend();
         }
-        renderDynamicLegend();
       });
     }
 
@@ -6911,18 +7163,53 @@
       });
     }
 
-    // Welcome Modal handlers
+    // Welcome Modal handlers (minimum 5 detik animasi startup agar siap mulus)
     const welcomeModal = document.getElementById('welcomeModal');
-    const closeWelcomeModal = () => {
-      if (welcomeModal) welcomeModal.classList.remove('open');
-    };
     const closeWelcomeBtn = document.getElementById('closeWelcomeModalBtn');
     const startWelcomeBtn = document.getElementById('welcomeStartBtn');
     const guideFromWelcomeBtn = document.getElementById('welcomeOpenGuideBtn');
+    const welcomeProgressFill = document.getElementById('welcomeProgressFill');
+    const welcomeProgressText = document.getElementById('welcomeProgressText');
+    const welcomeCountdownText = document.getElementById('welcomeCountdownText');
+    let welcomeReady = false;
+
+    if (closeWelcomeBtn) closeWelcomeBtn.disabled = true;
+
+    const WELCOME_MIN_MS = 5000;
+    const welcomeStartTime = performance.now();
+    const welcomeTimer = setInterval(() => {
+      const elapsed = performance.now() - welcomeStartTime;
+      const pct = Math.min(100, (elapsed / WELCOME_MIN_MS) * 100);
+      const remSec = Math.max(0, Math.ceil((WELCOME_MIN_MS - elapsed) / 1000));
+
+      if (welcomeProgressFill) welcomeProgressFill.style.width = `${pct}%`;
+      if (welcomeCountdownText) welcomeCountdownText.textContent = remSec > 0 ? `${remSec} dtk` : 'Siap';
+      if (startWelcomeBtn && remSec > 0) {
+        startWelcomeBtn.textContent = `Menyiapkan Peta (${remSec}s)...`;
+      }
+
+      if (elapsed >= WELCOME_MIN_MS) {
+        clearInterval(welcomeTimer);
+        welcomeReady = true;
+        if (welcomeProgressText) welcomeProgressText.textContent = 'Peta & seluruh layer siap digunakan';
+        if (startWelcomeBtn) {
+          startWelcomeBtn.disabled = false;
+          startWelcomeBtn.textContent = 'Mulai Eksplorasi';
+        }
+        if (guideFromWelcomeBtn) guideFromWelcomeBtn.disabled = false;
+        if (closeWelcomeBtn) closeWelcomeBtn.disabled = false;
+      }
+    }, 100);
+
+    const closeWelcomeModal = () => {
+      if (!welcomeReady) return;
+      if (welcomeModal) welcomeModal.classList.remove('open');
+    };
     if (closeWelcomeBtn) closeWelcomeBtn.addEventListener('click', closeWelcomeModal);
     if (startWelcomeBtn) startWelcomeBtn.addEventListener('click', closeWelcomeModal);
     if (guideFromWelcomeBtn) {
       guideFromWelcomeBtn.addEventListener('click', () => {
+        if (!welcomeReady) return;
         closeWelcomeModal();
         const gm = document.getElementById('guideModal');
         if (gm) gm.classList.add('open');
@@ -7045,7 +7332,8 @@
     });
 
     document.getElementById('manualSpeedSlider').addEventListener('input', (e) => {
-      document.getElementById('manualSpeedVal').textContent = `${e.target.value} km/jam`;
+      const spdVal = Number(e.target.value);
+      document.getElementById('manualSpeedVal').textContent = `${spdVal} km/jam (${(spdVal / 3.6).toFixed(1)} m/s)`;
       requestSimulationUpdate(false);
     });
 
@@ -7055,7 +7343,7 @@
       document.getElementById('chkManualWind').checked = false;
       document.getElementById('windOverrideControls').classList.add('disabled');
       document.getElementById('manualSpeedSlider').value = 16;
-      document.getElementById('manualSpeedVal').textContent = '16 km/jam';
+      document.getElementById('manualSpeedVal').textContent = '16 km/jam (4.4 m/s)';
       document.querySelectorAll('#windDirButtons .dir-btn').forEach(b => b.classList.toggle('active', b.dataset.deg === '140'));
       document.getElementById('manualDirLabel').textContent = 'Tenggara (140°)';
       updateSimulation();
