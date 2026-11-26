@@ -1246,6 +1246,161 @@
       width: min(780px, 95vw);
     }
 
+    .modal-dialog.welcome-dialog {
+      width: min(580px, 94vw);
+    }
+
+    .welcome-hero {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #f8fafc;
+      padding: 20px 22px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .welcome-hero h2 {
+      margin: 0 0 4px 0;
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+
+    .welcome-hero p {
+      margin: 0;
+      font-size: 12px;
+      color: #cbd5e1;
+      line-height: 1.45;
+    }
+
+    .welcome-hero .btn-modal-close {
+      color: #cbd5e1;
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.16);
+    }
+
+    .welcome-hero .btn-modal-close:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .welcome-features {
+      display: grid;
+      gap: 10px;
+      margin: 4px 0 14px 0;
+    }
+
+    .welcome-feat-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: #f8fafc;
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      font-size: 12.5px;
+      line-height: 1.45;
+      color: #334155;
+    }
+
+    .welcome-feat-icon {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      background: rgba(2, 132, 199, 0.12);
+      color: #0369a1;
+    }
+
+    .welcome-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      padding-top: 6px;
+      border-top: 1px solid rgba(15, 23, 42, 0.08);
+    }
+
+    .btn-welcome-primary {
+      background: #0f172a;
+      color: #fff;
+      border: none;
+      border-radius: 9px;
+      padding: 9px 18px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s ease, transform 0.12s ease;
+    }
+
+    .btn-welcome-primary:hover {
+      background: #1e293b;
+      transform: translateY(-1px);
+    }
+
+    .btn-welcome-secondary {
+      background: transparent;
+      color: #334155;
+      border: 1px solid rgba(15, 23, 42, 0.2);
+      border-radius: 9px;
+      padding: 8px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-welcome-secondary:hover {
+      background: #f1f5f9;
+    }
+
+    /* GLOBAL LOADING INDICATOR SAAT PROSES BERAT */
+    .global-loading-pill {
+      position: fixed;
+      top: 72px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-8px);
+      z-index: 2500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 16px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      color: #f8fafc;
+      font-size: 12px;
+      font-weight: 600;
+      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.28);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+
+    .global-loading-pill.active {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .loading-spinner-ring {
+      width: 15px;
+      height: 15px;
+      border: 2.2px solid rgba(255, 255, 255, 0.28);
+      border-top-color: #38bdf8;
+      border-radius: 50%;
+      animation: spinLoader 0.7s linear infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes spinLoader {
+      to { transform: rotate(360deg); }
+    }
+
     .modal-header {
       padding: 15px 20px;
       border-bottom: 1px solid rgba(15, 23, 42, 0.12);
@@ -2096,17 +2251,16 @@
         <button class="btn-play" id="playPauseBtn">▶ Play</button>
         <div class="mode-pills">
           <button type="button" class="mode-pill-btn active" id="btnModeSeasonal">Harian (1 Agt – 31 Okt)</button>
-          <button type="button" class="mode-pill-btn" id="btnModeEpisode">Episode Puncak (72 Jam)</button>
+          <button type="button" class="mode-pill-btn" id="btnModeEpisode">Episode Puncak (26 Agt – 3 Sep)</button>
         </div>
       </div>
-      <span class="mono-val" id="currentTimestampLabel">12 Okt 2026 • Harian</span>
+      <span class="mono-val" id="currentTimestampLabel">26 Agt 2026 • Harian</span>
     </div>
-    <input type="range" id="timeSlider" min="0" max="94" step="1" value="72" />
+    <input type="range" id="timeSlider" min="0" max="94" step="1" value="25" />
     <div class="timeline-ticks" id="timeTicks">
       <span class="clickable-tick" data-idx="0">1 Agt</span>
       <span class="clickable-tick" data-idx="31">1 Sep</span>
       <span class="clickable-tick" data-idx="61">1 Okt</span>
-      <span class="clickable-tick active" data-idx="72">12 Okt (Puncak)</span>
       <span class="clickable-tick" data-idx="91">31 Okt</span>
       <span class="clickable-tick forecast-tick" data-idx="92">1 Nov [FORECAST]</span>
       <span class="clickable-tick forecast-tick" data-idx="94">3 Nov [FORECAST]</span>
@@ -2119,10 +2273,10 @@
     <div class="glass-card glass-panel">
       <div class="card-header">
         <label class="card-title-toggle" title="Aktifkan/nonaktifkan kalkulasi KPI paparan (otomatis nonaktif saat time-slider dijalankan agar ringan)">
-          <input type="checkbox" id="chkEnableExposureCalc" checked />
+          <input type="checkbox" id="chkEnableExposureCalc" />
           <span class="card-title">Kalkulator Paparan</span>
         </label>
-        <span class="card-tag" id="exposureCalcBadge" style="color:#065f46; border-color:rgba(5,150,105,0.35); background:rgba(5,150,105,0.12);">ON-THE-FLY</span>
+        <span class="card-tag" id="exposureCalcBadge" style="color:#475569; border-color:rgba(15,23,42,0.18); background:rgba(15,23,42,0.06);">DIJEDA</span>
       </div>
 
       <div class="kpi-row" id="exposureKpiRow">
@@ -2170,13 +2324,13 @@
     <div class="glass-card glass-panel" id="top5Card">
       <div class="card-header">
         <label class="card-title-toggle" title="Aktifkan/nonaktifkan peringkat Top 5 wilayah (otomatis nonaktif saat time-slider dijalankan agar ringan)">
-          <input type="checkbox" id="chkEnableTop5" checked />
+          <input type="checkbox" id="chkEnableTop5" />
           <span class="card-title">Top 5 Wilayah Terdampak</span>
         </label>
         <span class="card-tag" id="top5DateBadge">HARIAN</span>
       </div>
       <div class="top5-list" id="top5DistrictList">
-        <div class="legend-empty">Menghitung peringkat Kabupaten/Kota...</div>
+        <div class="legend-empty">Centang kotak di atas untuk menghitung Top 5 wilayah terdampak.</div>
       </div>
     </div>
 
@@ -2395,6 +2549,45 @@
   </div>
 
   <!-- MODAL 2: PANDUAN SINGKAT PENGGUNAAN WEBGIS -->
+  <!-- GLOBAL LOADING INDICATOR -->
+  <div class="global-loading-pill" id="globalLoadingOverlay" role="status" aria-live="polite">
+    <span class="loading-spinner-ring"></span>
+    <span id="globalLoadingText">Memproses analisis spasial...</span>
+  </div>
+
+  <!-- WELCOME / PENGENALAN SINGKAT MODAL -->
+  <div class="modal-backdrop open" id="welcomeModal" role="dialog" aria-modal="true" aria-labelledby="welcomeModalTitle">
+    <div class="modal-dialog welcome-dialog">
+      <div class="welcome-hero">
+        <div>
+          <h2 id="welcomeModalTitle">Selamat Datang di WebGIS Karhutla Kalbar</h2>
+          <p>Pemantauan Sebaran Asap PM2.5, Medan Angin ERA5, &amp; Risiko Dampak (Agustus – November 2026)</p>
+        </div>
+        <button type="button" class="btn-modal-close" id="closeWelcomeModalBtn" aria-label="Tutup">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 16px 20px;">
+        <div class="welcome-features">
+          <div class="welcome-feat-item">
+            <div class="welcome-feat-icon">💨</div>
+            <div><strong>Medan Angin &amp; Sebaran Asap:</strong> Gunakan <em>time-slider</em> di bagian bawah untuk memantau pergerakan angin ERA5 (darat &amp; laut) serta konsentrasi PM2.5 harian.</div>
+          </div>
+          <div class="welcome-feat-item">
+            <div class="welcome-feat-icon">🗺️</div>
+            <div><strong>Filter Wilayah &amp; Layer:</strong> Pilih seluruh Kalimantan Barat atau fokus ke 14 Kabupaten/Kota melalui panel kiri untuk menyaring hotspot, gambut, dan area terbakar.</div>
+          </div>
+          <div class="welcome-feat-item">
+            <div class="welcome-feat-icon">📊</div>
+            <div><strong>Kalkulator Paparan &amp; Top 5 Wilayah:</strong> Sengaja dijeda saat awal agar peta tetap ringan. Centang kotak di panel kanan kapan saja untuk menghitung statistik paparan.</div>
+          </div>
+        </div>
+        <div class="welcome-actions">
+          <button type="button" class="btn-welcome-secondary" id="welcomeOpenGuideBtn">Buka Panduan Lengkap</button>
+          <button type="button" class="btn-welcome-primary" id="welcomeStartBtn">Mulai Eksplorasi</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="modal-backdrop" id="guideModal" role="dialog" aria-modal="true" aria-labelledby="guideModalTitle">
     <div class="modal-dialog guide-dialog">
       <div class="modal-header">
@@ -2689,20 +2882,15 @@
     })();
 
     const EPISODE_STEPS = [
-      { isoDate: "2026-10-11", ddmmyyyy: "11/10/2026", label: "11 Okt 00:00", timestamp: "11 Okt 2026 • 00:00 WIB (H-36j)", banner: "HYSPLIT 72-Hour Episode | 11 Okt 00:00 WIB", wind: "Memuat ERA5-Land...", windFromDeg: 140, windSpeedKmh: 12, pm25Multiplier: 0.62 },
-      { isoDate: "2026-10-11", ddmmyyyy: "11/10/2026", label: "11 Okt 06:00", timestamp: "11 Okt 2026 • 06:00 WIB (H-30j)", banner: "HYSPLIT 72-Hour Episode | 11 Okt 06:00 WIB", wind: "Memuat ERA5-Land...", windFromDeg: 140, windSpeedKmh: 12, pm25Multiplier: 0.70 },
-      { isoDate: "2026-10-11", ddmmyyyy: "11/10/2026", label: "11 Okt 12:00", timestamp: "11 Okt 2026 • 12:00 WIB (H-24j)", banner: "HYSPLIT 72-Hour Episode | 11 Okt 12:00 WIB", wind: "Memuat ERA5-Land...", windFromDeg: 140, windSpeedKmh: 12, pm25Multiplier: 0.78 },
-      { isoDate: "2026-10-11", ddmmyyyy: "11/10/2026", label: "11 Okt 18:00", timestamp: "11 Okt 2026 • 18:00 WIB (H-18j)", banner: "HYSPLIT 72-Hour Episode | 11 Okt 18:00 WIB", wind: "Memuat ERA5-Land...", windFromDeg: 140, windSpeedKmh: 12, pm25Multiplier: 0.88 },
-      { isoDate: "2026-10-12", ddmmyyyy: "12/10/2026", label: "12 Okt 00:00", timestamp: "12 Okt 2026 • 00:00 WIB (H-12j)", banner: "HYSPLIT 72-Hour Episode | 12 Okt 00:00 WIB", wind: "Memuat ERA5-Land...", windFromDeg: 140, windSpeedKmh: 12, pm25Multiplier: 0.96 },
-      { isoDate: "2026-10-12", ddmmyyyy: "12/10/2026", label: "12 Okt 06:00", timestamp: "12 Okt 2026 • 06:00 WIB (H-6j)", banner: "HYSPLIT 72-Hour Episode | 12 Okt 06:00 WIB", wind: "Memuat ERA5-Land...", windFromDeg: 140, windSpeedKmh: 12, pm25Multiplier: 1.04 },
-      { isoDate: "2026-10-12", ddmmyyyy: "12/10/2026", label: "12 Okt 12:00", timestamp: "12 Okt 2026 • 12:00 WIB (PUNCAK)", banner: "HYSPLIT 72-Hour Episode | 12 Okt 2026 (Puncak Emisi)", wind: "Memuat ERA5-Land...", windFromDeg: 140, windSpeedKmh: 12, pm25Multiplier: 1.08 },
-      { isoDate: "2026-10-12", ddmmyyyy: "12/10/2026", label: "12 Okt 18:00", timestamp: "12 Okt 2026 • 18:00 WIB (H+6j)", banner: "HYSPLIT 72-Hour Episode | 12 Okt 18:00 WIB", wind: "Memuat ERA5-Land...", windFromDeg: 140, windSpeedKmh: 12, pm25Multiplier: 1.15 },
-      { isoDate: "2026-10-13", ddmmyyyy: "13/10/2026", label: "13 Okt 00:00", timestamp: "13 Okt 2026 • 00:00 WIB (H+12j)", banner: "HYSPLIT 72-Hour Episode | 13 Okt 00:00 WIB", wind: "Memuat ERA5-Land...", windFromDeg: 140, windSpeedKmh: 12, pm25Multiplier: 1.20 },
-      { isoDate: "2026-10-13", ddmmyyyy: "13/10/2026", label: "13 Okt 06:00", timestamp: "13 Okt 2026 • 06:00 WIB (H+18j)", banner: "HYSPLIT 72-Hour Episode | 13 Okt 06:00 WIB", wind: "Memuat ERA5-Land...", windFromDeg: 140, windSpeedKmh: 12, pm25Multiplier: 1.12 },
-      { isoDate: "2026-10-13", ddmmyyyy: "13/10/2026", label: "13 Okt 12:00", timestamp: "13 Okt 2026 • 12:00 WIB (H+24j)", banner: "HYSPLIT 72-Hour Episode | 13 Okt 12:00 WIB", wind: "Memuat ERA5-Land...", windFromDeg: 140, windSpeedKmh: 12, pm25Multiplier: 0.94 },
-      { isoDate: "2026-10-13", ddmmyyyy: "13/10/2026", label: "13 Okt 18:00", timestamp: "13 Okt 2026 • 18:00 WIB (H+30j)", banner: "HYSPLIT 72-Hour Episode | 13 Okt 18:00 WIB", wind: "Memuat ERA5-Land...", windFromDeg: 140, windSpeedKmh: 12, pm25Multiplier: 0.82 },
-      { isoDate: "2026-10-14", ddmmyyyy: "14/10/2026", label: "14 Okt 00:00", timestamp: "14 Okt 2026 • 00:00 WIB (H+36j)", banner: "HYSPLIT 72-Hour Episode | 14 Okt 00:00 WIB", wind: "Memuat ERA5-Land...", windFromDeg: 140, windSpeedKmh: 12, pm25Multiplier: 0.72 },
-      { isoDate: "2026-11-01", ddmmyyyy: "01/11/2026", label: "1 Nov (Forecast)", isForecast: true, timestamp: "1 Nov 2026 • FORECAST (Pasca-31 Okt)", banner: "HYSPLIT Forecast | 1 Nov 2026 (Proyeksi Awal November)", wind: "Memuat ERA5-Land...", windFromDeg: 140, windSpeedKmh: 12, pm25Multiplier: 0.42 }
+      { isoDate: "2026-08-26", ddmmyyyy: "26/08/2026", label: "26 Agt", timestamp: "26 Agt 2026 • Episode Puncak", banner: "Episode Puncak (26 Agt – 3 Sep) | 26 Agt 2026", wind: "Memuat ERA5...", windFromDeg: 140, windSpeedKmh: 12, pm25Multiplier: 1.0 },
+      { isoDate: "2026-08-27", ddmmyyyy: "27/08/2026", label: "27 Agt", timestamp: "27 Agt 2026 • Episode Puncak", banner: "Episode Puncak (26 Agt – 3 Sep) | 27 Agt 2026", wind: "Memuat ERA5...", windFromDeg: 140, windSpeedKmh: 12, pm25Multiplier: 1.0 },
+      { isoDate: "2026-08-28", ddmmyyyy: "28/08/2026", label: "28 Agt", timestamp: "28 Agt 2026 • Episode Puncak", banner: "Episode Puncak (26 Agt – 3 Sep) | 28 Agt 2026", wind: "Memuat ERA5...", windFromDeg: 140, windSpeedKmh: 12, pm25Multiplier: 1.0 },
+      { isoDate: "2026-08-29", ddmmyyyy: "29/08/2026", label: "29 Agt", timestamp: "29 Agt 2026 • Episode Puncak", banner: "Episode Puncak (26 Agt – 3 Sep) | 29 Agt 2026", wind: "Memuat ERA5...", windFromDeg: 140, windSpeedKmh: 12, pm25Multiplier: 1.0 },
+      { isoDate: "2026-08-30", ddmmyyyy: "30/08/2026", label: "30 Agt", timestamp: "30 Agt 2026 • Episode Puncak", banner: "Episode Puncak (26 Agt – 3 Sep) | 30 Agt 2026", wind: "Memuat ERA5...", windFromDeg: 140, windSpeedKmh: 12, pm25Multiplier: 1.0 },
+      { isoDate: "2026-08-31", ddmmyyyy: "31/08/2026", label: "31 Agt", timestamp: "31 Agt 2026 • Episode Puncak", banner: "Episode Puncak (26 Agt – 3 Sep) | 31 Agt 2026", wind: "Memuat ERA5...", windFromDeg: 140, windSpeedKmh: 12, pm25Multiplier: 1.0 },
+      { isoDate: "2026-09-01", ddmmyyyy: "01/09/2026", label: "1 Sep",  timestamp: "1 Sep 2026 • Episode Puncak",  banner: "Episode Puncak (26 Agt – 3 Sep) | 1 Sep 2026",  wind: "Memuat ERA5...", windFromDeg: 140, windSpeedKmh: 12, pm25Multiplier: 1.0 },
+      { isoDate: "2026-09-02", ddmmyyyy: "02/09/2026", label: "2 Sep",  timestamp: "2 Sep 2026 • Episode Puncak",  banner: "Episode Puncak (26 Agt – 3 Sep) | 2 Sep 2026",  wind: "Memuat ERA5...", windFromDeg: 140, windSpeedKmh: 12, pm25Multiplier: 1.0 },
+      { isoDate: "2026-09-03", ddmmyyyy: "03/09/2026", label: "3 Sep",  timestamp: "3 Sep 2026 • Episode Puncak",  banner: "Episode Puncak (26 Agt – 3 Sep) | 3 Sep 2026",  wind: "Memuat ERA5...", windFromDeg: 140, windSpeedKmh: 12, pm25Multiplier: 1.0 }
     ];
 
     const fallbackTrajectoryOrigins = [
@@ -4625,13 +4813,12 @@
         btnEpisode.classList.remove('active');
         slider.min = 0;
         slider.max = SEASONAL_STEPS.length - 1;
-        slider.value = targetIdx !== null ? targetIdx : 72;
+        slider.value = targetIdx !== null ? targetIdx : 25;
 
         ticksContainer.innerHTML = `
           <span class="clickable-tick" data-idx="0">1 Agt</span>
           <span class="clickable-tick" data-idx="31">1 Sep</span>
           <span class="clickable-tick" data-idx="61">1 Okt</span>
-          <span class="clickable-tick" data-idx="72">12 Okt (Puncak)</span>
           <span class="clickable-tick" data-idx="91">31 Okt</span>
           <span class="clickable-tick forecast-tick" data-idx="92">1 Nov [FORECAST]</span>
           <span class="clickable-tick forecast-tick" data-idx="94">3 Nov [FORECAST]</span>
@@ -4641,14 +4828,14 @@
         btnSeasonal.classList.remove('active');
         slider.min = 0;
         slider.max = EPISODE_STEPS.length - 1;
-        slider.value = targetIdx !== null ? targetIdx : 6;
+        slider.value = targetIdx !== null ? targetIdx : 0;
 
         ticksContainer.innerHTML = `
-          <span class="clickable-tick" data-idx="0">11 Okt 00:00</span>
-          <span class="clickable-tick" data-idx="6">12 Okt (Puncak)</span>
-          <span class="clickable-tick" data-idx="10">H+24 Jam</span>
-          <span class="clickable-tick" data-idx="12">14 Okt 00:00</span>
-          <span class="clickable-tick forecast-tick" data-idx="13">1 Nov [FORECAST]</span>
+          <span class="clickable-tick" data-idx="0">26 Agt</span>
+          <span class="clickable-tick" data-idx="2">28 Agt</span>
+          <span class="clickable-tick" data-idx="4">30 Agt</span>
+          <span class="clickable-tick" data-idx="6">1 Sep</span>
+          <span class="clickable-tick" data-idx="8">3 Sep</span>
         `;
       }
 
@@ -5518,101 +5705,42 @@
     }
 
     function loadEra5WindCsv() {
-      fetch(`${BASE_PJBL_URL}/ERA5_Wind_UV_Kalbar_2026.csv`)
-        .then(res => { if (!res.ok) throw new Error(res.status); return res.text(); })
-        .then(csvText => {
-          const lines = csvText.split(/\r?\n/).filter(l => l.trim().length > 0);
-          if (lines.length < 2) return;
+      fetch(`${BASE_PJBL_URL}/ERA5_Wind_UV_Kalbar_Buffer_2026_Indexed.json`)
+        .then(res => { if (!res.ok) throw new Error(res.status); return res.json(); })
+        .then(payload => {
+          if (!payload || !payload.grid || !payload.dates) return;
 
-          const headers = parseCsvLineRfc4180(lines[0]).map(h => h.trim().replace(/^\uFEFF/, ''));
-          const lowerHeaders = headers.map(h => h.toLowerCase());
-          const idxDate = lowerHeaders.findIndex(h => h === 'tanggal' || h === 'date' || h === 'time');
-          const idxLat = lowerHeaders.findIndex(h => h === 'lat' || h === 'latitude');
-          const idxLon = lowerHeaders.findIndex(h => h === 'lon' || h === 'lng' || h === 'longitude');
-          const idxGeo = lowerHeaders.findIndex(h => h === '.geo' || h === 'geo');
-          const idxU = lowerHeaders.findIndex(h => h.includes('u_component') || h === 'u10' || h === 'u');
-          const idxV = lowerHeaders.findIndex(h => h.includes('v_component') || h === 'v10' || h === 'v');
-          const idxSpdMs = lowerHeaders.findIndex(h => h === 'wind_speed_ms' || h === 'speed_ms');
-          const idxSpdKmh = lowerHeaders.findIndex(h => h === 'wind_speed_kmh' || h === 'speed_kmh');
+          const { nLat, nLon, minLat, maxLat, minLon, maxLon, stepLat, stepLon } = payload.grid;
+          const totalCells = nLat * nLon;
 
-          if (idxDate === -1 || (idxLat === -1 && idxGeo === -1) || (idxLon === -1 && idxGeo === -1) || idxU === -1 || idxV === -1) {
-            console.warn('Header kolom ERA5_Wind_UV_Kalbar_2026.csv tidak sesuai:', headers);
-            return;
-          }
+          Object.keys(payload.dates).forEach(rawDate => {
+            const dIso = normalizeDateKey(rawDate);
+            if (!dIso) return;
+            const entry = payload.dates[rawDate];
+            const srcU = entry.u || [];
+            const srcV = entry.v || [];
 
-          const rawByDate = {};
-          for (let i = 1; i < lines.length; i++) {
-            const cols = parseCsvLineRfc4180(lines[i]);
-            if (cols.length <= Math.max(idxDate, idxU, idxV)) continue;
+            const uArr = new Float32Array(totalCells);
+            const vArr = new Float32Array(totalCells);
+            const points = [];
 
-            const dIso = normalizeDateKey(cols[idxDate]);
-            let lat = idxLat !== -1 ? parseFloat(cols[idxLat]) : NaN;
-            let lon = idxLon !== -1 ? parseFloat(cols[idxLon]) : NaN;
-            if ((isNaN(lat) || isNaN(lon)) && idxGeo !== -1 && cols[idxGeo]) {
-              const m = cols[idxGeo].match(/\[\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)\s*\]/);
-              if (m) {
-                lon = parseFloat(m[1]);
-                lat = parseFloat(m[2]);
-              }
-            }
-            const u = parseFloat(cols[idxU]);
-            const v = parseFloat(cols[idxV]);
-            const csvSpdMs = idxSpdMs !== -1 ? parseFloat(cols[idxSpdMs]) : NaN;
-            const csvSpdKmh = idxSpdKmh !== -1 ? parseFloat(cols[idxSpdKmh]) : NaN;
-
-            if (!dIso || isNaN(lat) || isNaN(lon)) continue;
-            if (!rawByDate[dIso]) {
-              rawByDate[dIso] = {
-                latSet: new Set(),
-                lonSet: new Set(),
-                points: []
-              };
-            }
-
-            const entry = rawByDate[dIso];
-            const latKey = Number(lat.toFixed(2));
-            const lonKey = Number(lon.toFixed(2));
-            entry.latSet.add(latKey);
-            entry.lonSet.add(lonKey);
-
-            if (!isNaN(u) && !isNaN(v)) {
-              const effSpdMs = !isNaN(csvSpdMs) ? csvSpdMs : Math.hypot(u, v);
-              const effSpdKmh = !isNaN(csvSpdKmh) ? csvSpdKmh : effSpdMs * 3.6;
-              entry.points.push({ latKey, lonKey, u, v, effSpdMs, effSpdKmh });
-            }
-          }
-
-          Object.keys(rawByDate).forEach(dIso => {
-            const e = rawByDate[dIso];
-            const lats = Array.from(e.latSet).sort((a, b) => a - b);
-            const lons = Array.from(e.lonSet).sort((a, b) => a - b);
-            const nLat = lats.length;
-            const nLon = lons.length;
-            const minLat = nLat ? lats[0] : 0;
-            const maxLat = nLat ? lats[nLat - 1] : 0;
-            const minLon = nLon ? lons[0] : 0;
-            const maxLon = nLon ? lons[nLon - 1] : 0;
-            const stepLat = nLat > 1 ? (maxLat - minLat) / (nLat - 1) : 0.25;
-            const stepLon = nLon > 1 ? (maxLon - minLon) / (nLon - 1) : 0.25;
-
-            const latIndexMap = new Map();
-            lats.forEach((v, idx) => latIndexMap.set(v, idx));
-            const lonIndexMap = new Map();
-            lons.forEach((v, idx) => lonIndexMap.set(v, idx));
-
-            const uArr = new Float32Array(nLat * nLon);
-            const vArr = new Float32Array(nLat * nLon);
-            uArr.fill(NaN);
-            vArr.fill(NaN);
-
-            for (let p = 0; p < e.points.length; p++) {
-              const pt = e.points[p];
-              const r = latIndexMap.get(pt.latKey);
-              const c = lonIndexMap.get(pt.lonKey);
-              if (r !== undefined && c !== undefined) {
+            for (let r = 0; r < nLat; r++) {
+              const latKey = Number((minLat + r * stepLat).toFixed(2));
+              for (let c = 0; c < nLon; c++) {
                 const idx = r * nLon + c;
-                uArr[idx] = pt.u;
-                vArr[idx] = pt.v;
+                const uVal = srcU[idx];
+                const vVal = srcV[idx];
+                if (uVal === null || uVal === undefined || vVal === null || vVal === undefined || isNaN(uVal) || isNaN(vVal)) {
+                  uArr[idx] = NaN;
+                  vArr[idx] = NaN;
+                } else {
+                  uArr[idx] = uVal;
+                  vArr[idx] = vVal;
+                  const lonKey = Number((minLon + c * stepLon).toFixed(2));
+                  const effSpdMs = Math.hypot(uVal, vVal);
+                  const effSpdKmh = effSpdMs * 3.6;
+                  points.push({ latKey, lonKey, u: uVal, v: vVal, effSpdMs, effSpdKmh });
+                }
               }
             }
 
@@ -5627,7 +5755,7 @@
               stepLon,
               uArr,
               vArr,
-              points: e.points,
+              points,
               meanU: undefined,
               meanV: undefined,
               meanSpdMs: undefined,
@@ -5638,11 +5766,11 @@
 
           dataStore.era5WindLoaded = Object.keys(dataStore.era5WindByDate).length > 0;
           recomputeEra5LandMeanWind();
-          console.log(`Berhasil memuat grid angin ERA5-Land untuk ${Object.keys(dataStore.era5WindByDate).length} hari (rata-rata daratan Kalbar).`);
+          console.log(`Berhasil memuat grid angin ERA5 (Indexed JSON) untuk ${Object.keys(dataStore.era5WindByDate).length} hari.`);
           if (typeof windLayer !== 'undefined') windLayer._rebuildScreenField();
           requestSimulationUpdate(true);
         })
-        .catch(err => console.warn('Gagal memuat ERA5_Wind_UV_Kalbar_2026.csv:', err));
+        .catch(err => console.warn('Gagal memuat ERA5_Wind_UV_Kalbar_Buffer_2026_Indexed.json:', err));
     }
 
     function loadCamsPm25GeoJSON() {
@@ -6312,7 +6440,7 @@
     // 8J. EKSPOR CSV LENGKAP & CETAK LAPORAN LANDSCAPE TERSTRUKTUR
     function downloadComprehensiveCsv() {
       const st = computeComprehensiveStats();
-      const modeName = timelineMode === 'seasonal' ? 'Harian (1 Agt - 3 Nov 2026)' : 'Episode Puncak 72 Jam';
+      const modeName = timelineMode === 'seasonal' ? 'Harian (1 Agt - 3 Nov 2026)' : 'Episode Puncak (26 Agt - 3 Sep 2026)';
       const merraMeanStr = st.comparison.merra.mean !== null ? st.comparison.merra.mean.toFixed(2) : 'Tidak tersedia';
       const modisMeanStr = st.comparison.modis.mean !== null ? st.comparison.modis.mean.toFixed(3) : 'Tidak tersedia';
       const camsMeanStr = st.comparison.cams.mean !== null ? st.comparison.cams.mean.toFixed(2) : 'Tidak tersedia';
@@ -6651,14 +6779,68 @@
       });
     }
 
+    function showHeavyLoading(message = 'Memproses analisis spasial...') {
+      const el = document.getElementById('globalLoadingOverlay');
+      const txt = document.getElementById('globalLoadingText');
+      if (txt) txt.textContent = message;
+      if (el) el.classList.add('active');
+    }
+
+    function hideHeavyLoading() {
+      const el = document.getElementById('globalLoadingOverlay');
+      if (el) el.classList.remove('active');
+    }
+
+    let _pendingDistrictFilterTimer = null;
+    function scheduleDeferredDistrictFilterLayers() {
+      if (_pendingDistrictFilterTimer) {
+        clearTimeout(_pendingDistrictFilterTimer);
+        _pendingDistrictFilterTimer = null;
+      }
+      let executed = false;
+      const runHeavy = () => {
+        if (executed) return;
+        executed = true;
+        if (_pendingDistrictFilterTimer) {
+          clearTimeout(_pendingDistrictFilterTimer);
+          _pendingDistrictFilterTimer = null;
+        }
+        map.off('moveend', runHeavy);
+        showHeavyLoading('Menyaring layer wilayah...');
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            try {
+              renderFilteredRealHotspots();
+              updateSimulation();
+              renderFilteredBurnedArea();
+              renderFilteredPeatland();
+              renderFilteredFacilities();
+              renderFilteredComparisonLayers();
+            } finally {
+              hideHeavyLoading();
+            }
+          }, 0);
+        });
+      };
+      map.once('moveend', runHeavy);
+      _pendingDistrictFilterTimer = setTimeout(runHeavy, 920);
+    }
+
     document.getElementById('districtFilter').addEventListener('change', (e) => {
       const val = e.target.value;
       const badge = document.getElementById('activeRegionBadge');
 
+      // Update highlight aktif di daftar Top 5 secara instan
+      document.querySelectorAll('#top5DistrictList .top5-item').forEach(el => {
+        el.classList.toggle('active-region', el.dataset.kab === val);
+      });
+
       if (val === 'ALL') {
         dataStore.selectedAdminFeature = null;
         if (badge) badge.textContent = 'PROVINSI';
-        map.flyTo([-0.65, 110.35], 7, { duration: 0.8 });
+        renderOutsideKalbarMask();
+        renderAdminBoundaries();
+        map.flyTo([-0.65, 110.35], 7, { duration: 0.75 });
       } else {
         dataStore.selectedAdminFeature = dataStore.adminFeatures.find(f => {
           const p = f.properties || {};
@@ -6666,12 +6848,14 @@
         }) || null;
 
         if (badge) badge.textContent = 'KAB/KOTA';
+        renderOutsideKalbarMask();
+        renderAdminBoundaries();
         if (dataStore.adminBoundsMap[val]) {
-          map.flyToBounds(dataStore.adminBoundsMap[val], { padding: [45, 45], duration: 0.85 });
+          map.flyToBounds(dataStore.adminBoundsMap[val], { padding: [45, 45], duration: 0.75 });
         }
       }
 
-      applyDistrictFilterToAllLayers();
+      scheduleDeferredDistrictFilterLayers();
     });
 
     document.getElementById('opacitySlider').addEventListener('input', (e) => {
@@ -6687,13 +6871,73 @@
 
     const chkEnableExposureCalc = document.getElementById('chkEnableExposureCalc');
     if (chkEnableExposureCalc) {
-      chkEnableExposureCalc.addEventListener('change', () => updateSimulation());
+      chkEnableExposureCalc.addEventListener('change', () => {
+        if (!chkEnableExposureCalc.checked) {
+          updateSimulation();
+          return;
+        }
+        showHeavyLoading('Menghitung kalkulator paparan...');
+        requestAnimationFrame(() => setTimeout(() => {
+          try {
+            updateSimulation();
+          } finally {
+            hideHeavyLoading();
+          }
+        }, 0));
+      });
     }
 
     const chkEnableTop5 = document.getElementById('chkEnableTop5');
     if (chkEnableTop5) {
-      chkEnableTop5.addEventListener('change', () => updateSimulation());
+      chkEnableTop5.addEventListener('change', () => {
+        const listContainer = document.getElementById('top5DistrictList');
+        if (!chkEnableTop5.checked) {
+          if (listContainer) {
+            listContainer.innerHTML = `<div class="legend-empty">Centang kotak di atas untuk menghitung Top 5 wilayah terdampak.</div>`;
+          }
+          return;
+        }
+        if (listContainer) {
+          listContainer.innerHTML = `<div class="legend-empty">Menghitung peringkat wilayah terdampak...</div>`;
+        }
+        showHeavyLoading('Menghitung Top 5 wilayah terdampak...');
+        requestAnimationFrame(() => setTimeout(() => {
+          try {
+            updateSimulation();
+          } finally {
+            hideHeavyLoading();
+          }
+        }, 0));
+      });
     }
+
+    // Welcome Modal handlers
+    const welcomeModal = document.getElementById('welcomeModal');
+    const closeWelcomeModal = () => {
+      if (welcomeModal) welcomeModal.classList.remove('open');
+    };
+    const closeWelcomeBtn = document.getElementById('closeWelcomeModalBtn');
+    const startWelcomeBtn = document.getElementById('welcomeStartBtn');
+    const guideFromWelcomeBtn = document.getElementById('welcomeOpenGuideBtn');
+    if (closeWelcomeBtn) closeWelcomeBtn.addEventListener('click', closeWelcomeModal);
+    if (startWelcomeBtn) startWelcomeBtn.addEventListener('click', closeWelcomeModal);
+    if (guideFromWelcomeBtn) {
+      guideFromWelcomeBtn.addEventListener('click', () => {
+        closeWelcomeModal();
+        const gm = document.getElementById('guideModal');
+        if (gm) gm.classList.add('open');
+      });
+    }
+    if (welcomeModal) {
+      welcomeModal.addEventListener('click', (e) => {
+        if (e.target === welcomeModal) closeWelcomeModal();
+      });
+    }
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && welcomeModal && welcomeModal.classList.contains('open')) {
+        closeWelcomeModal();
+      }
+    });
 
     const timeSliderEl = document.getElementById('timeSlider');
     timeSliderEl.addEventListener('input', () => {
@@ -6826,7 +7070,7 @@
     // 10. INISIALISASI AWAL APLIKASI
     // ============================================================================
     renderDynamicLegend();
-    setTimelineMode('seasonal', 72);
+    setTimelineMode('seasonal', 25);
     loadAdminBoundaryGeoJSON();
     loadHysplitPm25GeoJSON();
     loadPeatlandGeoJSON();
