@@ -1,6 +1,6 @@
 # SDSS Pemodelan Bahaya & Dampak Asap — Provinsi Kalimantan Barat
 
-**Spatial Decision Support System (SDSS)** berbasis WebGIS untuk pemantauan kejadian kebakaran hutan dan lahan (karhutla), pemodelan dispersi polutan $\text{PM}_{2.5}$ (HYSPLIT), dinamika meteorologi angin & curah hujan, serta analisis risiko dan paparan terhadap penduduk maupun fasilitas vital di Provinsi Kalimantan Barat (periode kajian **1 Agustus – 31 Oktober 2026**, dengan slot *Forecast* **1 – 3 November 2026**).
+**Spatial Decision Support System (SDSS)** berbasis WebGIS untuk pemantauan kejadian kebakaran hutan dan lahan (karhutla), pemodelan dispersi polutan PM<sub>2.5</sub> (HYSPLIT), dinamika meteorologi angin & curah hujan, serta analisis risiko dan paparan terhadap penduduk maupun fasilitas vital di Provinsi Kalimantan Barat (periode kajian **1 Agustus – 31 Oktober 2026**, dengan slot *Forecast* **1 – 3 November 2026**).
 
 Dikembangkan oleh **Kelompok 5 — Mata Kuliah GD4103 Sistem Informasi Geografis (ITB)**.
 
@@ -11,7 +11,7 @@ Dikembangkan oleh **Kelompok 5 — Mata Kuliah GD4103 Sistem Informasi Geografis
 ## Fitur Utama
 
 1. **Integrasi Data Spasial & Meteorologi Multi-Sumber**
-   - **Sebaran $\text{PM}_{2.5}$ Harian (HYSPLIT):** Poligon konsentrasi $\text{PM}_{2.5}$ harian (`1 Agt – 31 Okt 2026`) yang diklasifikasikan berdasarkan kategori ISPU (`Baik`, `Sedang`, `Tidak Sehat`, `Sangat Tidak Sehat`, `Berbahaya`) lengkap dengan nilai rata-rata, maksimum, dan luas zona ($\text{km}^2$).
+   - **Sebaran PM<sub>2.5</sub> Harian (HYSPLIT):** Poligon konsentrasi PM<sub>2.5</sub> harian (`1 Agt – 31 Okt 2026`) yang diklasifikasikan berdasarkan kategori ISPU (`Baik`, `Sedang`, `Tidak Sehat`, `Sangat Tidak Sehat`, `Berbahaya`) lengkap dengan nilai rata-rata, maksimum, dan luas zona (`km²`).
    - **Medan Angin Reanalisis ERA5 (Darat + Laut + Buffer):** Grid `0,25°` (`106,0°–117,0° BT`, `-5,5°–4,5° LS`, `1 Agt – 3 Nov 2026`) dalam format terindeks (`ERA5_Wind_UV_Kalbar_Buffer_2026_Indexed.json`) dengan animasi *streamlines* kanvas, *outline* batas domain ERA5, serta telemetri arah dan kecepatan rata-rata khusus daratan Kalimantan Barat (`km/jam` & `m/s`).
    - **Curah Hujan Harian Gabungan (CHIRPS + ERA5-Land):** Data curah hujan harian `1 Agt – 30 Sep 2026` dari **UCSB CHIRPS Daily** (`0,05°`) yang dilanjutkan `1 Okt – 3 Nov 2026` menggunakan **ECMWF ERA5-Land** (`0,1°`), tersaji dalam format JSON terindeks ringan (`Curah_Hujan_Kalbar_2026_Indexed.json`) dengan agregasi otomatis per Kabupaten/Kota dan dukungan *fallback* CSV.
    - **Titik Api & FRP (VIIRS 375 m):** Gabungan deteksi sensor NOAA-20, NOAA-21, dan Suomi-NPP (`1 Agt – 30 Okt 2026`) yang tersaring otomatis mengikuti tanggal aktif pada *time-slider* (`acq_date`).
@@ -34,16 +34,16 @@ Dikembangkan oleh **Kelompok 5 — Mata Kuliah GD4103 Sistem Informasi Geografis
    - **Mode Episode Puncak (`26 Agt – 3 Sep`):** Fokus harian pada episode puncak kabut asap akhir Agustus – awal September 2026.
 
 5. **Kalkulator Paparan *On-The-Fly* & Top 5 Wilayah Terdampak (Turf.js)**
-   - Menghitung luas zona yang melampaui ambang batas bahaya $\text{PM}_{2.5}$ (default `55 µg/m³`), estimasi populasi terpapar berbasis irisan spasial kepadatan penduduk BPS per Kab/Kota, jumlah sekolah, faskes, dan bandara/helipad terdampak, grafik sebaran luas per kategori ISPU, serta peringkat otomatis **Top 5 Wilayah Terdampak**.
+   - Menghitung luas zona yang melampaui ambang batas bahaya PM<sub>2.5</sub> (default `55 µg/m³`), estimasi populasi terpapar berbasis irisan spasial kepadatan penduduk BPS per Kab/Kota, jumlah sekolah, faskes, dan bandara/helipad terdampak, grafik sebaran luas per kategori ISPU, serta peringkat otomatis **Top 5 Wilayah Terdampak**.
 
 6. **Indeks Risiko Bencana (BNPB / IPCC) & Skenario Mitigasi (*What-If*)**
-   - Menghitung skor risiko ternormalisasi (`0,00 – 1,00`) dari perkalian komponen **Bahaya ($H$)** (konsentrasi $\text{PM}_{2.5}$ & durasi paparan $> 55{,}4\text{ µg/m}^3$ sejak 1 Agustus) dengan **Kerentanan & Keterpaparan ($V\&E$)** (jumlah poligon gambut KHG, fasilitas kesehatan/pendidikan, dan kepadatan penduduk tertimbang).
+   - Menghitung skor risiko ternormalisasi (`0,00 – 1,00`) dari perkalian komponen **Bahaya (*H*)** (konsentrasi PM<sub>2.5</sub> & durasi paparan `> 55,4 µg/m³` sejak 1 Agustus) dengan **Kerentanan & Keterpaparan (*V&E*)** (jumlah poligon gambut KHG, fasilitas kesehatan/pendidikan, dan kepadatan penduduk tertimbang).
    - Simulasi *what-if* reduksi emisi hotspot (`0% – 80%`) serta *override* arah dan kecepatan angin manual.
 
 7. **Validasi Kuantitatif Model, Instrumen Aksi BPBD/Dinkes & Ekspor Laporan**
-   - **Validasi Kuantitatif Model:** Menghitung metrik $N$, Korelasi Pearson ($r$), $R^2$, *Bias* (ME), dan *RMSE* antara keluaran model HYSPLIT terhadap data pembanding MERRA-2, MODIS AOD, dan CAMS.
+   - **Validasi Kuantitatif Model:** Menghitung metrik *N*, Korelasi Pearson (*r*), R², *Bias* (ME), dan RMSE antara keluaran model HYSPLIT terhadap data pembanding MERRA-2, MODIS AOD, dan CAMS.
    - **Instrumen Aksi BPBD & Dinkes Dinamis:** Menyusun rekomendasi penanganan otomatis sesuai tingkat bahaya wilayah aktif disertai tombol **Salin Briefing Cepat** ke *clipboard*.
-   - **Panel Statistik, Ekspor CSV & Cetak Laporan A4 Portrait:** Menyajikan 3 grafik Chart.js (termasuk tren harian gabungan $\text{PM}_{2.5}$ Maks, Titik Api VIIRS, dan Curah Hujan), 3 tabel ringkasan, unduh **CSV** lengkap, serta cetak laporan **A4 Portrait** dengan *snapshot* peta & legenda aktif.
+   - **Panel Statistik, Ekspor CSV & Cetak Laporan A4 Portrait:** Menyajikan 3 grafik Chart.js (termasuk tren harian gabungan PM<sub>2.5</sub> Maks, Titik Api VIIRS, dan Curah Hujan), 3 tabel ringkasan, unduh **CSV** lengkap, serta cetak laporan **A4 Portrait** dengan *snapshot* peta & legenda aktif.
 
 ---
 
