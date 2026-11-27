@@ -1,0 +1,394 @@
+// ====================================================================
+// 1. BATAS WILAYAH + BUFFER
+// ====================================================================
+
+var bufferDeg = 2.0; // Perluasan area dalam derajat (~220 km per sisi)
+
+var minLon = 108.0 - bufferDeg; // 106.0
+var minLat = -3.5 - bufferDeg;  // -5.5
+var maxLon = 115.0 + bufferDeg; // 117.0
+var maxLat = 2.5 + bufferDeg;   // 4.5
+
+var kalbarAsli = ee.Geometry.Rectangle([108.0, -3.5, 115.0, 2.5]);
+var kalbarBox = ee.Geometry.Rectangle([minLon, minLat, maxLon, maxLat]);
+
+Map.centerObject(kalbarBox, 6);
+Map.addLayer(kalbarAsli, {color: 'red'}, 'Batas Kalbar Inti', false);
+
+// ====================================================================
+// 2. GRID 0.25 DERAJAT (MENGIKUTI AREA BUFFER)
+// ====================================================================
+
+var lons = ee.List.sequence(minLon, maxLon, 0.25);
+var lats = ee.List.sequence(minLat, maxLat, 0.25);
+
+var gridPoints = ee.FeatureCollection(
+  lons.map(function(lon) {
+    return lats.map(function(lat) {
+      return ee.Feature(
+        ee.Geometry.Point([lon, lat]),
+        {
+          lon: lon,
+          lat: lat
+        }
+      );
+    });
+  }).flatten()
+);
+
+Map.addLayer(
+  gridPoints,
+  {color: 'yellow'},
+  'Titik Grid 0.25 Derajat',
+  false
+);
+
+// ====================================================================
+// 3. ERA5 DAILY (DARAT + LAUT, AGREGASI DARI HOURLY)
+// ====================================================================
+
+var startDate = ee.Date('2026-08-01');
+var endDate = ee.Date('2026-11-04');
+var nDays = endDate.difference(startDate, 'day');
+
+var era5Hourly = ee.ImageCollection('ECMWF/ERA5/HOURLY')
+  .filterDate(startDate, endDate)
+  .select([
+    'u_component_of_wind_10m',
+    'v_component_of_wind_10m'
+  ]);
+
+var era5 = ee.ImageCollection.fromImages(
+  ee.List.sequence(0, nDays.subtract(1)).map(function(dayOffset) {
+    var d = startDate.advance(dayOffset, 'day');
+    var dayCol = era5Hourly.filterDate(d, d.advance(1, 'day'));
+    var daily = dayCol.mean();
+
+    return ee.Algorithms.If(
+      dayCol.size().gt(0),
+      daily.addBands(
+        daily.select('u_component_of_wind_10m')
+          .hypot(daily.select('v_component_of_wind_10m'))
+          .rename('wind_speed_ms')
+      ).set('system:time_start', d.millis()),
+      null
+    );
+  }, true)
+);
+
+print('Jumlah image', era5.size());
+
+print(
+  'Band image pertama',
+  ee.Image(era5.first()).bandNames()
+);
+
+// ====================================================================
+// RANGE WAKTU
+// ====================================================================
+
+var countDays = era5.size().getInfo();
+
+var maxMillis =
+  era5.aggregate_max('system:time_start')
+      .getInfo();
+
+var startMillis =
+  new Date('2026-08-01T00:00:00Z')
+      .getTime();
+
+var dayMs = 86400000;
+
+var totalSteps =
+  Math.max(
+    0,
+    Math.round(
+      (maxMillis - startMillis) / dayMs
+    )
+  );
+
+print('Jumlah hari tersedia', countDays);
+
+print(
+  'Tanggal terakhir',
+  ee.Date(maxMillis).format('YYYY-MM-dd')
+);
+
+// ====================================================================
+// FUNGSI VEKTOR ANGIN
+// ====================================================================
+
+function makeWindVectors(img, scaleDeg) {
+
+  var sampled = img
+    .select([
+      'u_component_of_wind_10m',
+      'v_component_of_wind_10m',
+      'wind_speed_ms'
+    ])
+    .reduceRegions({
+      collection: gridPoints,
+      reducer: ee.Reducer.first(),
+      scale: 25000
+    })
+    .filter(
+      ee.Filter.notNull([
+        'u_component_of_wind_10m',
+        'v_component_of_wind_10m',
+        'wind_speed_ms'
+      ])
+    );
+
+  return sampled.map(function(f) {
+
+    var lon = ee.Number(f.get('lon'));
+    var lat = ee.Number(f.get('lat'));
+
+    var u = ee.Number(
+      f.get('u_component_of_wind_10m')
+    );
+
+    var v = ee.Number(
+      f.get('v_component_of_wind_10m')
+    );
+
+    var spd = ee.Number(
+      f.get('wind_speed_ms')
+    );
+
+    var endLon =
+      lon.add(u.multiply(scaleDeg));
+
+    var endLat =
+      lat.add(v.multiply(scaleDeg));
+
+    return ee.Feature(
+      ee.Geometry.LineString([
+        [lon, lat],
+        [endLon, endLat]
+      ]),
+      {
+        speed_ms: spd,
+        speed_kmh: spd.multiply(3.6)
+      }
+    );
+
+  });
+
+}
+
+// ====================================================================
+// LAYER DINAMIS
+// ====================================================================
+
+var windRasterLayer = ui.Map.Layer(
+  null,
+  {
+    min: 0,
+    max: 8,
+    palette: [
+      '#e0f2fe',
+      '#38bdf8',
+      '#0284c7',
+      '#f59e0b',
+      '#dc2626'
+    ]
+  },
+  'Kecepatan Angin 10m (m/s)'
+);
+
+var windVectorLayer = ui.Map.Layer(
+  null,
+  {
+    color: '#0f172a',
+    width: 2
+  },
+  'Arah Aliran Angin'
+);
+
+Map.layers().add(windRasterLayer);
+Map.layers().add(windVectorLayer);
+
+// ====================================================================
+// PANEL
+// ====================================================================
+
+var panel = ui.Panel({
+  style: {
+    position: 'bottom-left',
+    padding: '10px',
+    width: '360px'
+  }
+});
+
+var dateLabel = ui.Label(
+  'Tanggal: -',
+  {
+    fontWeight: 'bold'
+  }
+);
+
+var statsLabel = ui.Label(
+  'Geser slider'
+);
+
+panel.add(dateLabel);
+
+// ====================================================================
+// UPDATE
+// ====================================================================
+
+function updateByDayOffset(offsetDays) {
+
+  var targetDate =
+    ee.Date(startMillis)
+      .advance(offsetDays, 'day');
+
+  var isoStr =
+    targetDate
+      .format('YYYY-MM-dd')
+      .getInfo();
+
+  dateLabel.setValue(
+    'Tanggal: ' + isoStr
+  );
+
+  var dayImg = ee.Image(
+    era5
+      .filterDate(
+        targetDate,
+        targetDate.advance(1, 'day')
+      )
+      .first()
+  );
+
+  var stats = dayImg
+    .select([
+      'u_component_of_wind_10m',
+      'v_component_of_wind_10m',
+      'wind_speed_ms'
+    ])
+    .reduceRegion({
+      reducer: ee.Reducer.mean(),
+      geometry: kalbarBox,
+      scale: 25000,
+      maxPixels: 1e9
+    })
+    .getInfo();
+
+  statsLabel.setValue(
+    'Kecepatan rata-rata = ' +
+    Number(
+      stats.wind_speed_ms || 0
+    ).toFixed(2) +
+    ' m/s'
+  );
+
+  windRasterLayer.setEeObject(
+    dayImg
+      .select('wind_speed_ms')
+      .clip(kalbarBox)
+  );
+
+  windVectorLayer.setEeObject(
+    makeWindVectors(
+      dayImg,
+      0.08
+    )
+  );
+
+}
+
+// ====================================================================
+// SLIDER
+// ====================================================================
+
+var slider = ui.Slider({
+  min: 0,
+  max: totalSteps,
+  value: Math.min(72, totalSteps),
+  step: 1,
+  onChange: updateByDayOffset
+});
+
+panel.add(slider);
+panel.add(statsLabel);
+
+Map.add(panel);
+
+// ====================================================================
+// START
+// ====================================================================
+
+updateByDayOffset(
+  slider.getValue()
+);
+
+// ====================================================================
+// EXPORT CSV UNTUK WEBGIS
+// ====================================================================
+
+var windSeries = era5.map(function(img) {
+
+  var dateStr =
+    img.date()
+      .format('YYYY-MM-dd');
+
+  return img
+    .reduceRegions({
+      collection: gridPoints,
+      reducer: ee.Reducer.first(),
+      scale: 25000
+    })
+    .filter(
+      ee.Filter.notNull([
+        'u_component_of_wind_10m',
+        'v_component_of_wind_10m',
+        'wind_speed_ms'
+      ])
+    )
+    .map(function(f) {
+
+      var u =
+        ee.Number(
+          f.get('u_component_of_wind_10m')
+        );
+
+      var v =
+        ee.Number(
+          f.get('v_component_of_wind_10m')
+        );
+
+      var speed =
+        ee.Number(
+          f.get('wind_speed_ms')
+        );
+
+      return ee.Feature(
+        f.geometry(),
+        {
+          lon: f.get('lon'),
+          lat: f.get('lat'),
+
+          tanggal: dateStr,
+
+          u_component_of_wind_10m: u,
+          v_component_of_wind_10m: v,
+
+          wind_speed_ms: speed,
+          wind_speed_kmh: speed.multiply(3.6)
+        }
+      );
+
+    });
+
+}).flatten();
+
+print('Contoh hasil CSV');
+print(windSeries.first());
+
+Export.table.toDrive({
+  collection: windSeries,
+  description: 'ERA5_Wind_UV_Kalbar_Buffer_2026_WebGIS',
+  fileFormat: 'CSV'
+});
