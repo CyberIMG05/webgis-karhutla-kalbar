@@ -2977,7 +2977,7 @@
             <li><strong>Titik Api &amp; FRP (VIIRS):</strong> Lokasi titik panas (hotspot) dari satelit NOAA-20, NOAA-21, dan Suomi-NPP. Lingkaran lebih besar dan merah menandakan energi panas pembakaran yang lebih kuat.</li>
             <li><strong>Sebaran PM2.5 (HYSPLIT):</strong> Area sebaran konsentrasi partikel asap halus PM2.5 hasil pemodelan atmosfer HYSPLIT yang dikelompokkan berdasarkan warna standar kualitas udara (ISPU).</li>
             <li><strong>Area Terbakar (MODIS Agt–Sep) &amp; Lahan Gambut (KHG):</strong> Menampilkan bekas lahan yang terbakar pada periode Agustus–September 2026 serta sebaran kawasan gambut yang rentan membara lama.</li>
-            <li><strong>Aliran Angin &amp; Lintasan Partikel (20–1.000 m):</strong> Garis animasi medan angin ERA5 (darat &amp; laut) dan estimasi jalur pergerakan asap pada tiga ketinggian atmosfer dari klaster titik api utama.</li>
+            <li><strong>Aliran Angin &amp; Lintasan Partikel (20–1.000 m):</strong> Garis animasi medan angin ERA5 (darat &amp; laut) serta trajektori partikel HYSPLIT mingguan dari 3 titik hotspot FRP tertinggi (dengan estimasi vektor angin pada mode manual/forecast).</li>
             <li><strong>Fasilitas &amp; Objek Vital:</strong> Lokasi fasilitas kesehatan (RS/Puskesmas), sekolah/kampus, serta bandara dan helipad yang dipantau tingkat paparannya.</li>
           </ul>
         </div>
@@ -3308,6 +3308,7 @@
       cams: [],
       merra: [],
       modis: [],
+      weeklyTrajectories: [],
       era5WindByDate: {},
       era5WindLoaded: false,
       hysplitUnhealthyByDate: {}
@@ -3955,7 +3956,7 @@
         activeLayerCount++;
         sections.push(`
           <div class="legend-section">
-            <div class="legend-section-title"><span>Lintasan Partikel HYSPLIT</span></div>
+            <div class="legend-section-title"><span>Lintasan Partikel HYSPLIT (Mingguan)</span></div>
             <div class="legend-grid">
               <div class="legend-item">
                 <div class="legend-name"><span class="legend-line" style="background:#ef4444;"></span><span>Permukaan</span></div>
@@ -4705,6 +4706,7 @@
       tagFeaturesWithDistricts(dataStore.cams, true);
       tagFeaturesWithDistricts(dataStore.merra, true);
       tagFeaturesWithDistricts(dataStore.modis, true);
+      tagFeaturesWithDistricts(dataStore.weeklyTrajectories, true);
       // Tag fasilitas hanya jika tidak memiliki atribut nama kab/kota bawaan
       const tagIfNoAdmProp = (arr) => {
         const subset = arr.filter(f => {
@@ -5940,6 +5942,80 @@
     function renderDynamicTrajectories(fromDeg, speedKmh, isManual, stepObj, timeIdx, districtFilter = 'ALL') {
       layerGroups.trajectory.clearLayers();
 
+      const activeIso = getActiveDateISO();
+      if (!isManual && !(stepObj && stepObj.isForecast) && dataStore.weeklyTrajectories.length > 0) {
+        const matched = dataStore.weeklyTrajectories.filter(f => {
+          const p = f.properties || {};
+          if (!p.valid_from || !p.valid_to) return false;
+          if (activeIso < p.valid_from || activeIso > p.valid_to) return false;
+          if (districtFilter !== 'ALL') {
+            return featureMatchesDistrict(f, districtFilter);
+          }
+          return true;
+        });
+
+        if (matched.length > 0) {
+          const seenOrigins = new Set();
+          matched.forEach(feat => {
+            const p = feat.properties || {};
+            const coords = (feat.geometry && feat.geometry.coordinates) || [];
+            if (coords.length < 2) return;
+            const lineColor = p.color || '#0284c7';
+            const altLabel = p.alt_label || p.name || '500 m';
+
+            L.geoJSON(feat, {
+              renderer: sharedVectorRenderer,
+              style: {
+                color: lineColor,
+                weight: 2.8,
+                opacity: 0.92
+              },
+              onEachFeature: (_, layer) => {
+                layer.bindPopup(() => `
+                  <div class="popup-header">Trajektori HYSPLIT Mingguan (${altLabel})</div>
+                  <div class="popup-line"><strong>Periode Mingguan:</strong> ${p.week_label || '-'} (Run: ${p.sim_date || '-'})</div>
+                  <div class="popup-line"><strong>Titik Asal:</strong> Klaster FRP Tertinggi (${Number(p.origin_lat || coords[0][1]).toFixed(3)}°, ${Number(p.origin_lon || coords[0][0]).toFixed(3)}°)</div>
+                  <div class="popup-line"><strong>Sumber Data:</strong> NOAA ARL HYSPLIT Model (<code>${p.source_file || '-'}</code>)</div>
+                `);
+              }
+            }).addTo(layerGroups.trajectory);
+
+            const startPt = coords[0];
+            const endPt = coords[coords.length - 1];
+            const originKey = `${startPt[0]}_${startPt[1]}`;
+            if (!seenOrigins.has(originKey)) {
+              seenOrigins.add(originKey);
+              L.circleMarker([startPt[1], startPt[0]], {
+                renderer: sharedVectorRenderer,
+                radius: 4.5,
+                fillColor: '#ffffff',
+                color: '#090d16',
+                weight: 1.8,
+                fillOpacity: 1
+              }).bindPopup(`
+                <div class="popup-header">Titik Awal Trajektori HYSPLIT</div>
+                <div class="popup-line"><strong>Periode:</strong> ${p.week_label || '-'}</div>
+                <div class="popup-line"><strong>Koordinat:</strong> ${startPt[1].toFixed(3)}°, ${startPt[0].toFixed(3)}°</div>
+              `).addTo(layerGroups.trajectory);
+            }
+
+            L.circleMarker([endPt[1], endPt[0]], {
+              renderer: sharedVectorRenderer,
+              radius: 3.8,
+              fillColor: lineColor,
+              color: '#090d16',
+              weight: 1.1,
+              fillOpacity: 0.95
+            }).bindPopup(`
+              <div class="popup-header">Titik Akhir Trajektori (${altLabel})</div>
+              <div class="popup-line"><strong>Periode:</strong> ${p.week_label || '-'}</div>
+              <div class="popup-line"><strong>Koordinat:</strong> ${endPt[1].toFixed(3)}°, ${endPt[0].toFixed(3)}°</div>
+            `).addTo(layerGroups.trajectory);
+          });
+          return;
+        }
+      }
+
       const toDeg = (fromDeg + 180) % 360;
       const rad = (toDeg - 90) * (Math.PI / 180);
       const mult = stepObj ? (stepObj.pm25Multiplier || 0.7) : 0.7;
@@ -6454,6 +6530,18 @@
           requestSimulationUpdate(false);
         })
         .catch(err => console.warn('Gagal memuat ERA5_Wind_UV_Kalbar_Buffer_2026_Indexed.json:', err));
+    }
+
+    function loadWeeklyTrajectoriesGeoJSON() {
+      fetch(`${BASE_PJBL_URL}/trajektori_hysplit_mingguan.geojson`)
+        .then(res => { if (!res.ok) throw new Error(res.status); return res.json(); })
+        .then(data => {
+          dataStore.weeklyTrajectories = sanitizeGeoJsonFeatures(data.features || []);
+          tagFeaturesWithDistricts(dataStore.weeklyTrajectories);
+          console.log(`Berhasil memuat ${dataStore.weeklyTrajectories.length} lintasan trajektori HYSPLIT mingguan.`);
+          requestSimulationUpdate(false);
+        })
+        .catch(err => console.warn('Gagal memuat trajektori_hysplit_mingguan.geojson (pakai fallback vektor):', err));
     }
 
     function loadCamsPm25GeoJSON() {
@@ -8160,6 +8248,7 @@
     loadRealHotspotsFromGitHub();
     loadSeparatedImpactLayers();
     loadEra5WindCsv();
+    loadWeeklyTrajectoriesGeoJSON();
     loadCamsPm25GeoJSON();
     syncComparisonWithMainSlider();
   </script>
