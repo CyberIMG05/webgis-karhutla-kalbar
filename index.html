@@ -76,12 +76,14 @@
       top: 14px;
       left: 14px;
       right: 14px;
-      height: 56px;
+      min-height: 56px;
+      height: auto;
       border-radius: 14px;
-      padding: 0 18px;
+      padding: 6px 12px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 10px;
       z-index: 1000;
       overflow: hidden;
       background:
@@ -107,7 +109,9 @@
     .brand {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
+      min-width: 0;
+      flex: 1 1 auto;
     }
 
     .brand-mark {
@@ -184,12 +188,17 @@
       100% { transform: scale(0.98, 1.02) rotate(-0.5deg); }
     }
 
+    .brand-text {
+      min-width: 0;
+    }
+
     .brand-text h1 {
       font-size: 14.5px;
       font-weight: 700;
       letter-spacing: -0.015em;
       color: #090d16;
-      line-height: 1.2;
+      line-height: 1.18;
+      white-space: normal;
     }
 
     .brand-text p {
@@ -197,24 +206,45 @@
       font-weight: 500;
       color: #1e293b;
       margin-top: 2px;
+      line-height: 1.25;
+      white-space: normal;
     }
 
     .top-telemetry {
       display: flex;
       align-items: center;
-      gap: 9px;
+      gap: 6px;
+      flex: 0 1 auto;
+      min-width: 0;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    @media (min-width: 1320px) {
+      .top-telemetry {
+        flex-shrink: 0;
+        overflow-x: visible;
+      }
+    }
+
+    .top-telemetry::-webkit-scrollbar {
+      display: none;
     }
 
     .telemetry-chip {
       background: rgba(15, 23, 42, 0.05);
       border: 1px solid rgba(15, 23, 42, 0.12);
-      padding: 5.5px 12px;
+      padding: 5.5px 9px;
       border-radius: 8px;
       font-size: 11.5px;
       color: #1e293b;
       display: flex;
       align-items: center;
-      gap: 7px;
+      gap: 6px;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .telemetry-chip strong {
@@ -223,18 +253,20 @@
     }
 
     .alert-pill {
-      padding: 6px 12px;
+      padding: 6px 9px;
       border-radius: 8px;
       font-family: 'IBM Plex Mono', monospace;
       font-size: 11px;
       font-weight: 700;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       background: rgba(220, 38, 38, 0.11);
       border: 1px solid rgba(220, 38, 38, 0.38);
       color: #991b1b;
       transition: all 0.25s ease;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .pulse-dot {
@@ -258,8 +290,10 @@
       color: #0f172a;
       background: rgba(15, 23, 42, 0.06);
       border: 1px solid rgba(15, 23, 42, 0.14);
-      padding: 6px 10px;
+      padding: 6px 8px;
       border-radius: 8px;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .compass-ring {
@@ -284,7 +318,7 @@
       background: rgba(15, 23, 42, 0.055);
       border: 1px solid rgba(15, 23, 42, 0.14);
       color: #090d16;
-      padding: 6px 10px;
+      padding: 6px 9px;
       border-radius: 8px;
       font-family: 'Google Sans', sans-serif;
       font-size: 11px;
@@ -292,8 +326,10 @@
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       transition: all 0.2s;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .btn-zen:hover {
@@ -315,7 +351,7 @@
     /* FLOATING LEFT DOCK */
     .dock-left {
       position: absolute;
-      top: 80px;
+      top: 90px;
       left: 14px;
       bottom: 44px;
       width: 282px;
@@ -331,7 +367,7 @@
     /* FLOATING RIGHT DOCK */
     .dock-right {
       position: absolute;
-      top: 80px;
+      top: 90px;
       right: 14px;
       bottom: 14px;
       width: 326px;
@@ -679,7 +715,7 @@
     /* FLOATING CENTER-TOP SIMULATION PILL */
     .center-sim-pill {
       position: absolute;
-      top: 80px;
+      top: 90px;
       left: 50%;
       transform: translateX(-50%);
       z-index: 850;
@@ -1298,13 +1334,17 @@
       .welcome-actions button {
         flex: 1 1 140px;
       }
+      .top-telemetry {
+        flex-wrap: wrap !important;
+        overflow-x: visible !important;
+      }
     }
 
     .btn-header-pill {
       background: rgba(2, 132, 199, 0.10);
       border: 1px solid rgba(2, 132, 199, 0.32);
       color: #0369a1;
-      padding: 6px 11px;
+      padding: 6px 9px;
       border-radius: 8px;
       font-family: 'Google Sans', sans-serif;
       font-size: 11px;
@@ -1312,8 +1352,10 @@
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       transition: all 0.2s;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .btn-header-pill:hover {
@@ -2351,7 +2393,7 @@
         </svg>
       </div>
       <div class="brand-text">
-        <h1>SDSS Pemodelan Bahaya &amp; Dampak Asap Karhutla</h1>
+        <h1>SDSS Pemodelan Bahaya &amp; Dampak Asap</h1>
         <p>Dispersi PM2.5 HYSPLIT, Medan Angin ERA5 &amp; Analisis Paparan &bull; Kalimantan Barat (Agt–Nov 2026)</p>
       </div>
     </div>
@@ -2365,11 +2407,11 @@
         </span>
         <span id="windTextContent">Angin: <strong>Memuat data ERA5...</strong></span>
       </div>
-      <div class="telemetry-chip" id="rainInfoBanner" title="Curah hujan harian rata-rata wilayah aktif (UCSB CHIRPS 0,05°)">
+      <div class="telemetry-chip" id="rainInfoBanner" title="Curah hujan harian rata-rata wilayah aktif (UCSB CHIRPS Agt–Sep &amp; ERA5-Land Okt–3 Nov)">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
         </svg>
-        <span id="rainTextContent">Hujan CHIRPS: <strong>Memuat...</strong></span>
+        <span id="rainTextContent">Hujan: <strong>Memuat...</strong></span>
       </div>
       <div class="alert-pill" id="globalStatusBadge">
         <span class="pulse-dot"></span>
@@ -2828,8 +2870,8 @@
             </div>
           </div>
           <div class="stats-chart-card full-width">
-            <div class="stats-chart-title">Tren Harian PM2.5 Maksimum (HYSPLIT), Titik Api VIIRS &amp; Curah Hujan CHIRPS (1 Agt – 3 Nov 2026)</div>
-            <div class="stats-chart-caption" id="chartTrendCaption">Dihitung langsung dari HYSPLIT (µg/m³), NASA FIRMS VIIRS (titik) &amp; UCSB CHIRPS (mm/hari) sesuai filter wilayah aktif</div>
+            <div class="stats-chart-title">Tren Harian PM2.5 Maksimum (HYSPLIT), Titik Api VIIRS &amp; Curah Hujan (CHIRPS / ERA5-Land) (1 Agt – 3 Nov 2026)</div>
+            <div class="stats-chart-caption" id="chartTrendCaption">Dihitung langsung dari HYSPLIT (µg/m³), NASA FIRMS VIIRS (titik) &amp; Curah Hujan (UCSB CHIRPS Agt–Sep; ERA5-Land Okt–3 Nov) sesuai filter wilayah aktif</div>
             <div class="stats-canvas-wrap">
               <canvas id="statsTrendChart"></canvas>
             </div>
@@ -6593,6 +6635,7 @@
       if (!dataStore.rainLoaded) return;
       const dateKeys = Object.keys(dataStore.rainByDate);
       if (!dateKeys.length) return;
+      if (dataStore.rainByDate[dateKeys[0]].isPreIndexed) return;
 
       const simpAdmins = getSimplifiedAdminFeatures();
       const hasAdmin = simpAdmins.length > 0;
@@ -6668,7 +6711,7 @@
     function getDailyRainSummary(dateIso, districtFilter = 'ALL') {
       const entry = dataStore.rainByDate[dateIso];
       if (!dataStore.rainLoaded || !entry) {
-        return { available: false, meanMm: null, maxMm: null, ...classifyRainfallMm(null) };
+        return { available: false, meanMm: null, maxMm: null, source: '-', ...classifyRainfallMm(null) };
       }
       let meanMm = entry.meanAll;
       let maxMm = entry.maxAll;
@@ -6680,59 +6723,102 @@
         available: true,
         meanMm,
         maxMm,
+        source: entry.source || 'CHIRPS',
         ...classifyRainfallMm(meanMm)
       };
     }
 
     function updateRainBanner(dateIso, districtFilter = 'ALL') {
       const el = document.getElementById('rainTextContent');
+      const banner = document.getElementById('rainInfoBanner');
       if (!el) return;
       if (!dataStore.rainLoaded) {
-        el.innerHTML = 'Hujan CHIRPS: <strong>Memuat...</strong>';
+        el.innerHTML = 'Hujan: <strong>Memuat...</strong>';
         return;
       }
       const r = getDailyRainSummary(dateIso, districtFilter);
       if (!r.available) {
-        el.innerHTML = 'Hujan CHIRPS: <strong>Tidak Tersedia</strong>';
+        el.innerHTML = 'Hujan: <strong>Tidak Tersedia</strong>';
         return;
       }
-      el.innerHTML = `Hujan CHIRPS: <strong>${r.meanMm.toFixed(1)} mm/hr</strong> (${r.shortCat})`;
+      el.innerHTML = `Hujan (${r.source}): <strong>${r.meanMm.toFixed(1)} mm/hr</strong> (${r.shortCat})`;
+      if (banner) {
+        banner.title = `Curah hujan harian rata-rata (${r.source}) wilayah ${districtFilter === 'ALL' ? 'Kalimantan Barat' : districtFilter}: ${r.meanMm.toFixed(2)} mm/hari (${r.category})`;
+      }
     }
 
     function loadChirpsRainCsv() {
-      fetch(`${BASE_PJBL_URL}/CHIRPS_Curah_Hujan_Kalbar_2026_WebGIS.csv`)
-        .then(res => { if (!res.ok) throw new Error(res.status); return res.text(); })
-        .then(csvText => {
-          const lines = csvText.split(/\r?\n/).filter(l => l.trim().length > 0);
-          if (lines.length < 2) return;
+      const applyCsvFallback = () => {
+        fetch(`${BASE_PJBL_URL}/CHIRPS_Curah_Hujan_Kalbar_2026_WebGIS.csv`)
+          .then(res => { if (!res.ok) throw new Error(res.status); return res.text(); })
+          .then(csvText => {
+            const lines = csvText.split(/\r?\n/).filter(l => l.trim().length > 0);
+            if (lines.length < 2) return;
 
-          const headers = parseCsvLineRfc4180(lines[0]).map(h => h.trim().replace(/^\uFEFF/, '').toLowerCase());
-          const idxDate = headers.findIndex(h => h === 'tanggal' || h === 'date');
-          const idxLat = headers.findIndex(h => h === 'lat' || h === 'latitude');
-          const idxLon = headers.findIndex(h => h === 'lon' || h === 'lng' || h === 'longitude');
-          const idxRain = headers.findIndex(h => h.includes('rain') || h.includes('precip') || h === 'mean');
-          if (idxDate === -1 || idxLat === -1 || idxLon === -1 || idxRain === -1) return;
+            const headers = parseCsvLineRfc4180(lines[0]).map(h => h.trim().replace(/^\uFEFF/, '').toLowerCase());
+            const idxDate = headers.findIndex(h => h === 'tanggal' || h === 'date');
+            const idxLat = headers.findIndex(h => h === 'lat' || h === 'latitude');
+            const idxLon = headers.findIndex(h => h === 'lon' || h === 'lng' || h === 'longitude');
+            const idxRain = headers.findIndex(h => h.includes('rain') || h.includes('precip') || h === 'mean');
+            const idxSource = headers.findIndex(h => h === 'sumber' || h === 'source');
+            if (idxDate === -1 || idxLat === -1 || idxLon === -1 || idxRain === -1) return;
 
+            const byDate = {};
+            for (let i = 1; i < lines.length; i++) {
+              const cols = parseCsvLineRfc4180(lines[i]);
+              if (cols.length <= Math.max(idxDate, idxLat, idxLon, idxRain)) continue;
+              const dIso = normalizeDateKey(cols[idxDate]);
+              const lat = parseFloat(cols[idxLat]);
+              const lon = parseFloat(cols[idxLon]);
+              const rainMm = parseFloat(String(cols[idxRain]).replace(',', '.'));
+              const src = idxSource !== -1 && cols[idxSource] ? cols[idxSource].trim() : 'CHIRPS';
+              if (!dIso || isNaN(lat) || isNaN(lon) || isNaN(rainMm)) continue;
+              if (!byDate[dIso]) byDate[dIso] = { points: [], meanAll: 0, maxAll: 0, source: src, byKab: {} };
+              byDate[dIso].points.push({ lat, lon, rainMm });
+            }
+
+            dataStore.rainByDate = byDate;
+            dataStore.rainLoaded = Object.keys(byDate).length > 0;
+            recomputeChirpsMeanRain();
+            console.log(`Berhasil memuat curah hujan harian (CSV fallback) untuk ${Object.keys(byDate).length} hari.`);
+            requestSimulationUpdate(false);
+          })
+          .catch(err => console.warn('Gagal memuat curah hujan CSV:', err));
+      };
+
+      fetch(`${BASE_PJBL_URL}/Curah_Hujan_Kalbar_2026_Indexed.json`)
+        .then(res => { if (!res.ok) throw new Error(res.status); return res.json(); })
+        .then(payload => {
+          if (!payload || !payload.dates) throw new Error('Format JSON curah hujan tidak valid');
           const byDate = {};
-          for (let i = 1; i < lines.length; i++) {
-            const cols = parseCsvLineRfc4180(lines[i]);
-            if (cols.length <= Math.max(idxDate, idxLat, idxLon, idxRain)) continue;
-            const dIso = normalizeDateKey(cols[idxDate]);
-            const lat = parseFloat(cols[idxLat]);
-            const lon = parseFloat(cols[idxLon]);
-            const rainMm = parseFloat(String(cols[idxRain]).replace(',', '.'));
-            if (!dIso || isNaN(lat) || isNaN(lon) || isNaN(rainMm)) continue;
-            if (!byDate[dIso]) byDate[dIso] = { points: [], meanAll: 0, maxAll: 0, byKab: {} };
-            byDate[dIso].points.push({ lat, lon, rainMm });
-          }
-
+          Object.keys(payload.dates).forEach(rawDate => {
+            const dIso = normalizeDateKey(rawDate);
+            const item = payload.dates[rawDate];
+            if (!dIso || !item) return;
+            const byKab = {};
+            const kObj = item.k || {};
+            Object.keys(kObj).forEach(kab => {
+              const arr = kObj[kab];
+              if (Array.isArray(arr) && arr.length >= 2) {
+                byKab[kab] = { mean: Number(arr[0]), max: Number(arr[1]), count: Number(arr[2] || 1) };
+              }
+            });
+            byDate[dIso] = {
+              isPreIndexed: true,
+              source: item.s || 'CHIRPS',
+              meanAll: Number(item.m || 0),
+              maxAll: Number(item.x || 0),
+              byKab
+            };
+          });
           dataStore.rainByDate = byDate;
           dataStore.rainLoaded = Object.keys(byDate).length > 0;
-          recomputeChirpsMeanRain();
-          console.log(`Berhasil memuat curah hujan harian CHIRPS untuk ${Object.keys(byDate).length} hari.`);
+          console.log(`Berhasil memuat curah hujan terindeks (CHIRPS + ERA5-Land) untuk ${Object.keys(byDate).length} hari.`);
           requestSimulationUpdate(false);
         })
-        .catch(err => console.warn('Gagal memuat CHIRPS_Curah_Hujan_Kalbar_2026_WebGIS.csv:', err));
+        .catch(() => {
+          applyCsvFallback();
+        });
     }
 
     function loadWeeklyTrajectoriesGeoJSON() {
@@ -7375,10 +7461,10 @@
           <td>Prasarana transportasi udara di zona PM2.5 &ge; ${st.threshold} µg/m³ (<code>layer_dampak/airport</code>)</td>
         </tr>
         <tr>
-          <td>Curah Hujan Harian Wilayah (CHIRPS 0,05&deg;)</td>
+          <td>Curah Hujan Harian Wilayah (${st.rainfall && st.rainfall.available ? st.rainfall.source : 'CHIRPS / ERA5-Land'})</td>
           <td class="mono-cell">${st.rainfall && st.rainfall.available ? `${st.rainfall.meanMm.toFixed(2)} (Maks: ${st.rainfall.maxMm.toFixed(2)})` : 'Tidak tersedia'}</td>
           <td>mm/hari (${st.rainfall ? st.rainfall.category : '-'})</td>
-          <td>Rata-rata wilayah aktif; hujan sedang–lebat membantu pencucian asap (<em>wet deposition</em>) &amp; menekan titik api</td>
+          <td>Rata-rata wilayah aktif (CHIRPS Agt–Sep; ERA5-Land Okt–3 Nov); hujan sedang–lebat membantu pencucian asap (<em>wet deposition</em>) &amp; menekan titik api</td>
         </tr>
       `;
 
@@ -7558,7 +7644,7 @@
               },
               {
                 type: 'bar',
-                label: 'Curah Hujan CHIRPS (mm/hari)',
+                label: 'Curah Hujan (CHIRPS / ERA5-Land, mm/hr)',
                 data: st.dailyTrend.rainMmSeries || [],
                 backgroundColor: 'rgba(14, 165, 233, 0.34)',
                 borderColor: 'rgba(2, 132, 199, 0.55)',
@@ -7681,15 +7767,16 @@
           Pembanding_MERRA2_PM25_Rata_ug_m3: merraMeanStr,
           Pembanding_MODIS_AOD_550nm_Rata: modisMeanStr,
           Pembanding_CAMS_PM25_Rata_ug_m3: camsMeanStr,
-          Curah_Hujan_CHIRPS_mm_hari: (st.rainfall && st.rainfall.available) ? st.rainfall.meanMm.toFixed(2) : 'Tidak tersedia',
-          Kategori_Hujan_CHIRPS: st.rainfall ? st.rainfall.category : 'Tidak tersedia',
+          Curah_Hujan_mm_hari: (st.rainfall && st.rainfall.available) ? st.rainfall.meanMm.toFixed(2) : 'Tidak tersedia',
+          Kategori_Hujan: st.rainfall ? st.rainfall.category : 'Tidak tersedia',
+          Sumber_Curah_Hujan: (st.rainfall && st.rainfall.available) ? st.rainfall.source : 'Tidak tersedia',
           Validasi_MERRA2_r: (st.validation && st.validation.merra.r !== null) ? st.validation.merra.r.toFixed(3) : 'N/A',
           Validasi_MERRA2_Bias_ug_m3: (st.validation && st.validation.merra.bias !== null) ? st.validation.merra.bias.toFixed(2) : 'N/A',
           Validasi_MERRA2_RMSE_ug_m3: (st.validation && st.validation.merra.rmse !== null) ? st.validation.merra.rmse.toFixed(2) : 'N/A',
           Validasi_MODIS_AOD_r: (st.validation && st.validation.modis.r !== null) ? st.validation.modis.r.toFixed(3) : 'N/A',
           Validasi_CAMS_r: (st.validation && st.validation.cams.r !== null) ? st.validation.cams.r.toFixed(3) : 'N/A',
           Validasi_CAMS_RMSE_ug_m3: (st.validation && st.validation.cams.rmse !== null) ? st.validation.cams.rmse.toFixed(2) : 'N/A',
-          Sumber_Data: 'HYSPLIT; ERA5 Wind (Darat & Laut); UCSB CHIRPS Daily; BPS Kalbar; NASA FIRMS VIIRS 375m; KHG Gambut; MODIS MCD64A1; MERRA-2; MODIS AOD; CAMS'
+          Sumber_Data: 'HYSPLIT; ERA5 Wind (Darat & Laut); UCSB CHIRPS Daily (Agt-Sep) & ERA5-Land (Okt-Nov); BPS Kalbar; NASA FIRMS VIIRS 375m; KHG Gambut; MODIS MCD64A1; MERRA-2; MODIS AOD; CAMS'
         };
       });
 
@@ -7899,7 +7986,7 @@
                 },
                 {
                   type: 'bar',
-                  label: 'Curah Hujan CHIRPS (mm/hari)',
+                  label: 'Curah Hujan (CHIRPS / ERA5-Land, mm/hr)',
                   data: st.dailyTrend.rainMmSeries || [],
                   backgroundColor: 'rgba(14, 165, 233, 0.34)',
                   borderColor: 'rgba(2, 132, 199, 0.55)',
@@ -8099,7 +8186,7 @@
               </div>
             </div>
             <div class="rep-chart-box" style="margin-top: 10px;">
-              <div class="rc-cap">Tren Harian PM2.5 Maksimum (HYSPLIT), Titik Api VIIRS &amp; Curah Hujan CHIRPS</div>
+              <div class="rc-cap">Tren Harian PM2.5 Maksimum (HYSPLIT), Titik Api VIIRS &amp; Curah Hujan (CHIRPS / ERA5-Land)</div>
               ${trendChartImg ? `<img src="${trendChartImg}" alt="Grafik Tren Harian PM2.5 Maksimum dan Titik Api VIIRS" style="max-height: 195px;" />` : '<div>Grafik tidak tersedia</div>'}
             </div>
           </div>
@@ -8154,10 +8241,10 @@
                 <td>Grid Angin ECMWF ERA5 (Darat &amp; Laut) &amp; Standar BNPB / IPCC</td>
               </tr>
               <tr>
-                <td>Curah Hujan Harian (CHIRPS)</td>
+                <td>Curah Hujan Harian (${st.rainfall && st.rainfall.available ? st.rainfall.source : 'CHIRPS / ERA5-Land'})</td>
                 <td>Rata-rata &amp; Maksimum Wilayah (${st.targetDate})</td>
                 <td>${st.rainfall && st.rainfall.available ? `${st.rainfall.meanMm.toFixed(2)} mm/hari (${st.rainfall.category} • Maks: ${st.rainfall.maxMm.toFixed(2)} mm/hari)` : 'Tidak tersedia'}</td>
-                <td>UCSB CHIRPS Daily 0,05&deg; (Pencucian basah asap &amp; penekan titik api)</td>
+                <td>UCSB CHIRPS Daily 0,05&deg; (Agt–Sep) &amp; ECMWF ERA5-Land (Okt–3 Nov)</td>
               </tr>
             </tbody>
           </table>
