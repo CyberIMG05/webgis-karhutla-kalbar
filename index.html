@@ -710,6 +710,26 @@
       border-color: var(--accent);
     }
 
+    .btn-step-day {
+      background: rgba(15, 23, 42, 0.07);
+      color: #090d16;
+      border: 1px solid rgba(15, 23, 42, 0.16);
+      border-radius: 6px;
+      padding: 3.5px 8px;
+      font-family: 'Google Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-step-day:hover {
+      background: rgba(2, 132, 199, 0.14);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
     .mode-pills {
       display: inline-flex;
       background: rgba(15, 23, 42, 0.07);
@@ -2123,7 +2143,7 @@
             <line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/>
           </svg>
         </span>
-        <span id="windTextContent">Angin: <strong>Memuat data ERA5-Land...</strong></span>
+        <span id="windTextContent">Angin: <strong>Memuat data ERA5...</strong></span>
       </div>
       <div class="alert-pill" id="globalStatusBadge">
         <span class="pulse-dot"></span>
@@ -2355,9 +2375,11 @@
   <div class="timeline-dock glass-panel">
     <div class="timeline-top">
       <div class="timeline-controls">
+        <button type="button" class="btn-step-day" id="prevDayBtn" title="Mundur 1 Hari" aria-label="Mundur 1 Hari">&#8249;</button>
         <button class="btn-play" id="playPauseBtn">▶ Play</button>
+        <button type="button" class="btn-step-day" id="nextDayBtn" title="Maju 1 Hari" aria-label="Maju 1 Hari">&#8250;</button>
         <div class="mode-pills">
-          <button type="button" class="mode-pill-btn active" id="btnModeSeasonal">Harian (1 Agt – 31 Okt)</button>
+          <button type="button" class="mode-pill-btn active" id="btnModeSeasonal">Harian (1 Agt – 3 Nov)</button>
           <button type="button" class="mode-pill-btn" id="btnModeEpisode">Episode Puncak (26 Agt – 3 Sep)</button>
         </div>
       </div>
@@ -2719,7 +2741,7 @@
           <h3>1. Fungsi Kontrol Utama</h3>
           <ul>
             <li><strong>Wilayah &amp; Basemap (Panel Kiri Atas):</strong> Pilih <em>Seluruh Kalimantan Barat</em> atau salah satu dari 14 Kabupaten/Kota untuk memfokuskan tampilan peta serta menyaring seluruh angka statistik. Anda juga dapat mengganti peta dasar (Citra Satelit, Peta Terang, Peta Jalan, atau Peta Gelap). Area di luar Provinsi Kalimantan Barat digelapkan secara halus agar fokus tetap tertuju pada wilayah kajian.</li>
-            <li><strong>Penggeser Waktu / Time-Slider (Panel Bawah):</strong> Geser tanggal untuk melihat perubahan sebaran asap harian dari <strong>1 Agustus – 31 Oktober 2026</strong> beserta proyeksi <strong>1 – 3 November 2026 (Forecast)</strong>, atau beralih ke mode <strong>Episode Puncak (72 Jam)</strong> untuk mengamati dinamika puncak 11–14 Oktober 2026. Tekan tombol <strong>Play</strong> untuk memutar animasi otomatis.</li>
+            <li><strong>Penggeser Waktu / Time-Slider (Panel Bawah):</strong> Geser tanggal untuk melihat perubahan sebaran asap harian dari <strong>1 Agustus – 31 Oktober 2026</strong> beserta proyeksi <strong>1 – 3 November 2026 (Forecast)</strong>, atau beralih ke mode <strong>Episode Puncak (26 Agt – 3 Sep)</strong> untuk mengamati periode puncak 26 Agustus – 3 September 2026. Tekan tombol <strong>Play</strong> untuk memutar animasi otomatis.</li>
             <li><strong>Fokus Peta (Header Kanan Atas):</strong> Menyembunyikan panel kiri dan kanan sementara agar area peta terlihat penuh saat presentasi.</li>
           </ul>
         </div>
@@ -2730,7 +2752,7 @@
             <li><strong>Titik Api &amp; FRP (VIIRS):</strong> Lokasi titik panas (hotspot) dari satelit NOAA-20, NOAA-21, dan Suomi-NPP. Lingkaran lebih besar dan merah menandakan energi panas pembakaran yang lebih kuat.</li>
             <li><strong>Sebaran PM2.5 (HYSPLIT):</strong> Area sebaran konsentrasi partikel asap halus PM2.5 hasil pemodelan atmosfer HYSPLIT yang dikelompokkan berdasarkan warna standar kualitas udara (ISPU).</li>
             <li><strong>Area Terbakar (MODIS) &amp; Lahan Gambut (KHG):</strong> Menampilkan bekas lahan yang terbakar selama periode kajian serta sebaran kawasan gambut yang rentan membara lama.</li>
-            <li><strong>Aliran Angin &amp; Lintasan Partikel (20–1.000 m):</strong> Garis animasi medan angin ERA5-Land dan estimasi jalur pergerakan asap pada tiga ketinggian atmosfer dari klaster titik api utama.</li>
+            <li><strong>Aliran Angin &amp; Lintasan Partikel (20–1.000 m):</strong> Garis animasi medan angin ERA5 (darat &amp; laut) dan estimasi jalur pergerakan asap pada tiga ketinggian atmosfer dari klaster titik api utama.</li>
             <li><strong>Fasilitas &amp; Objek Vital:</strong> Lokasi fasilitas kesehatan (RS/Puskesmas), sekolah/kampus, serta bandara dan helipad yang dipantau tingkat paparannya.</li>
           </ul>
         </div>
@@ -2753,10 +2775,10 @@
         </div>
 
         <div class="guide-section">
-          <h3>5. Cara Mengunduh CSV &amp; Mencetak Laporan Landscape</h3>
+          <h3>5. Cara Mengunduh CSV &amp; Mencetak Laporan (A4 Portrait)</h3>
           <ul>
             <li><strong>Unduh CSV:</strong> Klik tombol <strong>Unduh CSV</strong> (di panel kanan bawah atau di dalam jendela Statistik) untuk mengunduh tabel data numerik lengkap beserta satuan ke dalam berkas yang dapat dibuka di Microsoft Excel atau Google Sheets.</li>
-            <li><strong>Cetak Laporan (Orientasi Landscape):</strong> Klik tombol <strong>Cetak Laporan</strong> untuk menyusun dokumen laporan terstruktur berorientasi mendatar (<em>landscape</em>) berisi ringkasan wilayah, jumlah populasi terdampak, tabel data, grafik statistik, dan sumber data. Pada dialog cetak browser, pilih <em>Save as PDF</em> / <em>Simpan sebagai PDF</em> untuk menyimpannya.</li>
+            <li><strong>Cetak Laporan (Orientasi Portrait):</strong> Klik tombol <strong>Cetak Laporan</strong> untuk menyusun dokumen laporan terstruktur berorientasi tegak (<em>A4 portrait</em>) berisi ringkasan kondisi, jumlah populasi terdampak, tabel data, grafik statistik, dan sumber data. Pada dialog cetak browser, pilih <em>Save as PDF</em> / <em>Simpan sebagai PDF</em> untuk menyimpannya.</li>
           </ul>
         </div>
 
@@ -2988,7 +3010,7 @@
           banner: isForecastDay
             ? `HYSPLIT Forecast | ${dayStr} (${phaseTag})`
             : `HYSPLIT Daily Reanalysis | ${dayStr} (${phaseTag})`,
-          wind: "Memuat ERA5-Land...",
+          wind: "Memuat ERA5...",
           windFromDeg: 140,
           windSpeedKmh: 12,
           pm25Multiplier: 0.7
@@ -3164,6 +3186,30 @@
         this._fieldU = null;
         this._fieldV = null;
         this._fieldInt = null;
+        this._era5Bounds = [[-5.5, 106.0], [4.5, 117.0]];
+        this._era5BoundsRect = null;
+      },
+      _syncEra5BoundsOutline: function () {
+        if (!this._map || !this._era5Bounds) return;
+        if (this._era5BoundsRect) {
+          this._era5BoundsRect.setBounds(this._era5Bounds);
+          if (!this._map.hasLayer(this._era5BoundsRect)) {
+            this._era5BoundsRect.addTo(this._map);
+          }
+        } else {
+          this._era5BoundsRect = L.rectangle(this._era5Bounds, {
+            color: '#ffffff',
+            weight: 1.25,
+            opacity: 0.72,
+            dashArray: '5, 4',
+            fill: false,
+            interactive: false
+          }).addTo(this._map);
+        }
+      },
+      setEra5Bounds: function (minLat, minLon, maxLat, maxLon) {
+        this._era5Bounds = [[minLat, minLon], [maxLat, maxLon]];
+        this._syncEra5BoundsOutline();
       },
       onAdd: function (map) {
         this._map = map;
@@ -3178,6 +3224,7 @@
         pane.appendChild(this._canvas);
         this._ctx = this._canvas.getContext('2d');
 
+        this._syncEra5BoundsOutline();
         this._reset();
         this._initParticles();
         this._startAnimation();
@@ -3187,6 +3234,9 @@
       },
       onRemove: function (map) {
         this._stopAnimation();
+        if (this._era5BoundsRect && map.hasLayer(this._era5BoundsRect)) {
+          map.removeLayer(this._era5BoundsRect);
+        }
         if (this._canvas && this._canvas.parentNode) {
           this._canvas.parentNode.removeChild(this._canvas);
         }
@@ -3403,9 +3453,8 @@
           ctx.lineJoin = 'round';
 
           const isLight = this._isLightBasemap;
-          const lightStrokePrefix = 'rgba(3, 105, 161, ';
-          const darkHiPrefix = 'rgba(224, 242, 254, ';
-          const darkLoPrefix = 'rgba(186, 230, 253, ';
+          ctx.lineWidth = 1.45;
+          const buckets = [[], [], [], []];
 
           for (let i = 0; i < this._particles.length; i++) {
             const p = this._particles[i];
@@ -3415,19 +3464,8 @@
 
             const progress = p.age / p.maxAge;
             const envelope = Math.sin(progress * Math.PI);
-            const alpha = envelope * (isLight ? 0.68 : 0.58);
-
-            ctx.lineWidth = 1.2 + envelope * 0.45;
-            if (isLight) {
-              ctx.strokeStyle = lightStrokePrefix + alpha.toFixed(2) + ')';
-            } else {
-              ctx.strokeStyle = (vel.intensity > 1.0 ? darkHiPrefix : darkLoPrefix) + (vel.intensity > 1.0 ? alpha : alpha * 0.88).toFixed(2) + ')';
-            }
-
-            ctx.beginPath();
-            ctx.moveTo(p.x, p.y);
-            ctx.lineTo(nx, ny);
-            ctx.stroke();
+            let bIdx = Math.min(3, Math.max(0, Math.floor(envelope * 4)));
+            buckets[bIdx].push(p.x, p.y, nx, ny);
 
             p.x = nx;
             p.y = ny;
@@ -3436,6 +3474,20 @@
             if (p.age >= p.maxAge || p.x < -10 || p.x > w + 10 || p.y < -10 || p.y > h + 10) {
               this._particles[i] = this._spawnParticle(w, h, false);
             }
+          }
+
+          const bucketAlphas = isLight ? [0.18, 0.36, 0.54, 0.70] : [0.15, 0.30, 0.45, 0.60];
+          const rgbPrefix = isLight ? 'rgba(3, 105, 161, ' : 'rgba(224, 242, 254, ';
+          for (let b = 0; b < 4; b++) {
+            const coords = buckets[b];
+            if (!coords.length) continue;
+            ctx.strokeStyle = rgbPrefix + bucketAlphas[b] + ')';
+            ctx.beginPath();
+            for (let k = 0; k < coords.length; k += 4) {
+              ctx.moveTo(coords[k], coords[k + 1]);
+              ctx.lineTo(coords[k + 2], coords[k + 3]);
+            }
+            ctx.stroke();
           }
 
           this._animId = requestAnimationFrame(animate);
@@ -3920,10 +3972,23 @@
       }
     }
 
-    // C. Render Area Terbakar MODIS MCD64A1 (Tersaring Kab/Kota)
+    const _dirtyVectorLayers = {
+      burnedArea: false,
+      peat: false,
+      health: false,
+      education: false,
+      airport: false
+    };
+
+    // C. Render Area Terbakar MODIS MCD64A1 (Lazy jika layer tidak aktif)
     function renderFilteredBurnedArea() {
       layerGroups.burnedArea.clearLayers();
       if (!dataStore.burnedArea.length) return;
+      if (!map.hasLayer(layerGroups.burnedArea)) {
+        _dirtyVectorLayers.burnedArea = true;
+        return;
+      }
+      _dirtyVectorLayers.burnedArea = false;
 
       const districtFilter = document.getElementById('districtFilter').value;
       const filtered = dataStore.burnedArea.filter(f => featureMatchesDistrict(f, districtFilter));
@@ -3947,10 +4012,15 @@
       }).addTo(layerGroups.burnedArea);
     }
 
-    // D. Render Lahan Gambut KHG Asli (Tersaring Kab/Kota)
+    // D. Render Lahan Gambut KHG Asli (Lazy jika layer tidak aktif)
     function renderFilteredPeatland() {
       layerGroups.peat.clearLayers();
       if (!dataStore.peat.length) return;
+      if (!map.hasLayer(layerGroups.peat)) {
+        _dirtyVectorLayers.peat = true;
+        return;
+      }
+      _dirtyVectorLayers.peat = false;
 
       const districtFilter = document.getElementById('districtFilter').value;
       const filtered = dataStore.peat.filter(f => featureMatchesDistrict(f, districtFilter));
@@ -4003,54 +4073,72 @@
         `;
       };
 
-      const healthFiltered = dataStore.health.filter(f => featureMatchesDistrict(f, districtFilter));
-      if (healthFiltered.length) {
-        L.geoJSON({ type: 'FeatureCollection', features: healthFiltered }, {
-          renderer: sharedVectorRenderer,
-          pointToLayer: (f, latlng) => L.circleMarker(latlng, {
+      const healthActive = map.hasLayer(layerGroups.health);
+      if (!healthActive) {
+        _dirtyVectorLayers.health = true;
+      } else {
+        _dirtyVectorLayers.health = false;
+        const healthFiltered = dataStore.health.filter(f => featureMatchesDistrict(f, districtFilter));
+        if (healthFiltered.length) {
+          L.geoJSON({ type: 'FeatureCollection', features: healthFiltered }, {
             renderer: sharedVectorRenderer,
-            radius: 5.5, fillColor: '#e11d48', color: '#ffffff', weight: 1.5, fillOpacity: 0.9
-          }),
-          style: { color: '#be123c', weight: 1.5, fillColor: '#fb7185', fillOpacity: 0.45 },
-          onEachFeature: (f, l) => l.bindPopup(() => formatImpactPopup(f.properties || {}, 'Fasilitas Kesehatan', 'Fasilitas Kesehatan'))
-        }).addTo(layerGroups.health);
+            pointToLayer: (f, latlng) => L.circleMarker(latlng, {
+              renderer: sharedVectorRenderer,
+              radius: 5.5, fillColor: '#e11d48', color: '#ffffff', weight: 1.5, fillOpacity: 0.9
+            }),
+            style: { color: '#be123c', weight: 1.5, fillColor: '#fb7185', fillOpacity: 0.45 },
+            onEachFeature: (f, l) => l.bindPopup(() => formatImpactPopup(f.properties || {}, 'Fasilitas Kesehatan', 'Fasilitas Kesehatan'))
+          }).addTo(layerGroups.health);
+        }
       }
 
-      const eduFiltered = dataStore.education.filter(f => featureMatchesDistrict(f, districtFilter));
-      if (eduFiltered.length) {
-        L.geoJSON({ type: 'FeatureCollection', features: eduFiltered }, {
-          renderer: sharedVectorRenderer,
-          pointToLayer: (f, latlng) => L.circleMarker(latlng, {
+      const eduActive = map.hasLayer(layerGroups.education);
+      if (!eduActive) {
+        _dirtyVectorLayers.education = true;
+      } else {
+        _dirtyVectorLayers.education = false;
+        const eduFiltered = dataStore.education.filter(f => featureMatchesDistrict(f, districtFilter));
+        if (eduFiltered.length) {
+          L.geoJSON({ type: 'FeatureCollection', features: eduFiltered }, {
             renderer: sharedVectorRenderer,
-            radius: 5.5, fillColor: '#2563eb', color: '#ffffff', weight: 1.5, fillOpacity: 0.9
-          }),
-          style: { color: '#1d4ed8', weight: 1.5, fillColor: '#60a5fa', fillOpacity: 0.45 },
-          onEachFeature: (f, l) => l.bindPopup(() => formatImpactPopup(f.properties || {}, 'Fasilitas Pendidikan', 'Fasilitas Pendidikan'))
-        }).addTo(layerGroups.education);
+            pointToLayer: (f, latlng) => L.circleMarker(latlng, {
+              renderer: sharedVectorRenderer,
+              radius: 5.5, fillColor: '#2563eb', color: '#ffffff', weight: 1.5, fillOpacity: 0.9
+            }),
+            style: { color: '#1d4ed8', weight: 1.5, fillColor: '#60a5fa', fillOpacity: 0.45 },
+            onEachFeature: (f, l) => l.bindPopup(() => formatImpactPopup(f.properties || {}, 'Fasilitas Pendidikan', 'Fasilitas Pendidikan'))
+          }).addTo(layerGroups.education);
+        }
       }
 
-      const airportFiltered = dataStore.airport.filter(f => featureMatchesDistrict(f, districtFilter));
-      if (airportFiltered.length) {
-        L.geoJSON({ type: 'FeatureCollection', features: airportFiltered }, {
-          renderer: sharedVectorRenderer,
-          pointToLayer: (f, latlng) => L.circleMarker(latlng, {
+      const airActive = map.hasLayer(layerGroups.airport);
+      if (!airActive) {
+        _dirtyVectorLayers.airport = true;
+      } else {
+        _dirtyVectorLayers.airport = false;
+        const airportFiltered = dataStore.airport.filter(f => featureMatchesDistrict(f, districtFilter));
+        if (airportFiltered.length) {
+          L.geoJSON({ type: 'FeatureCollection', features: airportFiltered }, {
             renderer: sharedVectorRenderer,
-            radius: 6.5, fillColor: '#7c3aed', color: '#ffffff', weight: 1.8, fillOpacity: 0.95
-          }),
-          style: (f) => {
-            if (f.geometry && f.geometry.type.includes('Line')) {
-              return { color: '#facc15', weight: 3.5, opacity: 0.95 };
+            pointToLayer: (f, latlng) => L.circleMarker(latlng, {
+              renderer: sharedVectorRenderer,
+              radius: 6.5, fillColor: '#7c3aed', color: '#ffffff', weight: 1.8, fillOpacity: 0.95
+            }),
+            style: (f) => {
+              if (f.geometry && f.geometry.type.includes('Line')) {
+                return { color: '#facc15', weight: 3.5, opacity: 0.95 };
+              }
+              return { color: '#6d28d9', weight: 1.8, fillColor: '#a78bfa', fillOpacity: 0.45 };
+            },
+            onEachFeature: (f, l) => {
+              l.bindPopup(() => {
+                const p = f.properties || {};
+                const defaultLabel = (p.aeroway || '').toLowerCase() === 'helipad' ? 'Helipad' : 'Bandar Udara / Landasan';
+                return formatImpactPopup(p, defaultLabel, 'Transportasi Udara');
+              });
             }
-            return { color: '#6d28d9', weight: 1.8, fillColor: '#a78bfa', fillOpacity: 0.45 };
-          },
-          onEachFeature: (f, l) => {
-            l.bindPopup(() => {
-              const p = f.properties || {};
-              const defaultLabel = (p.aeroway || '').toLowerCase() === 'helipad' ? 'Helipad' : 'Bandar Udara / Landasan';
-              return formatImpactPopup(p, defaultLabel, 'Transportasi Udara');
-            });
-          }
-        }).addTo(layerGroups.airport);
+          }).addTo(layerGroups.airport);
+        }
       }
     }
 
@@ -5802,20 +5890,43 @@
     function recomputeEra5LandMeanWind() {
       if (!dataStore.era5WindLoaded) return;
       const hasAdmin = dataStore.adminFeatures.length > 0;
+      const dateKeys = Object.keys(dataStore.era5WindByDate);
+      if (!dateKeys.length) return;
 
-      Object.keys(dataStore.era5WindByDate).forEach(dIso => {
+      // Hitung masker indeks daratan 1 kali saja karena grid koordinat tetap sama antar hari
+      const samplePts = dataStore.era5WindByDate[dateKeys[0]].points || [];
+      const refLen = samplePts.length;
+      const inlandIdx = [];
+      for (let i = 0; i < refLen; i++) {
+        if (!hasAdmin || isEra5PointInKalbarLand(samplePts[i].lonKey, samplePts[i].latKey)) {
+          inlandIdx.push(i);
+        }
+      }
+
+      dateKeys.forEach(dIso => {
         const dayGrid = dataStore.era5WindByDate[dIso];
         const pts = dayGrid.points || [];
         let uSum = 0, vSum = 0, spdMsSum = 0, spdKmhSum = 0, count = 0;
 
-        for (let i = 0; i < pts.length; i++) {
-          const pt = pts[i];
-          if (hasAdmin && !isEra5PointInKalbarLand(pt.lonKey, pt.latKey)) continue;
-          uSum += pt.u;
-          vSum += pt.v;
-          spdMsSum += pt.effSpdMs;
-          spdKmhSum += pt.effSpdKmh;
-          count++;
+        if (pts.length === refLen && inlandIdx.length > 0) {
+          for (let k = 0; k < inlandIdx.length; k++) {
+            const pt = pts[inlandIdx[k]];
+            uSum += pt.u;
+            vSum += pt.v;
+            spdMsSum += pt.effSpdMs;
+            spdKmhSum += pt.effSpdKmh;
+          }
+          count = inlandIdx.length;
+        } else {
+          for (let i = 0; i < pts.length; i++) {
+            const pt = pts[i];
+            if (hasAdmin && !isEra5PointInKalbarLand(pt.lonKey, pt.latKey)) continue;
+            uSum += pt.u;
+            vSum += pt.v;
+            spdMsSum += pt.effSpdMs;
+            spdKmhSum += pt.effSpdKmh;
+            count++;
+          }
         }
 
         // Fallback ke semua titik valid hanya jika tidak ada titik yang jatuh di poligon daratan
@@ -5901,8 +6012,11 @@
           dataStore.era5WindLoaded = Object.keys(dataStore.era5WindByDate).length > 0;
           recomputeEra5LandMeanWind();
           console.log(`Berhasil memuat grid angin ERA5 (Indexed JSON) untuk ${Object.keys(dataStore.era5WindByDate).length} hari.`);
-          if (typeof windLayer !== 'undefined') windLayer._rebuildScreenField();
-          requestSimulationUpdate(true);
+          if (typeof windLayer !== 'undefined') {
+            windLayer.setEra5Bounds(minLat, minLon, maxLat, maxLon);
+            windLayer._rebuildScreenField();
+          }
+          requestSimulationUpdate(false);
         })
         .catch(err => console.warn('Gagal memuat ERA5_Wind_UV_Kalbar_Buffer_2026_Indexed.json:', err));
     }
@@ -6635,7 +6749,7 @@
           Pembanding_MERRA2_PM25_Rata_ug_m3: merraMeanStr,
           Pembanding_MODIS_AOD_550nm_Rata: modisMeanStr,
           Pembanding_CAMS_PM25_Rata_ug_m3: camsMeanStr,
-          Sumber_Data: 'HYSPLIT; ERA5-Land Wind; BPS Kalbar; NASA FIRMS VIIRS 375m; KHG Gambut; MODIS MCD64A1; MERRA-2; MODIS AOD; CAMS'
+          Sumber_Data: 'HYSPLIT; ERA5 Wind (Darat & Laut); BPS Kalbar; NASA FIRMS VIIRS 375m; KHG Gambut; MODIS MCD64A1; MERRA-2; MODIS AOD; CAMS'
         };
       });
 
@@ -6680,8 +6794,10 @@
 
     function generateAndPrintLandscapeReport() {
       syncComparisonWithMainSlider(true);
-      renderStatsModalContent();
       const st = computeComprehensiveStats();
+      if (document.getElementById('statsModal')?.classList.contains('open')) {
+        renderStatsModalContent();
+      }
 
       const ispuAreaMap = {
         'Sedang': 0,
@@ -6746,6 +6862,69 @@
           }
         }
       });
+
+      const trendChartImg = (st.dailyTrend && st.dailyTrend.labels && st.dailyTrend.labels.length)
+        ? renderOffscreenChartPng({
+            type: 'line',
+            data: {
+              labels: st.dailyTrend.labels,
+              datasets: [
+                {
+                  label: 'PM2.5 Maks Harian HYSPLIT (µg/m³)',
+                  data: st.dailyTrend.pm25MaxSeries,
+                  borderColor: '#0284c7',
+                  backgroundColor: 'rgba(2, 132, 199, 0.14)',
+                  borderWidth: 2,
+                  pointRadius: 1.2,
+                  fill: true,
+                  tension: 0.25,
+                  yAxisID: 'y'
+                },
+                {
+                  label: 'Titik Api VIIRS Harian (Titik)',
+                  data: st.dailyTrend.hotspotCountSeries,
+                  borderColor: '#dc2626',
+                  backgroundColor: 'rgba(220, 38, 38, 0.10)',
+                  borderWidth: 1.6,
+                  pointRadius: 1.1,
+                  fill: false,
+                  tension: 0.2,
+                  spanGaps: false,
+                  yAxisID: 'y1'
+                }
+              ]
+            },
+            options: {
+              plugins: {
+                legend: {
+                  display: true,
+                  position: 'top',
+                  labels: { boxWidth: 12, font: { size: 11, weight: '600' } }
+                }
+              },
+              scales: {
+                y: {
+                  type: 'linear',
+                  position: 'left',
+                  beginAtZero: true,
+                  ticks: { font: { size: 10 } },
+                  title: { display: true, text: 'PM2.5 Maks (µg/m³)', font: { size: 10, weight: '600' }, color: '#0284c7' }
+                },
+                y1: {
+                  type: 'linear',
+                  position: 'right',
+                  beginAtZero: true,
+                  grid: { drawOnChartArea: false },
+                  ticks: { precision: 0, font: { size: 10 } },
+                  title: { display: true, text: 'Titik Api (Titik)', font: { size: 10, weight: '600' }, color: '#dc2626' }
+                },
+                x: {
+                  ticks: { maxTicksLimit: 12, font: { size: 10 } }
+                }
+              }
+            }
+          }, 960, 260)
+        : '';
 
       const nowStr = new Date().toLocaleString('id-ID', {
         dateStyle: 'long',
@@ -6881,6 +7060,10 @@
                 ${sensorChartImg ? `<img src="${sensorChartImg}" alt="Grafik Titik Api per Sensor VIIRS" />` : '<div>Grafik tidak tersedia</div>'}
               </div>
             </div>
+            <div class="rep-chart-box" style="margin-top: 10px;">
+              <div class="rc-cap">Tren Harian PM2.5 Maksimum (HYSPLIT) &amp; Titik Api VIIRS</div>
+              ${trendChartImg ? `<img src="${trendChartImg}" alt="Grafik Tren Harian PM2.5 Maksimum dan Titik Api VIIRS" style="max-height: 195px;" />` : '<div>Grafik tidak tersedia</div>'}
+            </div>
           </div>
         </div>
 
@@ -6984,6 +7167,15 @@
       el.addEventListener('change', (e) => {
         if (e.target.checked) {
           map.addLayer(item.layer);
+          if (item.id === 'chkBurnedArea' && _dirtyVectorLayers.burnedArea) renderFilteredBurnedArea();
+          if (item.id === 'chkPeat' && _dirtyVectorLayers.peat) renderFilteredPeatland();
+          if (
+            (item.id === 'chkHealth' && _dirtyVectorLayers.health) ||
+            (item.id === 'chkEducation' && _dirtyVectorLayers.education) ||
+            (item.id === 'chkAirport' && _dirtyVectorLayers.airport)
+          ) {
+            renderFilteredFacilities();
+          }
           if (item.id === 'chkRisk') {
             showHeavyLoading('Memuat Peta Indeks Risiko Bencana...');
             requestAnimationFrame(() => setTimeout(() => {
@@ -7236,6 +7428,25 @@
       syncComparisonWithMainSlider();
     });
 
+    function stepTimelineDay(delta) {
+      const slider = document.getElementById('timeSlider');
+      if (!slider) return;
+      const minVal = parseInt(slider.min, 10) || 0;
+      const maxVal = parseInt(slider.max, 10) || 0;
+      const curVal = parseInt(slider.value, 10) || 0;
+      const nextVal = Math.max(minVal, Math.min(maxVal, curVal + delta));
+      if (nextVal === curVal) return;
+      disableHeavyTimelineFeatures();
+      slider.value = nextVal;
+      requestSimulationUpdate(true);
+      syncComparisonWithMainSlider();
+    }
+
+    const prevDayBtn = document.getElementById('prevDayBtn');
+    const nextDayBtn = document.getElementById('nextDayBtn');
+    if (prevDayBtn) prevDayBtn.addEventListener('click', () => stepTimelineDay(-1));
+    if (nextDayBtn) nextDayBtn.addEventListener('click', () => stepTimelineDay(1));
+
     document.getElementById('btnModeSeasonal').addEventListener('click', () => setTimelineMode('seasonal'));
     document.getElementById('btnModeEpisode').addEventListener('click', () => setTimelineMode('episode'));
 
@@ -7274,9 +7485,16 @@
     function openStatsModal() {
       const modal = document.getElementById('statsModal');
       if (!modal) return;
-      modal.classList.add('open');
-      syncComparisonWithMainSlider(true);
-      renderStatsModalContent();
+      showHeavyLoading('Menyiapkan statistik & grafik...');
+      requestAnimationFrame(() => setTimeout(() => {
+        try {
+          modal.classList.add('open');
+          syncComparisonWithMainSlider(true);
+          renderStatsModalContent();
+        } finally {
+          hideHeavyLoading();
+        }
+      }, 0));
     }
     function closeStatsModal() {
       const modal = document.getElementById('statsModal');
