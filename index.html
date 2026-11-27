@@ -6158,10 +6158,20 @@
 
     function extractPm25Value(props) {
       if (!props) return null;
-      const candidates = ['pm25', 'PM25', 'pm2_5', 'PM2_5', 'pm25_rata', 'value', 'VALUE', 'val', 'mean', 'DN', 'raster_val'];
+      const candidates = ['pm25_ugm3', 'PM25_UGM3', 'pm25', 'PM25', 'pm2_5', 'PM2_5', 'pm25_rata', 'value', 'VALUE', 'val', 'mean', 'DN', 'raster_val'];
+      const parseNum = (raw) => {
+        if (raw === undefined || raw === null || raw === '') return NaN;
+        if (typeof raw === 'number') return raw;
+        return parseFloat(String(raw).trim().replace(',', '.'));
+      };
       for (const key of candidates) {
-        if (props[key] !== undefined && props[key] !== null && !isNaN(parseFloat(props[key]))) {
-          return parseFloat(props[key]);
+        const val = parseNum(props[key]);
+        if (!isNaN(val)) return val;
+      }
+      for (const k of Object.keys(props)) {
+        if (k.toLowerCase().includes('pm25') || k.toLowerCase().includes('pm2_5')) {
+          const val = parseNum(props[k]);
+          if (!isNaN(val)) return val;
         }
       }
       return null;
