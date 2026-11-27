@@ -315,18 +315,20 @@
     }
 
     .btn-zen {
+      width: 30px;
+      height: 30px;
+      padding: 0;
       background: rgba(15, 23, 42, 0.055);
       border: 1px solid rgba(15, 23, 42, 0.14);
       color: #090d16;
-      padding: 6px 9px;
       border-radius: 8px;
       font-family: 'Google Sans', sans-serif;
       font-size: 11px;
       font-weight: 600;
       cursor: pointer;
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 5px;
+      justify-content: center;
       transition: all 0.2s;
       white-space: nowrap;
       flex-shrink: 0;
@@ -335,6 +337,12 @@
     .btn-zen:hover {
       background: rgba(15, 23, 42, 0.11);
       border-color: rgba(15, 23, 42, 0.26);
+    }
+
+    body.zen-mode .btn-zen {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #ffffff;
     }
 
     body.zen-mode .dock-left,
@@ -2423,11 +2431,10 @@
         </svg>
         <span>Statistik</span>
       </button>
-      <button class="btn-zen" id="toggleZenBtn" title="Sembunyikan/Tampilkan Panel Samping untuk Presentasi">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <button class="btn-zen" id="toggleZenBtn" title="Fokus Peta (Sembunyikan/Tampilkan Panel Samping)" aria-label="Fokus Peta" aria-pressed="false">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
           <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
         </svg>
-        <span id="zenBtnText">Fokus Peta</span>
       </button>
       <button class="btn-info-icon" id="openGuideBtn" title="Panduan Singkat WebGIS & Penjelasan Istilah Teknis" aria-label="Panduan Singkat WebGIS">i</button>
       <div class="group-badge">GD4103 • KEL. 5</div>
@@ -8786,10 +8793,16 @@
       updateSimulation();
     });
 
-    document.getElementById('toggleZenBtn').addEventListener('click', () => {
-      const isZen = document.body.classList.toggle('zen-mode');
-      document.getElementById('zenBtnText').textContent = isZen ? 'Tampilkan Panel' : 'Fokus Peta';
-    });
+    const toggleZenBtnEl = document.getElementById('toggleZenBtn');
+    if (toggleZenBtnEl) {
+      toggleZenBtnEl.addEventListener('click', () => {
+        const isZen = document.body.classList.toggle('zen-mode');
+        toggleZenBtnEl.setAttribute('aria-pressed', String(isZen));
+        toggleZenBtnEl.title = isZen
+          ? 'Tampilkan Panel Samping'
+          : 'Fokus Peta (Sembunyikan/Tampilkan Panel Samping)';
+      });
+    }
 
     // ============================================================================
     // 10. INISIALISASI AWAL APLIKASI
