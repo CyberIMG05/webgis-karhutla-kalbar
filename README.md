@@ -1,4 +1,5 @@
-# SDSS Pemodelan Bahaya & Dampak Asap — Provinsi Kalimantan Barat
+# SDSS Pemodelan Bahaya & Dampak Asap
+# Provinsi Kalimantan Barat
 
 **Spatial Decision Support System (SDSS)** berbasis WebGIS untuk pemantauan kejadian kebakaran hutan dan lahan (karhutla), pemodelan dispersi polutan PM<sub>2.5</sub> (HYSPLIT), dinamika meteorologi angin & curah hujan, serta analisis risiko dan paparan terhadap penduduk maupun fasilitas vital di Provinsi Kalimantan Barat (periode kajian **1 Agustus – 31 Oktober 2026**, dengan slot *Forecast* **1 – 3 November 2026**).
 
