@@ -2365,6 +2365,12 @@
         </span>
         <span id="windTextContent">Angin: <strong>Memuat data ERA5...</strong></span>
       </div>
+      <div class="telemetry-chip" id="rainInfoBanner" title="Curah hujan harian rata-rata wilayah aktif (UCSB CHIRPS 0,05°)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+        </svg>
+        <span id="rainTextContent">Hujan CHIRPS: <strong>Memuat...</strong></span>
+      </div>
       <div class="alert-pill" id="globalStatusBadge">
         <span class="pulse-dot"></span>
         <span id="globalStatusText">MEMUAT DATA...</span>
@@ -2822,8 +2828,8 @@
             </div>
           </div>
           <div class="stats-chart-card full-width">
-            <div class="stats-chart-title">Tren Harian PM2.5 Maksimum (HYSPLIT) &amp; Titik Api VIIRS (1 Agt – 3 Nov 2026)</div>
-            <div class="stats-chart-caption" id="chartTrendCaption">Dihitung langsung dari data HYSPLIT (µg/m³) &amp; NASA FIRMS VIIRS (titik) sesuai filter wilayah aktif</div>
+            <div class="stats-chart-title">Tren Harian PM2.5 Maksimum (HYSPLIT), Titik Api VIIRS &amp; Curah Hujan CHIRPS (1 Agt – 3 Nov 2026)</div>
+            <div class="stats-chart-caption" id="chartTrendCaption">Dihitung langsung dari HYSPLIT (µg/m³), NASA FIRMS VIIRS (titik) &amp; UCSB CHIRPS (mm/hari) sesuai filter wilayah aktif</div>
             <div class="stats-canvas-wrap">
               <canvas id="statsTrendChart"></canvas>
             </div>
@@ -3334,6 +3340,8 @@
       merra: [],
       modis: [],
       weeklyTrajectories: [],
+      rainByDate: {},
+      rainLoaded: false,
       era5WindByDate: {},
       era5WindLoaded: false,
       hysplitUnhealthyByDate: {}
@@ -5278,6 +5286,7 @@
       const dotColor = step.isForecast ? '#0284c7' : '#d97706';
       document.getElementById('simTitleBanner').innerHTML = `<span class="sim-dot" style="background:${dotColor};"></span><span>${step.banner}${bannerSuffix}</span>${forecastBadge}`;
       document.getElementById('windTextContent').innerHTML = `Angin: <strong>${activeWindLabel}</strong>`;
+      updateRainBanner(activeDateIso, document.getElementById('districtFilter')?.value || 'ALL');
       const needle = document.getElementById('windCompassNeedle');
       if (needle) needle.style.transform = `rotate(${flowToDeg}deg)`;
       document.getElementById('currentTimestampLabel').innerHTML = step.isForecast
@@ -5400,6 +5409,7 @@
       const dotColor = step.isForecast ? '#0284c7' : '#d97706';
       document.getElementById('simTitleBanner').innerHTML = `<span class="sim-dot" style="background:${dotColor};"></span><span>${step.banner}${bannerSuffix}</span>${forecastBadge}`;
       document.getElementById('windTextContent').innerHTML = `Angin: <strong>${activeWindLabel}</strong>`;
+      updateRainBanner(activeDateIso, document.getElementById('districtFilter')?.value || 'ALL');
       const needle = document.getElementById('windCompassNeedle');
       if (needle) needle.style.transform = `rotate(${flowToDeg}deg)`;
       document.getElementById('currentTimestampLabel').innerHTML = step.isForecast
@@ -6259,6 +6269,7 @@
             retagAllLoadedDatasets();
             _era5InlandCoordCache.clear();
             recomputeEra5LandMeanWind();
+            recomputeChirpsMeanRain();
             requestSimulationUpdate(false);
           }, 0));
           console.log(`Berhasil memuat ${dataStore.adminFeatures.length} Kab/Kota Kalbar (dengan data penduduk BPS).`);
@@ -6567,6 +6578,163 @@
         .catch(err => console.warn('Gagal memuat ERA5_Wind_UV_Kalbar_Buffer_2026_Indexed.json:', err));
     }
 
+    function classifyRainfallMm(mm) {
+      if (mm === null || mm === undefined || isNaN(mm)) {
+        return { category: 'Tidak Tersedia', shortCat: '—' };
+      }
+      if (mm < 0.5) return { category: 'Kering / Tidak Hujan', shortCat: 'Kering' };
+      if (mm < 20) return { category: 'Hujan Ringan', shortCat: 'Ringan' };
+      if (mm < 50) return { category: 'Hujan Sedang', shortCat: 'Sedang' };
+      if (mm < 100) return { category: 'Hujan Lebat', shortCat: 'Lebat' };
+      return { category: 'Hujan Sangat Lebat', shortCat: 'Sangat Lebat' };
+    }
+
+    function recomputeChirpsMeanRain() {
+      if (!dataStore.rainLoaded) return;
+      const dateKeys = Object.keys(dataStore.rainByDate);
+      if (!dateKeys.length) return;
+
+      const simpAdmins = getSimplifiedAdminFeatures();
+      const hasAdmin = simpAdmins.length > 0;
+      const samplePts = dataStore.rainByDate[dateKeys[0]].points || [];
+      const pointKabCache = new Map();
+
+      const resolveKabForPoint = (lon, lat) => {
+        const key = `${lat.toFixed(2)}_${lon.toFixed(2)}`;
+        if (pointKabCache.has(key)) return pointKabCache.get(key);
+        let found = null;
+        if (hasAdmin && typeof turf !== 'undefined') {
+          for (let i = 0; i < simpAdmins.length; i++) {
+            const adm = simpAdmins[i];
+            const box = getFeatureBbox(adm.geomFeat);
+            if (box && (lon < box[0] || lon > box[2] || lat < box[1] || lat > box[3])) continue;
+            try {
+              if (turf.booleanPointInPolygon([lon, lat], adm.geomFeat)) {
+                found = adm.kabName;
+                break;
+              }
+            } catch (e) {}
+          }
+        }
+        pointKabCache.set(key, found);
+        return found;
+      };
+
+      for (let i = 0; i < samplePts.length; i++) {
+        resolveKabForPoint(samplePts[i].lon, samplePts[i].lat);
+      }
+
+      dateKeys.forEach(dIso => {
+        const entry = dataStore.rainByDate[dIso];
+        const pts = entry.points || [];
+        let sumAll = 0, countAll = 0, maxAll = 0;
+        let sumFallback = 0, countFallback = 0, maxFallback = 0;
+        const byKab = {};
+
+        for (let i = 0; i < pts.length; i++) {
+          const pt = pts[i];
+          const val = pt.rainMm;
+          sumFallback += val;
+          countFallback++;
+          if (val > maxFallback) maxFallback = val;
+
+          const kab = resolveKabForPoint(pt.lon, pt.lat);
+          if (!hasAdmin || kab) {
+            sumAll += val;
+            countAll++;
+            if (val > maxAll) maxAll = val;
+          }
+          if (kab) {
+            if (!byKab[kab]) byKab[kab] = { sum: 0, count: 0, max: 0 };
+            byKab[kab].sum += val;
+            byKab[kab].count++;
+            if (val > byKab[kab].max) byKab[kab].max = val;
+          }
+        }
+
+        entry.meanAll = countAll > 0 ? (sumAll / countAll) : (countFallback > 0 ? sumFallback / countFallback : 0);
+        entry.maxAll = countAll > 0 ? maxAll : maxFallback;
+        entry.byKab = {};
+        Object.keys(byKab).forEach(k => {
+          entry.byKab[k] = {
+            mean: byKab[k].sum / byKab[k].count,
+            max: byKab[k].max,
+            count: byKab[k].count
+          };
+        });
+      });
+    }
+
+    function getDailyRainSummary(dateIso, districtFilter = 'ALL') {
+      const entry = dataStore.rainByDate[dateIso];
+      if (!dataStore.rainLoaded || !entry) {
+        return { available: false, meanMm: null, maxMm: null, ...classifyRainfallMm(null) };
+      }
+      let meanMm = entry.meanAll;
+      let maxMm = entry.maxAll;
+      if (districtFilter && districtFilter !== 'ALL' && entry.byKab && entry.byKab[districtFilter]) {
+        meanMm = entry.byKab[districtFilter].mean;
+        maxMm = entry.byKab[districtFilter].max;
+      }
+      return {
+        available: true,
+        meanMm,
+        maxMm,
+        ...classifyRainfallMm(meanMm)
+      };
+    }
+
+    function updateRainBanner(dateIso, districtFilter = 'ALL') {
+      const el = document.getElementById('rainTextContent');
+      if (!el) return;
+      if (!dataStore.rainLoaded) {
+        el.innerHTML = 'Hujan CHIRPS: <strong>Memuat...</strong>';
+        return;
+      }
+      const r = getDailyRainSummary(dateIso, districtFilter);
+      if (!r.available) {
+        el.innerHTML = 'Hujan CHIRPS: <strong>Tidak Tersedia</strong>';
+        return;
+      }
+      el.innerHTML = `Hujan CHIRPS: <strong>${r.meanMm.toFixed(1)} mm/hr</strong> (${r.shortCat})`;
+    }
+
+    function loadChirpsRainCsv() {
+      fetch(`${BASE_PJBL_URL}/CHIRPS_Curah_Hujan_Kalbar_2026_WebGIS.csv`)
+        .then(res => { if (!res.ok) throw new Error(res.status); return res.text(); })
+        .then(csvText => {
+          const lines = csvText.split(/\r?\n/).filter(l => l.trim().length > 0);
+          if (lines.length < 2) return;
+
+          const headers = parseCsvLineRfc4180(lines[0]).map(h => h.trim().replace(/^\uFEFF/, '').toLowerCase());
+          const idxDate = headers.findIndex(h => h === 'tanggal' || h === 'date');
+          const idxLat = headers.findIndex(h => h === 'lat' || h === 'latitude');
+          const idxLon = headers.findIndex(h => h === 'lon' || h === 'lng' || h === 'longitude');
+          const idxRain = headers.findIndex(h => h.includes('rain') || h.includes('precip') || h === 'mean');
+          if (idxDate === -1 || idxLat === -1 || idxLon === -1 || idxRain === -1) return;
+
+          const byDate = {};
+          for (let i = 1; i < lines.length; i++) {
+            const cols = parseCsvLineRfc4180(lines[i]);
+            if (cols.length <= Math.max(idxDate, idxLat, idxLon, idxRain)) continue;
+            const dIso = normalizeDateKey(cols[idxDate]);
+            const lat = parseFloat(cols[idxLat]);
+            const lon = parseFloat(cols[idxLon]);
+            const rainMm = parseFloat(String(cols[idxRain]).replace(',', '.'));
+            if (!dIso || isNaN(lat) || isNaN(lon) || isNaN(rainMm)) continue;
+            if (!byDate[dIso]) byDate[dIso] = { points: [], meanAll: 0, maxAll: 0, byKab: {} };
+            byDate[dIso].points.push({ lat, lon, rainMm });
+          }
+
+          dataStore.rainByDate = byDate;
+          dataStore.rainLoaded = Object.keys(byDate).length > 0;
+          recomputeChirpsMeanRain();
+          console.log(`Berhasil memuat curah hujan harian CHIRPS untuk ${Object.keys(byDate).length} hari.`);
+          requestSimulationUpdate(false);
+        })
+        .catch(err => console.warn('Gagal memuat CHIRPS_Curah_Hujan_Kalbar_2026_WebGIS.csv:', err));
+    }
+
     function loadWeeklyTrajectoriesGeoJSON() {
       fetch(`${BASE_PJBL_URL}/trajektori_hysplit_mingguan.geojson`)
         .then(res => { if (!res.ok) throw new Error(res.status); return res.json(); })
@@ -6708,11 +6876,15 @@
       const labels = [];
       const pm25MaxSeries = [];
       const hotspotCountSeries = [];
+      const rainMmSeries = [];
 
       for (let i = 0; i < SEASONAL_STEPS.length; i++) {
         const s = SEASONAL_STEPS[i];
         const dIso = s.isoDate;
         labels.push(s.label.replace(' 2026', ''));
+
+        const rainInfo = getDailyRainSummary(dIso, districtFilter);
+        rainMmSeries.push(rainInfo.available ? Number(rainInfo.meanMm.toFixed(1)) : null);
 
         const dayHysplit = dataStore.hysplitByDate[dIso] || [];
         let maxPm = null;
@@ -6749,7 +6921,7 @@
         }
       }
 
-      return { labels, pm25MaxSeries, hotspotCountSeries };
+      return { labels, pm25MaxSeries, hotspotCountSeries, rainMmSeries };
     }
 
     function getGridFeatureCenter(feat) {
@@ -7031,6 +7203,7 @@
 
       const dailyTrend = computeDailyTrendSeries(districtFilter, emissionFactor);
       const validation = computeModelValidationMetrics(activeDateIso, emissionFactor, filteredMerra, filteredModis, filteredCams);
+      const rainfall = getDailyRainSummary(activeDateIso, districtFilter);
 
       return {
         districtFilter,
@@ -7077,6 +7250,7 @@
         ispuBreakdown,
         dailyTrend,
         validation,
+        rainfall,
         rows: currentSimulationResults
       };
     }
@@ -7199,6 +7373,12 @@
           <td class="mono-cell">${st.facilities.airportExposed} / ${st.facilities.airportTotal}</td>
           <td>Unit</td>
           <td>Prasarana transportasi udara di zona PM2.5 &ge; ${st.threshold} µg/m³ (<code>layer_dampak/airport</code>)</td>
+        </tr>
+        <tr>
+          <td>Curah Hujan Harian Wilayah (CHIRPS 0,05&deg;)</td>
+          <td class="mono-cell">${st.rainfall && st.rainfall.available ? `${st.rainfall.meanMm.toFixed(2)} (Maks: ${st.rainfall.maxMm.toFixed(2)})` : 'Tidak tersedia'}</td>
+          <td>mm/hari (${st.rainfall ? st.rainfall.category : '-'})</td>
+          <td>Rata-rata wilayah aktif; hujan sedang–lebat membantu pencucian asap (<em>wet deposition</em>) &amp; menekan titik api</td>
         </tr>
       `;
 
@@ -7375,6 +7555,16 @@
                 tension: 0.2,
                 spanGaps: false,
                 yAxisID: 'y1'
+              },
+              {
+                type: 'bar',
+                label: 'Curah Hujan CHIRPS (mm/hari)',
+                data: st.dailyTrend.rainMmSeries || [],
+                backgroundColor: 'rgba(14, 165, 233, 0.34)',
+                borderColor: 'rgba(2, 132, 199, 0.55)',
+                borderWidth: 0.8,
+                yAxisID: 'y2',
+                order: 3
               }
             ]
           },
@@ -7404,6 +7594,12 @@
                 grid: { drawOnChartArea: false },
                 ticks: { precision: 0, font: { size: 9.5, family: 'IBM Plex Mono' } },
                 title: { display: true, text: 'Titik Api (Titik)', font: { size: 9.5, weight: '600' }, color: '#dc2626' }
+              },
+              y2: {
+                type: 'linear',
+                position: 'right',
+                display: false,
+                beginAtZero: true
               },
               x: {
                 ticks: { maxTicksLimit: 12, font: { size: 9.5 } }
@@ -7485,13 +7681,15 @@
           Pembanding_MERRA2_PM25_Rata_ug_m3: merraMeanStr,
           Pembanding_MODIS_AOD_550nm_Rata: modisMeanStr,
           Pembanding_CAMS_PM25_Rata_ug_m3: camsMeanStr,
+          Curah_Hujan_CHIRPS_mm_hari: (st.rainfall && st.rainfall.available) ? st.rainfall.meanMm.toFixed(2) : 'Tidak tersedia',
+          Kategori_Hujan_CHIRPS: st.rainfall ? st.rainfall.category : 'Tidak tersedia',
           Validasi_MERRA2_r: (st.validation && st.validation.merra.r !== null) ? st.validation.merra.r.toFixed(3) : 'N/A',
           Validasi_MERRA2_Bias_ug_m3: (st.validation && st.validation.merra.bias !== null) ? st.validation.merra.bias.toFixed(2) : 'N/A',
           Validasi_MERRA2_RMSE_ug_m3: (st.validation && st.validation.merra.rmse !== null) ? st.validation.merra.rmse.toFixed(2) : 'N/A',
           Validasi_MODIS_AOD_r: (st.validation && st.validation.modis.r !== null) ? st.validation.modis.r.toFixed(3) : 'N/A',
           Validasi_CAMS_r: (st.validation && st.validation.cams.r !== null) ? st.validation.cams.r.toFixed(3) : 'N/A',
           Validasi_CAMS_RMSE_ug_m3: (st.validation && st.validation.cams.rmse !== null) ? st.validation.cams.rmse.toFixed(2) : 'N/A',
-          Sumber_Data: 'HYSPLIT; ERA5 Wind (Darat & Laut); BPS Kalbar; NASA FIRMS VIIRS 375m; KHG Gambut; MODIS MCD64A1; MERRA-2; MODIS AOD; CAMS'
+          Sumber_Data: 'HYSPLIT; ERA5 Wind (Darat & Laut); UCSB CHIRPS Daily; BPS Kalbar; NASA FIRMS VIIRS 375m; KHG Gambut; MODIS MCD64A1; MERRA-2; MODIS AOD; CAMS'
         };
       });
 
@@ -7698,6 +7896,16 @@
                   tension: 0.2,
                   spanGaps: false,
                   yAxisID: 'y1'
+                },
+                {
+                  type: 'bar',
+                  label: 'Curah Hujan CHIRPS (mm/hari)',
+                  data: st.dailyTrend.rainMmSeries || [],
+                  backgroundColor: 'rgba(14, 165, 233, 0.34)',
+                  borderColor: 'rgba(2, 132, 199, 0.55)',
+                  borderWidth: 0.8,
+                  yAxisID: 'y2',
+                  order: 3
                 }
               ]
             },
@@ -7724,6 +7932,12 @@
                   grid: { drawOnChartArea: false },
                   ticks: { precision: 0, font: { size: 10 } },
                   title: { display: true, text: 'Titik Api (Titik)', font: { size: 10, weight: '600' }, color: '#dc2626' }
+                },
+                y2: {
+                  type: 'linear',
+                  position: 'right',
+                  display: false,
+                  beginAtZero: true
                 },
                 x: {
                   ticks: { maxTicksLimit: 12, font: { size: 10 } }
@@ -7804,7 +8018,7 @@
 
         <div class="rep-exec-summary ${isAlertCondition ? 'alert' : ''}">
           <strong>Ringkasan Kondisi &amp; Rekomendasi Singkat:</strong>
-          Pada tanggal simulasi ini di wilayah <strong>${st.regionLabel}</strong>, kualitas udara tertinggi berada pada kategori <strong>${airQualityDesc}</strong> (PM2.5 maks. <strong>${maxPmVal.toFixed(1)} µg/m³</strong>) dengan angin dominan <strong>${st.expSummary.activeWindLabel}</strong>${st.hotspot.isForecastDay ? '' : ` serta terpantau <strong>${st.hotspot.total.toLocaleString('id-ID')} titik api</strong>`}.
+          Pada tanggal simulasi ini di wilayah <strong>${st.regionLabel}</strong>, kualitas udara tertinggi berada pada kategori <strong>${airQualityDesc}</strong> (PM2.5 maks. <strong>${maxPmVal.toFixed(1)} µg/m³</strong>) dengan angin dominan <strong>${st.expSummary.activeWindLabel}</strong>${st.rainfall && st.rainfall.available ? `, curah hujan rata-rata <strong>${st.rainfall.meanMm.toFixed(1)} mm/hari (${st.rainfall.category})</strong>` : ''}${st.hotspot.isForecastDay ? '' : `, serta terpantau <strong>${st.hotspot.total.toLocaleString('id-ID')} titik api</strong>`}.
           ${st.expSummary.estExposedPop > 0 ? `Diperkirakan sekitar <strong>${st.expSummary.estExposedPop.toLocaleString('id-ID')} jiwa (${st.expSummary.popPct}%)</strong> berada di zona melebihi ambang batas &ge; ${st.threshold} µg/m³.` : `Belum ada populasi yang masuk zona melebihi ambang batas &ge; ${st.threshold} µg/m³.`}
           <em>Rekomendasi:</em> ${actionAdvice}
         </div>
@@ -7885,7 +8099,7 @@
               </div>
             </div>
             <div class="rep-chart-box" style="margin-top: 10px;">
-              <div class="rc-cap">Tren Harian PM2.5 Maksimum (HYSPLIT) &amp; Titik Api VIIRS</div>
+              <div class="rc-cap">Tren Harian PM2.5 Maksimum (HYSPLIT), Titik Api VIIRS &amp; Curah Hujan CHIRPS</div>
               ${trendChartImg ? `<img src="${trendChartImg}" alt="Grafik Tren Harian PM2.5 Maksimum dan Titik Api VIIRS" style="max-height: 195px;" />` : '<div>Grafik tidak tersedia</div>'}
             </div>
           </div>
@@ -7938,6 +8152,12 @@
                 <td>Vektor Angin Dominan &amp; Formula Risiko</td>
                 <td>${st.expSummary.activeWindLabel} &bull; Risiko = Bahaya (H) &times; Kerentanan &amp; Paparan (V&amp;E)</td>
                 <td>Grid Angin ECMWF ERA5 (Darat &amp; Laut) &amp; Standar BNPB / IPCC</td>
+              </tr>
+              <tr>
+                <td>Curah Hujan Harian (CHIRPS)</td>
+                <td>Rata-rata &amp; Maksimum Wilayah (${st.targetDate})</td>
+                <td>${st.rainfall && st.rainfall.available ? `${st.rainfall.meanMm.toFixed(2)} mm/hari (${st.rainfall.category} • Maks: ${st.rainfall.maxMm.toFixed(2)} mm/hari)` : 'Tidak tersedia'}</td>
+                <td>UCSB CHIRPS Daily 0,05&deg; (Pencucian basah asap &amp; penekan titik api)</td>
               </tr>
             </tbody>
           </table>
@@ -8496,6 +8716,7 @@
     loadRealHotspotsFromGitHub();
     loadSeparatedImpactLayers();
     loadEra5WindCsv();
+    loadChirpsRainCsv();
     loadWeeklyTrajectoriesGeoJSON();
     loadCamsPm25GeoJSON();
     syncComparisonWithMainSlider();
