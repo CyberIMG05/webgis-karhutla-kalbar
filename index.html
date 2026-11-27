@@ -111,35 +111,77 @@
     }
 
     .brand-mark {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-      background: linear-gradient(145deg, rgba(239, 68, 68, 0.14), rgba(245, 158, 11, 0.12));
-      border: 1px solid rgba(220, 38, 38, 0.35);
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      background: linear-gradient(160deg, #0f172a 0%, #1e293b 68%, #334155 100%);
+      border: 1px solid rgba(255, 255, 255, 0.20);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #dc2626;
       flex-shrink: 0;
       position: relative;
-      box-shadow: 0 2px 12px rgba(239, 68, 68, 0.18), inset 0 0 8px rgba(245, 158, 11, 0.14);
-      animation: emberGlow 3s ease-in-out infinite;
+      overflow: hidden;
+      box-shadow:
+        0 4px 12px rgba(15, 23, 42, 0.22),
+        inset 0 -6px 12px rgba(249, 115, 22, 0.24),
+        inset 0 1px 0 rgba(255, 255, 255, 0.18);
+      animation: smokeGlow 3.8s ease-in-out infinite;
     }
 
-    .brand-mark svg {
+    .brand-mark .smoke-puff-back {
+      animation: smokeFloatA 3.4s ease-in-out infinite alternate;
+      transform-origin: 16px 14px;
+    }
+
+    .brand-mark .smoke-puff-front {
+      animation: smokeFloatB 2.8s ease-in-out infinite alternate;
+      transform-origin: 16px 14px;
+    }
+
+    .brand-mark .smoke-wisp {
+      animation: smokeWisp 2.6s ease-in-out infinite alternate;
+    }
+
+    .brand-mark .ember-core {
       animation: flameFlicker 2.2s ease-in-out infinite alternate;
-      transform-origin: center bottom;
+      transform-origin: 16px 26px;
     }
 
-    @keyframes emberGlow {
-      0%, 100% { box-shadow: 0 2px 10px rgba(239, 68, 68, 0.16), inset 0 0 6px rgba(245, 158, 11, 0.12); }
-      50% { box-shadow: 0 3px 16px rgba(245, 158, 11, 0.32), inset 0 0 10px rgba(239, 68, 68, 0.22); }
+    @keyframes smokeGlow {
+      0%, 100% {
+        box-shadow:
+          0 4px 12px rgba(15, 23, 42, 0.22),
+          inset 0 -5px 10px rgba(249, 115, 22, 0.20),
+          inset 0 1px 0 rgba(255, 255, 255, 0.18);
+      }
+      50% {
+        box-shadow:
+          0 5px 16px rgba(15, 23, 42, 0.30),
+          inset 0 -7px 14px rgba(245, 158, 11, 0.32),
+          inset 0 1px 0 rgba(255, 255, 255, 0.22);
+      }
+    }
+
+    @keyframes smokeFloatA {
+      0% { transform: translate(0px, 0.6px) scale(0.97); opacity: 0.72; }
+      100% { transform: translate(1.2px, -1.2px) scale(1.04); opacity: 0.92; }
+    }
+
+    @keyframes smokeFloatB {
+      0% { transform: translate(-0.4px, 0.4px) scale(0.98); opacity: 0.88; }
+      100% { transform: translate(0.8px, -1.0px) scale(1.03); opacity: 1; }
+    }
+
+    @keyframes smokeWisp {
+      0% { transform: translateX(-0.6px); opacity: 0.55; }
+      100% { transform: translateX(1.2px); opacity: 0.95; }
     }
 
     @keyframes flameFlicker {
-      0% { transform: scale(1) rotate(-1.5deg); }
-      50% { transform: scale(1.06, 1.1) rotate(1deg); }
-      100% { transform: scale(0.98, 1.04) rotate(-0.5deg); }
+      0% { transform: scale(0.96, 0.98) rotate(-1.5deg); }
+      50% { transform: scale(1.04, 1.08) rotate(1.5deg); }
+      100% { transform: scale(0.98, 1.02) rotate(-0.5deg); }
     }
 
     .brand-text h1 {
@@ -665,10 +707,10 @@
       bottom: 16px;
       left: 50%;
       transform: translateX(-50%);
-      width: min(610px, calc(100vw - 640px));
+      width: min(700px, calc(100vw - 644px));
       min-width: 410px;
       border-radius: 14px;
-      padding: 11px 16px;
+      padding: 10px 14px;
       z-index: 900;
     }
 
@@ -678,18 +720,26 @@
       align-items: center;
       margin-bottom: 8px;
       gap: 8px;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
     }
 
     .timeline-controls {
       display: flex;
       align-items: center;
-      gap: 7px;
-      font-size: 10.5px;
+      gap: 5px;
+      font-size: 10px;
       font-weight: 700;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.02em;
       color: #090d16;
       text-transform: uppercase;
+      min-width: 0;
+    }
+
+    #currentTimestampLabel {
+      white-space: nowrap;
+      flex-shrink: 0;
+      font-size: 10.5px;
+      text-align: right;
     }
 
     .btn-play {
@@ -697,11 +747,12 @@
       color: #ffffff;
       border: 1px solid #090d16;
       border-radius: 6px;
-      padding: 3.5px 10px;
+      padding: 3.5px 8.5px;
       font-family: 'Google Sans', sans-serif;
-      font-size: 10.5px;
+      font-size: 10px;
       font-weight: 600;
       cursor: pointer;
+      white-space: nowrap;
       transition: all 0.15s;
     }
 
@@ -715,7 +766,7 @@
       color: #090d16;
       border: 1px solid rgba(15, 23, 42, 0.16);
       border-radius: 6px;
-      padding: 3.5px 8px;
+      padding: 3.5px 6.5px;
       font-family: 'Google Sans', sans-serif;
       font-size: 12px;
       font-weight: 700;
@@ -744,11 +795,12 @@
       border: none;
       color: #1e293b;
       font-family: 'Google Sans', sans-serif;
-      font-size: 10px;
+      font-size: 9.8px;
       font-weight: 600;
-      padding: 3px 8px;
+      padding: 3px 6.5px;
       border-radius: 5px;
       cursor: pointer;
+      white-space: nowrap;
       transition: all 0.15s;
     }
 
@@ -984,6 +1036,37 @@
       font-weight: 700;
     }
 
+    .protocol-list li.level-warn {
+      border-left-color: var(--warning);
+      background: rgba(217, 119, 6, 0.06);
+    }
+    .protocol-list li.level-warn strong {
+      color: #92400e;
+    }
+
+    .protocol-list li.level-danger {
+      border-left-color: var(--danger);
+      background: rgba(220, 38, 38, 0.07);
+    }
+    .protocol-list li.level-danger strong {
+      color: #991b1b;
+    }
+
+    .protocol-list li.level-ok {
+      border-left-color: var(--success);
+    }
+
+    .btn-copy-briefing {
+      grid-column: span 2;
+      background: rgba(5, 150, 105, 0.09);
+      color: #065f46;
+      border-color: rgba(5, 150, 105, 0.30);
+    }
+    .btn-copy-briefing:hover {
+      background: var(--success);
+      color: #ffffff;
+    }
+
     .action-btns {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -1136,6 +1219,9 @@
         width: min(560px, calc(100vw - 520px));
         min-width: 300px;
       }
+      .timeline-top {
+        flex-wrap: wrap;
+      }
     }
 
     @media (max-width: 768px) {
@@ -1155,6 +1241,7 @@
         padding: 10px 12px !important;
       }
       .center-sim-pill {
+        display: flex !important;
         position: relative !important;
         top: auto !important;
         left: auto !important;
@@ -1168,6 +1255,13 @@
         width: 100% !important;
         height: 52vh !important;
         min-height: 320px;
+      }
+      .dock-left,
+      .dock-right {
+        display: flex !important;
+      }
+      .timeline-dock {
+        display: block !important;
       }
       .dock-left,
       .dock-right,
@@ -1918,6 +2012,95 @@
         border-color: #fecaca;
         border-left-color: #dc2626;
       }
+      .rep-map-legend-grid {
+        display: grid;
+        grid-template-columns: 1.65fr 1fr;
+        gap: 10px;
+        margin-bottom: 14px;
+        page-break-inside: avoid;
+      }
+      .rep-map-box,
+      .rep-legend-box {
+        border: 1px solid #cbd5e1;
+        border-radius: 7px;
+        padding: 8px;
+        background: #ffffff;
+      }
+      .rep-map-box img {
+        width: 100%;
+        height: 235px;
+        object-fit: cover;
+        border-radius: 5px;
+        border: 1px solid #cbd5e1;
+        display: block;
+      }
+      .rep-map-cap {
+        font-size: 7.5pt;
+        color: #475569;
+        margin-top: 5px;
+        display: flex;
+        justify-content: space-between;
+      }
+      .rep-legend-box .legend-section {
+        margin-bottom: 5px;
+        padding-bottom: 4px;
+        border-bottom: 1px dashed #e2e8f0;
+      }
+      .rep-legend-box .legend-section:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+      }
+      .rep-legend-box .legend-section-title {
+        font-size: 7.5pt;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 3px;
+      }
+      .rep-legend-box .legend-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 2.5px;
+      }
+      .rep-legend-box .legend-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6px;
+        font-size: 7pt;
+        color: #1e293b;
+      }
+      .rep-legend-box .legend-name {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .rep-legend-box .legend-swatch {
+        width: 10px;
+        height: 10px;
+        border-radius: 2px;
+        flex-shrink: 0;
+        display: inline-block;
+      }
+      .rep-legend-box .legend-circle {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        display: inline-block;
+      }
+      .rep-legend-box .legend-line {
+        width: 12px;
+        height: 3px;
+        border-radius: 2px;
+        flex-shrink: 0;
+        display: inline-block;
+      }
+      .rep-legend-box .legend-val {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 6.8pt;
+        color: #475569;
+      }
     }
 
     @media (max-width: 768px) {
@@ -2126,8 +2309,45 @@
     <canvas id="headerSmokeCanvas"></canvas>
     <div class="brand">
       <div class="brand-mark" aria-hidden="true">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
+        <svg width="29" height="29" viewBox="0 0 32 32" fill="none">
+          <defs>
+            <linearGradient id="smokeGradBack" x1="6" y1="2" x2="26" y2="20" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#f8fafc" stop-opacity="0.95"/>
+              <stop offset="100%" stop-color="#94a3b8" stop-opacity="0.58"/>
+            </linearGradient>
+            <linearGradient id="smokeGradFront" x1="8" y1="6" x2="24" y2="22" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.99"/>
+              <stop offset="100%" stop-color="#cbd5e1" stop-opacity="0.82"/>
+            </linearGradient>
+            <linearGradient id="emberGrad" x1="16" y1="22" x2="16" y2="30" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#fb923c"/>
+              <stop offset="100%" stop-color="#dc2626"/>
+            </linearGradient>
+          </defs>
+
+          <!-- Kepulan asap belakang (lebih besar, tinggi & lebar tertiup angin ke kanan) -->
+          <g class="smoke-puff-back">
+            <circle cx="13.5" cy="9.8" r="5.6" fill="url(#smokeGradBack)"/>
+            <circle cx="20.4" cy="8.0" r="5.1" fill="url(#smokeGradBack)"/>
+            <circle cx="25.8" cy="6.6" r="3.3" fill="url(#smokeGradBack)"/>
+          </g>
+
+          <!-- Garis aliran angin/asap halus -->
+          <path class="smoke-wisp" d="M4.2 14.0c2.2-1.8 4.6-1.8 6.8-0.5M21.2 14.2c2.3-1.2 4.6-1.2 6.6-0.2" stroke="#e2e8f0" stroke-width="1.25" stroke-linecap="round" opacity="0.68"/>
+
+          <!-- Kepulan asap utama di depan (lebih penuh & dominan) -->
+          <g class="smoke-puff-front">
+            <circle cx="10.2" cy="15.2" r="4.5" fill="url(#smokeGradFront)"/>
+            <circle cx="16.2" cy="13.8" r="5.3" fill="url(#smokeGradFront)"/>
+            <circle cx="21.8" cy="14.8" r="4.0" fill="url(#smokeGradFront)"/>
+            <rect x="9.6" y="14.6" width="12.6" height="4.8" rx="2.4" fill="url(#smokeGradFront)"/>
+          </g>
+
+          <!-- Api kecil & bara di bagian bawah sebagai sumber asap -->
+          <g class="ember-core">
+            <path d="M16 21.6c1.7 1.4 2.7 2.8 2.7 4.3a2.7 2.7 0 1 1-5.4 0c0-1.5 1.0-2.9 2.7-4.3z" fill="url(#emberGrad)"/>
+            <path d="M16 23.8c0.8 0.7 1.2 1.4 1.2 2.1a1.2 1.2 0 1 1-2.4 0c0-0.7 0.4-1.4 1.2-2.1z" fill="#fde047"/>
+          </g>
         </svg>
       </div>
       <div class="brand-text">
@@ -2220,9 +2440,9 @@
 
       <div class="layer-row">
         <label class="layer-label">
-          <input type="checkbox" id="chkBurnedArea" checked />
+          <input type="checkbox" id="chkBurnedArea" />
           <span class="dot-indicator" style="background:#451a03; border: 1px solid #ea580c;"></span>
-          <span>Area Terbakar (MODIS)</span>
+          <span>Area Terbakar (MODIS Agt–Sep)</span>
         </label>
       </div>
 
@@ -2235,32 +2455,32 @@
       </div>
 
       <!-- DROPDOWN 1: FASILITAS & OBJEK VITAL -->
-      <div class="layer-dropdown open" id="ddFacilities">
+      <div class="layer-dropdown" id="ddFacilities">
         <button type="button" class="layer-dropdown-header" data-target="ddFacilities">
           <span class="dropdown-left-title">
             <span>Fasilitas & Objek Vital</span>
-            <span class="dropdown-badge" id="badgeFacilities">3/3</span>
+            <span class="dropdown-badge" id="badgeFacilities">0/3</span>
           </span>
           <svg class="dropdown-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
         <div class="layer-dropdown-body">
           <div class="layer-row">
             <label class="layer-label">
-              <input type="checkbox" id="chkHealth" class="fac-chk" checked />
+              <input type="checkbox" id="chkHealth" class="fac-chk" />
               <span class="dot-indicator" style="background:#e11d48;"></span>
               <span>Fasilitas Kesehatan</span>
             </label>
           </div>
           <div class="layer-row">
             <label class="layer-label">
-              <input type="checkbox" id="chkEducation" class="fac-chk" checked />
+              <input type="checkbox" id="chkEducation" class="fac-chk" />
               <span class="dot-indicator" style="background:#2563eb;"></span>
               <span>Fasilitas Pendidikan</span>
             </label>
           </div>
           <div class="layer-row">
             <label class="layer-label">
-              <input type="checkbox" id="chkAirport" class="fac-chk" checked />
+              <input type="checkbox" id="chkAirport" class="fac-chk" />
               <span class="dot-indicator" style="background:#7c3aed;"></span>
               <span>Bandara & Helipad</span>
             </label>
@@ -2418,7 +2638,7 @@
           <div class="kpi-num amber" id="kpiSchools">0 Unit</div>
         </div>
         <div class="kpi-tile">
-          <div class="kpi-name">Faskes Siaga ISPA</div>
+          <div class="kpi-name">Faskes Terdampak</div>
           <div class="kpi-num cyan" id="kpiHealth">0 Unit</div>
         </div>
         <div class="kpi-tile">
@@ -2537,11 +2757,12 @@
     <div class="glass-card glass-panel">
       <div class="card-header">
         <span class="card-title">Instrumen Aksi BPBD & Dinkes</span>
+        <span class="card-tag" id="actionAlertBadge" style="color:#065f46; border-color:rgba(5,150,105,0.35); background:rgba(5,150,105,0.10);">PEMANTAUAN</span>
       </div>
-      <ul class="protocol-list">
-        <li><strong>E-Learning:</strong> Rujukan sekolah BDR/daring pada zona PM2.5 &gt; 55.4 µg/m³.</li>
-        <li><strong>Logistik:</strong> Distribusi masker N95 prioritas zona tidak sehat &amp; berbahaya.</li>
-        <li><strong>Puskesmas:</strong> Pengaktifan posko oksigen & layanan darurat ISPA 24 jam.</li>
+      <ul class="protocol-list" id="bpbdProtocolList">
+        <li><strong>E-Learning:</strong> Memuat status sekolah pada zona terdampak...</li>
+        <li><strong>Logistik:</strong> Memuat prioritas distribusi masker N95...</li>
+        <li><strong>Puskesmas:</strong> Memuat status posko layanan ISPA...</li>
       </ul>
 
       <div class="action-btns">
@@ -2552,6 +2773,10 @@
         <button class="btn-action btn-print" id="printReportBtn">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
           <span>Cetak Laporan</span>
+        </button>
+        <button type="button" class="btn-action btn-copy-briefing" id="copyBriefingBtn" title="Salin ringkasan kondisi & rekomendasi aksi BPBD/Dinkes ke clipboard">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <span id="copyBriefingLabel">Salin Briefing Cepat</span>
         </button>
       </div>
     </div>
@@ -2569,7 +2794,7 @@
           <button type="button" class="btn-action btn-export" id="modalExportCsvBtn" title="Unduh seluruh tabel statistik dalam format CSV">
             <span>Unduh CSV</span>
           </button>
-          <button type="button" class="btn-action btn-print" id="modalPrintReportBtn" title="Cetak atau simpan laporan dalam orientasi landscape">
+          <button type="button" class="btn-action btn-print" id="modalPrintReportBtn" title="Cetak atau simpan laporan dalam orientasi A4 portrait">
             <span>Cetak Laporan</span>
           </button>
           <button type="button" class="btn-modal-close" id="closeStatsModalBtn" aria-label="Tutup Panel Statistik">&times;</button>
@@ -2633,7 +2858,7 @@
         <div class="stats-table-section">
           <h3>2. Tabel Ringkasan Titik Api (VIIRS), Tutupan Lahan &amp; Infrastruktur Terdampak</h3>
           <div class="table-source-note">
-            Sumber data: NASA FIRMS VIIRS 375 m (NOAA-20, NOAA-21, Suomi-NPP), Peta KHG Gambut Kalbar, NASA MODIS MCD64A1 (Agt–Okt 2026), dan Layer Objek Vital Kalbar.
+            Sumber data: NASA FIRMS VIIRS 375 m (NOAA-20, NOAA-21, Suomi-NPP), Peta KHG Gambut Kalbar, NASA MODIS MCD64A1 (Agt–Sep 2026), dan Layer Objek Vital Kalbar.
           </div>
           <div class="table-responsive">
             <table class="data-table">
@@ -2751,7 +2976,7 @@
           <ul>
             <li><strong>Titik Api &amp; FRP (VIIRS):</strong> Lokasi titik panas (hotspot) dari satelit NOAA-20, NOAA-21, dan Suomi-NPP. Lingkaran lebih besar dan merah menandakan energi panas pembakaran yang lebih kuat.</li>
             <li><strong>Sebaran PM2.5 (HYSPLIT):</strong> Area sebaran konsentrasi partikel asap halus PM2.5 hasil pemodelan atmosfer HYSPLIT yang dikelompokkan berdasarkan warna standar kualitas udara (ISPU).</li>
-            <li><strong>Area Terbakar (MODIS) &amp; Lahan Gambut (KHG):</strong> Menampilkan bekas lahan yang terbakar selama periode kajian serta sebaran kawasan gambut yang rentan membara lama.</li>
+            <li><strong>Area Terbakar (MODIS Agt–Sep) &amp; Lahan Gambut (KHG):</strong> Menampilkan bekas lahan yang terbakar pada periode Agustus–September 2026 serta sebaran kawasan gambut yang rentan membara lama.</li>
             <li><strong>Aliran Angin &amp; Lintasan Partikel (20–1.000 m):</strong> Garis animasi medan angin ERA5 (darat &amp; laut) dan estimasi jalur pergerakan asap pada tiga ketinggian atmosfer dari klaster titik api utama.</li>
             <li><strong>Fasilitas &amp; Objek Vital:</strong> Lokasi fasilitas kesehatan (RS/Puskesmas), sekolah/kampus, serta bandara dan helipad yang dipantau tingkat paparannya.</li>
           </ul>
@@ -2845,18 +3070,18 @@
       resizeHeaderCanvas();
       window.addEventListener('resize', resizeHeaderCanvas);
 
-      const smokePuffs = Array.from({ length: 22 }, (_, i) => ({
-        x: 24 + Math.random() * 280,
-        y: h * (0.25 + Math.random() * 0.7),
+      const smokePuffs = Array.from({ length: 28 }, (_, i) => ({
+        x: 20 + Math.random() * 290,
+        y: h * (0.2 + Math.random() * 0.72),
         vx: 0.22 + Math.random() * 0.35,
-        vy: -0.06 - Math.random() * 0.14,
-        radius: 14 + Math.random() * 24,
-        growth: 0.04 + Math.random() * 0.05,
-        alpha: 0.045 + Math.random() * 0.065,
-        phase: (i / 22) * Math.PI * 2
+        vy: -0.07 - Math.random() * 0.14,
+        radius: 15 + Math.random() * 26,
+        growth: 0.045 + Math.random() * 0.055,
+        alpha: 0.07 + Math.random() * 0.08,
+        phase: (i / 28) * Math.PI * 2
       }));
 
-      const embers = Array.from({ length: 14 }, () => ({
+      const embers = Array.from({ length: 6 }, () => ({
         x: 20 + Math.random() * 160,
         y: h * (0.4 + Math.random() * 0.55),
         vx: 0.35 + Math.random() * 0.55,
@@ -2944,28 +3169,34 @@
       satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
         attribution: '&copy; Esri World Imagery | GD4103 Kel. 5 ITB',
         maxNativeZoom: 17,
-        maxZoom: 21
+        maxZoom: 21,
+        crossOrigin: 'anonymous'
       }),
       light: L.layerGroup([
         L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
           attribution: '&copy; Esri, HERE, Garmin, OpenStreetMap | GD4103 Kel. 5 ITB',
-          maxZoom: 16
+          maxZoom: 16,
+          crossOrigin: 'anonymous'
         }),
         L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}', {
-          maxZoom: 16
+          maxZoom: 16,
+          crossOrigin: 'anonymous'
         })
       ]),
       osm: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
         attribution: '&copy; Esri World Street Map',
-        maxZoom: 18
+        maxZoom: 18,
+        crossOrigin: 'anonymous'
       }),
       dark: L.layerGroup([
         L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
           attribution: '&copy; Esri, HERE, Garmin, OpenStreetMap',
-          maxZoom: 16
+          maxZoom: 16,
+          crossOrigin: 'anonymous'
         }),
         L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}', {
-          maxZoom: 16
+          maxZoom: 16,
+          crossOrigin: 'anonymous'
         })
       ])
     };
@@ -3041,14 +3272,14 @@
     // ============================================================================
     const layerGroups = {
       peat: L.layerGroup().addTo(map),
-      burnedArea: L.layerGroup().addTo(map),
+      burnedArea: L.layerGroup(),
       pm25: L.layerGroup().addTo(map),
       risk: L.layerGroup(),
       trajectory: L.layerGroup().addTo(map),
       hotspots: L.layerGroup().addTo(map),
-      health: L.layerGroup().addTo(map),
-      education: L.layerGroup().addTo(map),
-      airport: L.layerGroup().addTo(map)
+      health: L.layerGroup(),
+      education: L.layerGroup(),
+      airport: L.layerGroup()
     };
 
     map.createPane('outsideMaskPane');
@@ -3659,7 +3890,7 @@
           items += `
             <div class="legend-item">
               <div class="legend-name"><span class="legend-swatch" style="background:#451a03; border:1.2px solid #ea580c;"></span><span>Area Terbakar</span></div>
-              <span class="legend-val">MODIS MCD64A1</span>
+              <span class="legend-val">MODIS Agt–Sep</span>
             </div>
           `;
         }
@@ -3787,7 +4018,28 @@
         `);
       }
 
-      if (isChecked('chkWind')) activeLayerCount++;
+      if (isChecked('chkWind')) {
+        activeLayerCount++;
+        const b = (typeof windLayer !== 'undefined' && windLayer._era5Bounds)
+          ? windLayer._era5Bounds
+          : [[-5.5, 106.0], [4.5, 117.0]];
+        const lonSpan = `${b[0][1].toFixed(1)}°–${b[1][1].toFixed(1)}° BT`;
+        sections.push(`
+          <div class="legend-section">
+            <div class="legend-section-title"><span>Aliran Angin &amp; Domain ERA5</span></div>
+            <div class="legend-grid">
+              <div class="legend-item">
+                <div class="legend-name"><span class="legend-line" style="background:linear-gradient(90deg, rgba(14,165,233,0.3), #0284c7);"></span><span>Partikel Aliran Angin</span></div>
+                <span class="legend-val">Darat &amp; Laut</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-name"><span class="legend-swatch" style="background:rgba(15,23,42,0.18); border:1.5px dashed #64748b;"></span><span>Batas Domain ERA5</span></div>
+                <span class="legend-val">${lonSpan}</span>
+              </div>
+            </div>
+          </div>
+        `);
+      }
 
       if (countBadge) countBadge.textContent = `${activeLayerCount} LAYER`;
       container.innerHTML = sections.length > 0
@@ -4006,7 +4258,7 @@
             <div class="popup-header">Area Terbakar (Burned Area)</div>
             <div class="popup-line"><strong>Sumber Data:</strong> NASA MODIS MCD64A1 v061 (500 m)</div>
             <div class="popup-line"><strong>Wilayah:</strong> ${districtFilter === 'ALL' ? 'Provinsi Kalimantan Barat' : districtFilter}</div>
-            <div class="popup-line"><strong>Periode Kajian:</strong> Agustus – Oktober 2026</div>
+            <div class="popup-line"><strong>Periode Data:</strong> Agustus – September 2026</div>
           `);
         }
       }).addTo(layerGroups.burnedArea);
@@ -5491,6 +5743,26 @@
         statusText.textContent = `TERKENDALI (PM2.5 Maks ${maxPm25} µg/m³)`;
       }
 
+      const activeDayHotspotsFiltered = districtFilter === 'ALL'
+        ? allDayHotspots
+        : allDayHotspots.filter(f => featureMatchesDistrict(f, districtFilter));
+
+      updateBpbdDinkesActionInstrument({
+        maxPm25,
+        threshold,
+        districtFilter,
+        targetDate,
+        step,
+        activeWindLabel,
+        calcExposure,
+        hotspotCount: activeDayHotspotsFiltered.length,
+        estExposedPop: calcExposure && window._latestExposureSummary ? window._latestExposureSummary.estExposedPop : 0,
+        popPct: calcExposure && window._latestExposureSummary ? window._latestExposureSummary.popPct : '0.0',
+        exposedSchools: calcExposure && window._latestExposureSummary ? window._latestExposureSummary.exposedSchoolsCount : 0,
+        exposedHealth: calcExposure && window._latestExposureSummary ? window._latestExposureSummary.exposedHealthCount : 0,
+        exposedAirport: calcExposure && window._latestExposureSummary ? window._latestExposureSummary.exposedAirportCount : 0
+      });
+
       exposureChart.data.labels = ['Sedang', 'Tidak Sehat', 'Sangat Tdk Sehat', 'Berbahaya'];
       exposureChart.data.datasets[0].data = [
         Math.round(areaByCategory['Sedang']),
@@ -5500,6 +5772,169 @@
       ];
       exposureChart.data.datasets[0].backgroundColor = ['#0070C0', '#FFC000', '#FF0000', '#18181b'];
       exposureChart.update('none');
+    }
+
+    function buildBpbdDinkesProtocols(ctx) {
+      const {
+        maxPm25 = 0,
+        threshold = 55,
+        districtFilter = 'ALL',
+        targetDate = '-',
+        step = null,
+        activeWindLabel = '-',
+        calcExposure = false,
+        hotspotCount = 0,
+        estExposedPop = 0,
+        popPct = '0.0',
+        exposedSchools = 0,
+        exposedHealth = 0,
+        exposedAirport = 0
+      } = ctx || {};
+
+      const isEmergency = maxPm25 > 150.4;
+      const isWarning = !isEmergency && (maxPm25 > Math.min(55.4, threshold) || (calcExposure && estExposedPop > 0));
+      const statusLabel = isEmergency ? 'SIAGA DARURAT' : isWarning ? 'WASPADA' : 'PEMANTAUAN';
+      const statusLevel = isEmergency ? 'danger' : isWarning ? 'warn' : 'ok';
+
+      const items = [];
+
+      // 1. E-Learning / Pendidikan
+      if (calcExposure) {
+        if (exposedSchools > 0) {
+          items.push({
+            level: isEmergency ? 'danger' : 'warn',
+            title: 'E-Learning',
+            text: `Rekomendasi BDR/daring untuk <strong>${exposedSchools.toLocaleString('id-ID')} sekolah</strong> di zona PM2.5 &ge; ${threshold} µg/m³.`,
+            plain: `E-Learning: Rekomendasi BDR/daring untuk ${exposedSchools.toLocaleString('id-ID')} sekolah di zona PM2.5 >= ${threshold} ug/m3.`
+          });
+        } else {
+          items.push({
+            level: 'ok',
+            title: 'E-Learning',
+            text: `KBM tatap muka normal (0 sekolah di zona &ge; ${threshold} µg/m³).`,
+            plain: `E-Learning: KBM tatap muka normal (0 sekolah di zona >= ${threshold} ug/m3).`
+          });
+        }
+      } else if (maxPm25 > 55.4) {
+        items.push({
+          level: isEmergency ? 'danger' : 'warn',
+          title: 'E-Learning',
+          text: `Siapkan opsi BDR/kurangi jam luar kelas (PM2.5 maks ${maxPm25.toFixed(1)} µg/m³; centang Kalkulator Paparan untuk jumlah sekolah).`,
+          plain: `E-Learning: Siapkan opsi BDR/kurangi jam luar kelas (PM2.5 maks ${maxPm25.toFixed(1)} ug/m3).`
+        });
+      } else {
+        items.push({
+          level: 'ok',
+          title: 'E-Learning',
+          text: `KBM tatap muka normal; PM2.5 maks (${maxPm25.toFixed(1)} µg/m³) dalam batas aman.`,
+          plain: `E-Learning: KBM tatap muka normal; PM2.5 maks (${maxPm25.toFixed(1)} ug/m3) aman.`
+        });
+      }
+
+      // 2. Logistik Masker N95
+      if (calcExposure && estExposedPop > 0) {
+        items.push({
+          level: isEmergency ? 'danger' : 'warn',
+          title: 'Logistik',
+          text: `Prioritas distribusi masker N95/KF94 untuk estimasi <strong>${estExposedPop.toLocaleString('id-ID')} jiwa (${popPct}%)</strong> terdampak.`,
+          plain: `Logistik: Prioritas masker N95/KF94 untuk estimasi ${estExposedPop.toLocaleString('id-ID')} jiwa (${popPct}%) terdampak.`
+        });
+      } else if (maxPm25 > 55.4) {
+        items.push({
+          level: isEmergency ? 'danger' : 'warn',
+          title: 'Logistik',
+          text: `Siagakan distribusi masker N95 pada zona ${isEmergency ? 'sangat tidak sehat/berbahaya' : 'tidak sehat'}.`,
+          plain: `Logistik: Siagakan distribusi masker N95 pada zona ${isEmergency ? 'sangat tidak sehat/berbahaya' : 'tidak sehat'}.`
+        });
+      } else {
+        items.push({
+          level: 'ok',
+          title: 'Logistik',
+          text: `Stok masker N95 dalam status siaga rutin di gudang logistik daerah.`,
+          plain: `Logistik: Stok masker N95 dalam status siaga rutin.`
+        });
+      }
+
+      // 3. Puskesmas & Layanan ISPA
+      if (calcExposure && exposedHealth > 0) {
+        items.push({
+          level: isEmergency ? 'danger' : 'warn',
+          title: 'Puskesmas',
+          text: `Siagakan <strong>${exposedHealth.toLocaleString('id-ID')} faskes</strong> terdampak untuk posko oksigen &amp; layanan darurat ISPA.`,
+          plain: `Puskesmas: Siagakan ${exposedHealth.toLocaleString('id-ID')} faskes terdampak untuk posko oksigen & layanan ISPA.`
+        });
+      } else if (isEmergency) {
+        items.push({
+          level: 'danger',
+          title: 'Puskesmas',
+          text: `Aktifkan posko oksigen &amp; layanan darurat ISPA 24 jam di puskesmas zona merah.`,
+          plain: `Puskesmas: Aktifkan posko oksigen & layanan darurat ISPA 24 jam di zona merah.`
+        });
+      } else {
+        items.push({
+          level: 'ok',
+          title: 'Puskesmas',
+          text: `Layanan faskes normal dengan pemantauan rutin keluhan ISPA harian.`,
+          plain: `Puskesmas: Layanan faskes normal dengan pemantauan rutin ISPA.`
+        });
+      }
+
+      // 4. Bandara / Helipad (bila terdampak)
+      if (calcExposure && exposedAirport > 0) {
+        items.push({
+          level: isEmergency ? 'danger' : 'warn',
+          title: 'Navigasi Udara',
+          text: `Pantau jarak pandang (<em>visibility</em>) pada <strong>${exposedAirport} bandara/helipad</strong> di zona asap.`,
+          plain: `Navigasi Udara: Pantau jarak pandang pada ${exposedAirport} bandara/helipad di zona asap.`
+        });
+      }
+
+      // 5. Pemadaman Dini Titik Api (BPBD / Manggala Agni)
+      if (!(step && step.isForecast) && hotspotCount > 0) {
+        items.push({
+          level: hotspotCount >= 50 ? 'danger' : 'warn',
+          title: 'Pemadaman Dini',
+          text: `Terpantau <strong>${hotspotCount.toLocaleString('id-ID')} titik api</strong> (${districtFilter === 'ALL' ? 'Kalbar' : districtFilter}) — prioritaskan patroli darat &amp; pembasahan.`,
+          plain: `Pemadaman Dini: Terpantau ${hotspotCount.toLocaleString('id-ID')} titik api (${districtFilter === 'ALL' ? 'Kalbar' : districtFilter}) - prioritaskan patroli & pembasahan.`
+        });
+      }
+
+      return {
+        statusLabel,
+        statusLevel,
+        items,
+        summaryMeta: { districtFilter, targetDate, step, maxPm25, activeWindLabel, hotspotCount }
+      };
+    }
+
+    function updateBpbdDinkesActionInstrument(ctx) {
+      const res = buildBpbdDinkesProtocols(ctx);
+      window._latestBpbdActionSummary = res;
+
+      const badge = document.getElementById('actionAlertBadge');
+      if (badge) {
+        badge.textContent = res.statusLabel;
+        if (res.statusLevel === 'danger') {
+          badge.style.color = '#991b1b';
+          badge.style.borderColor = 'rgba(220,38,38,0.38)';
+          badge.style.background = 'rgba(220,38,38,0.12)';
+        } else if (res.statusLevel === 'warn') {
+          badge.style.color = '#92400e';
+          badge.style.borderColor = 'rgba(217,119,6,0.40)';
+          badge.style.background = 'rgba(217,119,6,0.12)';
+        } else {
+          badge.style.color = '#065f46';
+          badge.style.borderColor = 'rgba(5,150,105,0.35)';
+          badge.style.background = 'rgba(5,150,105,0.10)';
+        }
+      }
+
+      const listEl = document.getElementById('bpbdProtocolList');
+      if (listEl) {
+        listEl.innerHTML = res.items.map(it =>
+          `<li class="level-${it.level}"><strong>${it.title}:</strong> ${it.text}</li>`
+        ).join('');
+      }
     }
 
     function renderDynamicTrajectories(fromDeg, speedKmh, isManual, stepObj, timeIdx, districtFilter = 'ALL') {
@@ -6408,7 +6843,7 @@
         <div class="stats-kpi-card">
           <div class="s-label">Luas Lahan Gambut (KHG) &amp; Area Terbakar</div>
           <div class="s-val" style="color:#854d0e;">${st.peat.loaded ? Math.round(st.peat.areaHa).toLocaleString('id-ID') + ' ha' : 'Memuat...'}</div>
-          <div class="s-sub">Area terbakar MODIS (Agt–Okt): ${st.burned.loaded ? st.burned.areaKm2.toFixed(1) + ' km²' : 'Memuat...'}</div>
+          <div class="s-sub">Area terbakar MODIS (Agt–Sep): ${st.burned.loaded ? st.burned.areaKm2.toFixed(1) + ' km²' : 'Memuat...'}</div>
         </div>
         <div class="stats-kpi-card">
           <div class="s-label">Fasilitas Vital Terdampak (&ge; ${st.threshold} µg/m³)</div>
@@ -6480,7 +6915,7 @@
           <td>Total Luas Area Bekas Terbakar (MODIS MCD64A1)</td>
           <td class="mono-cell">${st.burned.loaded ? st.burned.areaKm2.toFixed(2) + ' (' + Math.round(st.burned.areaHa).toLocaleString('id-ID') + ' ha)' : 'Memuat data...'}</td>
           <td>km² / Hektar</td>
-          <td>Akumulasi ${st.burned.count} poligon bekas terbakar periode kajian Agt–Okt 2026 (<code>burned_area_modis_mcd64a1.geojson</code>)</td>
+          <td>Akumulasi ${st.burned.count} poligon bekas terbakar periode Agt–Sep 2026 (<code>burned_area_modis_mcd64a1.geojson</code>)</td>
         </tr>
         <tr>
           <td>Fasilitas Kesehatan Terdampak / Total Wilayah</td>
@@ -6792,12 +7227,77 @@
       return dataUrl && dataUrl.length > 32 ? dataUrl : '';
     }
 
+    function captureMapSnapshotDataUrl() {
+      const mapEl = document.getElementById('map');
+      if (!mapEl) return '';
+      const mapRect = mapEl.getBoundingClientRect();
+      const w = Math.max(1, Math.round(mapRect.width));
+      const h = Math.max(1, Math.round(mapRect.height));
+
+      const outCanvas = document.createElement('canvas');
+      outCanvas.width = w;
+      outCanvas.height = h;
+      const outCtx = outCanvas.getContext('2d');
+      outCtx.fillStyle = '#dbe3ec';
+      outCtx.fillRect(0, 0, w, h);
+
+      // 1. Gambar seluruh tile basemap yang sudah termuat
+      const tiles = mapEl.querySelectorAll('.leaflet-tile-pane img.leaflet-tile');
+      tiles.forEach(img => {
+        if (!img.complete || img.naturalWidth === 0) return;
+        const r = img.getBoundingClientRect();
+        if (r.width <= 0 || r.height <= 0) return;
+        const x = r.left - mapRect.left;
+        const y = r.top - mapRect.top;
+        const prevAlpha = outCtx.globalAlpha;
+        const op = parseFloat(getComputedStyle(img).opacity);
+        if (!isNaN(op)) outCtx.globalAlpha = op;
+        try {
+          outCtx.drawImage(img, x, y, r.width, r.height);
+        } catch (e) {}
+        outCtx.globalAlpha = prevAlpha;
+      });
+
+      // 2. Gambar seluruh layer canvas (outsideMaskPane, vector renderer, windLayer) berurutan sesuai z-index
+      const canvases = Array.from(mapEl.querySelectorAll('.leaflet-pane canvas'));
+      canvases.sort((a, b) => {
+        const pa = a.closest('.leaflet-pane');
+        const pb = b.closest('.leaflet-pane');
+        const pza = pa ? (parseInt(getComputedStyle(pa).zIndex, 10) || 400) : 400;
+        const pzb = pb ? (parseInt(getComputedStyle(pb).zIndex, 10) || 400) : 400;
+        if (pza !== pzb) return pza - pzb;
+        const za = parseInt(getComputedStyle(a).zIndex, 10) || 0;
+        const zb = parseInt(getComputedStyle(b).zIndex, 10) || 0;
+        return za - zb;
+      });
+
+      canvases.forEach(c => {
+        if (c.width <= 0 || c.height <= 0) return;
+        const r = c.getBoundingClientRect();
+        if (r.width <= 0 || r.height <= 0) return;
+        const x = r.left - mapRect.left;
+        const y = r.top - mapRect.top;
+        try {
+          outCtx.drawImage(c, x, y, r.width, r.height);
+        } catch (e) {}
+      });
+
+      try {
+        return outCanvas.toDataURL('image/png');
+      } catch (e) {
+        return '';
+      }
+    }
+
     function generateAndPrintLandscapeReport() {
       syncComparisonWithMainSlider(true);
       const st = computeComprehensiveStats();
       if (document.getElementById('statsModal')?.classList.contains('open')) {
         renderStatsModalContent();
       }
+      const mapSnapshotImg = captureMapSnapshotDataUrl();
+      const activeLegendHtml = document.getElementById('dynamicLegendContainer')?.innerHTML || '';
+      const activeBasemapLabel = document.getElementById('basemapSelect')?.selectedOptions?.[0]?.textContent || 'Citra Satelit';
 
       const ispuAreaMap = {
         'Sedang': 0,
@@ -7002,6 +7502,23 @@
           <em>Rekomendasi:</em> ${actionAdvice}
         </div>
 
+        <div class="rep-map-legend-grid">
+          <div class="rep-map-box">
+            <div class="rc-cap" style="font-size:8.5pt; font-weight:700; color:#0f172a; margin-bottom:5px;">Tangkapan Layar Peta Sebaran Aktif</div>
+            ${mapSnapshotImg
+              ? `<img src="${mapSnapshotImg}" alt="Tangkapan Layar Peta Sebaran Aktif" />`
+              : `<div style="height:200px; display:flex; align-items:center; justify-content:center; color:#64748b; font-size:8pt; background:#f8fafc; border-radius:5px;">Tangkapan layar peta tidak tersedia</div>`}
+            <div class="rep-map-cap">
+              <span>${activeBasemapLabel}</span>
+              <span>Zoom: ${map.getZoom()} &bull; Utara &uarr;</span>
+            </div>
+          </div>
+          <div class="rep-legend-box">
+            <div class="rc-cap" style="font-size:8.5pt; font-weight:700; color:#0f172a; margin-bottom:5px; border-bottom:1px solid #e2e8f0; padding-bottom:3px;">Legenda Layer Aktif</div>
+            ${activeLegendHtml || '<div style="font-size:7.5pt; color:#64748b;">Tidak ada layer aktif</div>'}
+          </div>
+        </div>
+
         <div class="rep-kpi-row">
           <div class="rep-kpi danger">
             <div class="rk-title">Estimasi Populasi Terpapar (&ge; ${st.threshold} µg/m³)</div>
@@ -7119,11 +7636,32 @@
           </table>
         </div>
 
+        <div class="rep-section">
+          <div class="rep-section-title">4. Rekomendasi Tindak Lanjut BPBD &amp; Dinas Kesehatan</div>
+          <ul style="margin:0; padding-left:18px; font-size:8.5pt; line-height:1.5; color:#0f172a;">
+            ${buildBpbdDinkesProtocols({
+              maxPm25: st.expSummary.maxPm25,
+              threshold: st.threshold,
+              districtFilter: st.districtFilter,
+              targetDate: st.targetDate,
+              step: st.step,
+              activeWindLabel: st.expSummary.activeWindLabel,
+              calcExposure: true,
+              hotspotCount: st.hotspot.isForecastDay ? 0 : st.hotspot.total,
+              estExposedPop: st.expSummary.estExposedPop,
+              popPct: st.expSummary.popPct,
+              exposedSchools: st.facilities.eduExposed,
+              exposedHealth: st.facilities.healthExposed,
+              exposedAirport: st.facilities.airportExposed
+            }).items.map(it => `<li><strong>${it.title}:</strong> ${it.text}</li>`).join('')}
+          </ul>
+        </div>
+
         <div class="rep-footer-notes">
           <strong>Panduan Membaca &amp; Sumber Data:</strong>
           (1) <em>Bahaya (H)</em> menunjukkan intensitas konsentrasi &amp; durasi asap PM2.5; <em>Kerentanan &amp; Paparan (V&amp;E)</em> menunjukkan kepadatan penduduk, lahan gambut, dan fasilitas vital di area tersebut; <em>Risiko = H &times; V&amp;E</em>.
           (2) Sebaran PM2.5 harian bersumber dari keluaran model dispersi HYSPLIT (<code>asap_pm25_harian_ispu.geojson</code>) dan medan angin darat–laut dari reanalisis ECMWF ERA5 (<code>ERA5_Wind_UV_Kalbar_Buffer_2026_Indexed.json</code>).
-          (3) Titik api aktif bersumber dari NASA FIRMS VIIRS 375 m periode 1 Agustus – 31 Oktober 2026; area terbakar dari NASA MODIS MCD64A1; lahan gambut dari peta KHG Kalimantan Barat.
+          (3) Titik api aktif bersumber dari NASA FIRMS VIIRS 375 m periode 1 Agustus – 31 Oktober 2026; area terbakar dari NASA MODIS MCD64A1 (Agt–Sep 2026); lahan gambut dari peta KHG Kalimantan Barat.
           (4) Dataset CAMS PM2.5, MERRA-2 PM2.5, dan MODIS AOD disajikan sebagai <strong>data pembanding</strong> spasial untuk melihat kesesuaian pola sebaran asap.
           (5) Estimasi populasi terpapar dihitung dari irisan spasial zona terdampak dengan batas Kabupaten/Kota berdasarkan data kepadatan dan jumlah penduduk BPS Kalimantan Barat.
         </div>
@@ -7481,6 +8019,44 @@
     document.getElementById('modalExportCsvBtn').addEventListener('click', downloadComprehensiveCsv);
     document.getElementById('printReportBtn').addEventListener('click', generateAndPrintLandscapeReport);
     document.getElementById('modalPrintReportBtn').addEventListener('click', generateAndPrintLandscapeReport);
+
+    const copyBriefingBtn = document.getElementById('copyBriefingBtn');
+    if (copyBriefingBtn) {
+      copyBriefingBtn.addEventListener('click', () => {
+        const res = window._latestBpbdActionSummary || buildBpbdDinkesProtocols({});
+        const m = res.summaryMeta || {};
+        const wilayah = (!m.districtFilter || m.districtFilter === 'ALL') ? 'Provinsi Kalimantan Barat' : m.districtFilter;
+        const tgl = m.step ? m.step.timestamp : (m.targetDate || '-');
+        const lines = [
+          `[BRIEFING KARHUTLA KALBAR — ${res.statusLabel}]`,
+          `Wilayah: ${wilayah}`,
+          `Waktu Simulasi: ${tgl}`,
+          `PM2.5 Maks: ${Number(m.maxPm25 || 0).toFixed(1)} ug/m3 | Angin: ${m.activeWindLabel || '-'}`,
+          ...(m.step && m.step.isForecast ? [] : [`Titik Api VIIRS: ${Number(m.hotspotCount || 0).toLocaleString('id-ID')} titik`]),
+          ``,
+          `Rekomendasi Aksi BPBD & Dinkes:`,
+          ...res.items.map((it, idx) => `${idx + 1}. ${it.plain}`)
+        ];
+        const textOut = lines.join('\n');
+        const labelEl = document.getElementById('copyBriefingLabel');
+        const markCopied = () => {
+          if (labelEl) {
+            labelEl.textContent = '✓ Briefing Tersalin!';
+            setTimeout(() => { labelEl.textContent = 'Salin Briefing Cepat'; }, 2000);
+          }
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(textOut).then(markCopied).catch(() => {});
+        } else {
+          const ta = document.createElement('textarea');
+          ta.value = textOut;
+          document.body.appendChild(ta);
+          ta.select();
+          try { document.execCommand('copy'); markCopied(); } catch (e) {}
+          document.body.removeChild(ta);
+        }
+      });
+    }
 
     function openStatsModal() {
       const modal = document.getElementById('statsModal');
