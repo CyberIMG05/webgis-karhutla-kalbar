@@ -2550,21 +2550,21 @@
             <label class="layer-label">
               <input type="checkbox" id="chkCams" class="cmp-chk" />
               <span class="dot-indicator" style="background:#7c3aed;"></span>
-              <span>Data Pembanding PM2.5 (CAMS)</span>
+              <span>CAMS PM2.5 (Agt-Okt)</span>
             </label>
           </div>
           <div class="layer-row">
             <label class="layer-label">
               <input type="checkbox" id="chkWeeklyMerra" class="cmp-chk" />
               <span class="dot-indicator" style="background:#9333ea;"></span>
-              <span>MERRA-2 PM2.5 (Pembanding)</span>
+              <span>MERRA-2 PM2.5 (Mingguan)</span>
             </label>
           </div>
           <div class="layer-row">
             <label class="layer-label">
               <input type="checkbox" id="chkWeeklyModis" class="cmp-chk" />
               <span class="dot-indicator" style="background:#d97706;"></span>
-              <span>MODIS AOD (Pembanding)</span>
+              <span>MODIS AOD (Mingguan)</span>
             </label>
           </div>
         </div>
@@ -7062,9 +7062,9 @@
       };
 
       cmpBody.innerHTML = [
-        formatStatRow('NASA MERRA-2 PM2.5 (Pembanding Mingguan)', st.comparison.weeklyLabel, st.comparison.merra, 'µg/m³ • Grid reanalisis atmosfer global MERRA-2', 2),
-        formatStatRow('NASA MODIS AOD 550 nm (Pembanding Mingguan)', st.comparison.weeklyLabel, st.comparison.modis, 'Indeks tanpa satuan (0–1+) • Ketebalan optik aerosol satelit', 3),
-        formatStatRow('Copernicus CAMS PM2.5 (Data Pembanding)', 'Cakupan Dataset CAMS', st.comparison.cams, 'µg/m³ • Model komposisi atmosfer CAMS', 2)
+        formatStatRow('NASA MERRA-2 PM2.5 (Mingguan)', st.comparison.weeklyLabel, st.comparison.merra, 'µg/m³ • Grid reanalisis atmosfer global MERRA-2', 2),
+        formatStatRow('NASA MODIS AOD 550 nm (Mingguan)', st.comparison.weeklyLabel, st.comparison.modis, 'Indeks tanpa satuan (0–1+) • Ketebalan optik aerosol satelit', 3),
+        formatStatRow('CAMS PM2.5 (Agt-Okt)', 'Agustus – Oktober 2026', st.comparison.cams, 'µg/m³ • Model komposisi atmosfer Copernicus CAMS', 2)
       ].join('');
 
       renderStatsCharts(st);
