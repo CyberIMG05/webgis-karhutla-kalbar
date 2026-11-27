@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SDSS Mitigasi & Peringatan Dini Karhutla — Kalimantan Barat | Kelompok 5</title>
+  <title>SDSS Pemodelan Bahaya & Dampak Asap Karhutla — Kalimantan Barat | Kelompok 5</title>
 
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -2351,8 +2351,8 @@
         </svg>
       </div>
       <div class="brand-text">
-        <h1>SDSS Mitigasi & Peringatan Dini Karhutla</h1>
-        <p>Pemodelan Sebaran Asap HYSPLIT & Analisis Paparan • Provinsi Kalimantan Barat</p>
+        <h1>SDSS Pemodelan Bahaya &amp; Dampak Asap Karhutla</h1>
+        <p>Dispersi PM2.5 HYSPLIT, Medan Angin ERA5 &amp; Analisis Paparan &bull; Kalimantan Barat (Agt–Nov 2026)</p>
       </div>
     </div>
 
@@ -2895,6 +2895,31 @@
                 </tr>
               </thead>
               <tbody id="statsComparisonTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TABEL 4: VALIDASI KUANTITATIF KINERJA MODEL (r, R², BIAS, RMSE) -->
+        <div class="stats-table-section">
+          <h3>4. Validasi Kuantitatif Kinerja Model HYSPLIT (Korelasi <em>r</em>, R&sup2;, Bias &amp; RMSE)</h3>
+          <div class="table-source-note">
+            Evaluasi kuantitatif spasial dilakukan dengan memasangkan titik tengah sel grid observasi/reanalisis (MERRA-2, MODIS AOD, CAMS) terhadap nilai PM2.5 keluaran model HYSPLIT pada lokasi dan periode yang bersesuaian.
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Pasangan Validasi</th>
+                  <th>Sampel (N)</th>
+                  <th>Rata-rata Model vs Obs</th>
+                  <th>Korelasi (r)</th>
+                  <th>R&sup2;</th>
+                  <th>Bias (ME)</th>
+                  <th>RMSE</th>
+                  <th>Interpretasi</th>
+                </tr>
+              </thead>
+              <tbody id="statsValidationTableBody"></tbody>
             </table>
           </div>
         </div>
@@ -6727,6 +6752,146 @@
       return { labels, pm25MaxSeries, hotspotCountSeries };
     }
 
+    function getGridFeatureCenter(feat) {
+      if (!feat || !feat.geometry) return null;
+      const g = feat.geometry;
+      if (g.type === 'Point' && Array.isArray(g.coordinates) && g.coordinates.length >= 2) {
+        return [g.coordinates[0], g.coordinates[1]];
+      }
+      const box = getFeatureBbox(feat);
+      if (!box) return null;
+      return [(box[0] + box[2]) / 2, (box[1] + box[3]) / 2];
+    }
+
+    function getHysplitPm25AtPointForDate(lon, lat, dateIso, emissionFactor) {
+      const polys = dataStore.hysplitByDate[dateIso];
+      if (!polys || !polys.length || typeof turf === 'undefined') return 0;
+      let maxVal = 0;
+      for (let i = 0; i < polys.length; i++) {
+        const poly = polys[i];
+        const box = getFeatureBbox(poly);
+        if (box && (lon < box[0] || lon > box[2] || lat < box[1] || lat > box[3])) continue;
+        try {
+          if (turf.booleanPointInPolygon([lon, lat], poly)) {
+            const p = poly.properties || {};
+            const raw = parseFloat(String(p.pm25_rata || 0).replace(',', '.')) || 0;
+            const eff = raw * emissionFactor;
+            if (eff > maxVal) maxVal = eff;
+          }
+        } catch (e) {}
+      }
+      return maxVal;
+    }
+
+    function computePairwiseValidationStats(pairs, sameUnit = true) {
+      const n = pairs.length;
+      if (n < 2) {
+        return { n, modelMean: null, obsMean: null, r: null, r2: null, bias: null, rmse: null, interp: 'Sampel kurang (N < 2)' };
+      }
+      let sumM = 0, sumO = 0;
+      for (let i = 0; i < n; i++) {
+        sumM += pairs[i].m;
+        sumO += pairs[i].o;
+      }
+      const meanM = sumM / n;
+      const meanO = sumO / n;
+
+      let num = 0, denM = 0, denO = 0, sumDiff = 0, sumSqDiff = 0;
+      for (let i = 0; i < n; i++) {
+        const dm = pairs[i].m - meanM;
+        const dobs = pairs[i].o - meanO;
+        num += dm * dobs;
+        denM += dm * dm;
+        denO += dobs * dobs;
+        const err = pairs[i].m - pairs[i].o;
+        sumDiff += err;
+        sumSqDiff += err * err;
+      }
+
+      const denom = Math.sqrt(denM * denO);
+      const r = denom > 1e-12 ? (num / denom) : null;
+      const r2 = r !== null ? (r * r) : null;
+      const bias = sameUnit ? (sumDiff / n) : null;
+      const rmse = sameUnit ? Math.sqrt(sumSqDiff / n) : null;
+
+      let interp = 'Varians model nol (zona aman)';
+      if (r !== null) {
+        if (r >= 0.7) interp = 'Korelasi Positif Kuat';
+        else if (r >= 0.4) interp = 'Korelasi Positif Sedang';
+        else if (r >= 0.1) interp = 'Korelasi Positif Lemah';
+        else if (r > -0.1) interp = 'Tidak Berkorelasi Linier';
+        else interp = 'Korelasi Negatif (Arah Berlawanan)';
+      }
+
+      return { n, modelMean: meanM, obsMean: meanO, r, r2, bias, rmse, interp };
+    }
+
+    function computeModelValidationMetrics(activeDateIso, emissionFactor, filteredMerra, filteredModis, filteredCams) {
+      const period = getWeeklyPeriodForIsoDate(activeDateIso);
+      const weekDates = [];
+      const cur = new Date(`${period.start}T00:00:00Z`);
+      const endD = new Date(`${period.end}T00:00:00Z`);
+      while (cur <= endD) {
+        const iso = cur.toISOString().slice(0, 10);
+        if (dataStore.hysplitByDate[iso] && dataStore.hysplitByDate[iso].length > 0) {
+          weekDates.push(iso);
+        }
+        cur.setUTCDate(cur.getUTCDate() + 1);
+      }
+
+      const weeklyMeanAt = (lon, lat) => {
+        if (!weekDates.length) return 0;
+        let s = 0;
+        for (let i = 0; i < weekDates.length; i++) {
+          s += getHysplitPm25AtPointForDate(lon, lat, weekDates[i], emissionFactor);
+        }
+        return s / weekDates.length;
+      };
+
+      const merraPairs = [];
+      for (let i = 0; i < filteredMerra.length; i++) {
+        const f = filteredMerra[i];
+        const obs = Number(extractPropValue(f.properties, ['pm25_ugm3', 'PM25', 'pm25', 'value'], NaN));
+        const ctr = getGridFeatureCenter(f);
+        if (isNaN(obs) || !ctr) continue;
+        merraPairs.push({ m: weeklyMeanAt(ctr[0], ctr[1]), o: obs });
+      }
+
+      const modisPairs = [];
+      for (let i = 0; i < filteredModis.length; i++) {
+        const f = filteredModis[i];
+        const obs = Number(extractPropValue(f.properties, ['aod_550nm', 'aod', 'AOD', 'value'], NaN));
+        const ctr = getGridFeatureCenter(f);
+        if (isNaN(obs) || !ctr) continue;
+        modisPairs.push({ m: weeklyMeanAt(ctr[0], ctr[1]), o: obs });
+      }
+
+      const allHysplitDates = Object.keys(dataStore.hysplitByDate);
+      const seasonalMaxAt = (lon, lat) => {
+        let mx = 0;
+        for (let i = 0; i < allHysplitDates.length; i++) {
+          const v = getHysplitPm25AtPointForDate(lon, lat, allHysplitDates[i], emissionFactor);
+          if (v > mx) mx = v;
+        }
+        return mx;
+      };
+
+      const camsPairs = [];
+      for (let i = 0; i < filteredCams.length; i++) {
+        const f = filteredCams[i];
+        const obs = extractPm25Value(f.properties);
+        const ctr = getGridFeatureCenter(f);
+        if (obs === null || isNaN(obs) || !ctr) continue;
+        camsPairs.push({ m: seasonalMaxAt(ctr[0], ctr[1]), o: obs });
+      }
+
+      return {
+        merra: { label: 'HYSPLIT (Rata Mingguan) vs MERRA-2 PM2.5', unit: 'µg/m³', sameUnit: true, ...computePairwiseValidationStats(merraPairs, true) },
+        modis: { label: 'HYSPLIT (Rata Mingguan) vs MODIS AOD 550nm', unit: 'AOD', sameUnit: false, ...computePairwiseValidationStats(modisPairs, false) },
+        cams:  { label: 'HYSPLIT (Maks Agt–Okt) vs CAMS PM2.5', unit: 'µg/m³', sameUnit: true, ...computePairwiseValidationStats(camsPairs, true) }
+      };
+    }
+
     function computeComprehensiveStats() {
       const districtFilter = document.getElementById('districtFilter').value;
       const regionLabel = districtFilter === 'ALL' ? 'Provinsi Kalimantan Barat (14 Kab/Kota)' : `Kabupaten/Kota ${districtFilter}`;
@@ -6865,6 +7030,7 @@
       });
 
       const dailyTrend = computeDailyTrendSeries(districtFilter, emissionFactor);
+      const validation = computeModelValidationMetrics(activeDateIso, emissionFactor, filteredMerra, filteredModis, filteredCams);
 
       return {
         districtFilter,
@@ -6910,6 +7076,7 @@
         },
         ispuBreakdown,
         dailyTrend,
+        validation,
         rows: currentSimulationResults
       };
     }
@@ -7066,6 +7233,42 @@
         formatStatRow('NASA MODIS AOD 550 nm (Mingguan)', st.comparison.weeklyLabel, st.comparison.modis, 'Indeks tanpa satuan (0–1+) • Ketebalan optik aerosol satelit', 3),
         formatStatRow('CAMS PM2.5 (Agt-Okt)', 'Agustus – Oktober 2026', st.comparison.cams, 'µg/m³ • Model komposisi atmosfer Copernicus CAMS', 2)
       ].join('');
+
+      const valBody = document.getElementById('statsValidationTableBody');
+      if (valBody && st.validation) {
+        const fmtValRow = (v, obsDigits = 2) => {
+          if (!v || v.n < 2) {
+            return `
+              <tr>
+                <td><strong>${v ? v.label : '-'}</strong></td>
+                <td class="mono-cell">${v ? v.n : 0}</td>
+                <td colspan="6" style="color:#64748b; font-style:italic;">Data observasi/pembanding belum termuat untuk filter wilayah ini</td>
+              </tr>
+            `;
+          }
+          const rStr = v.r !== null ? v.r.toFixed(3) : '—';
+          const r2Str = v.r2 !== null ? v.r2.toFixed(3) : '—';
+          const biasStr = v.sameUnit && v.bias !== null ? `${v.bias >= 0 ? '+' : ''}${v.bias.toFixed(2)} µg/m³` : 'N/A (Beda Satuan)';
+          const rmseStr = v.sameUnit && v.rmse !== null ? `${v.rmse.toFixed(2)} µg/m³` : 'N/A (Beda Satuan)';
+          return `
+            <tr>
+              <td><strong>${v.label}</strong></td>
+              <td class="mono-cell">${v.n}</td>
+              <td class="mono-cell">${v.modelMean.toFixed(2)} vs ${v.obsMean.toFixed(obsDigits)} ${v.unit}</td>
+              <td class="mono-cell">${rStr}</td>
+              <td class="mono-cell">${r2Str}</td>
+              <td class="mono-cell">${biasStr}</td>
+              <td class="mono-cell">${rmseStr}</td>
+              <td>${v.interp}</td>
+            </tr>
+          `;
+        };
+        valBody.innerHTML = [
+          fmtValRow(st.validation.merra, 2),
+          fmtValRow(st.validation.modis, 3),
+          fmtValRow(st.validation.cams, 2)
+        ].join('');
+      }
 
       renderStatsCharts(st);
     }
@@ -7282,6 +7485,12 @@
           Pembanding_MERRA2_PM25_Rata_ug_m3: merraMeanStr,
           Pembanding_MODIS_AOD_550nm_Rata: modisMeanStr,
           Pembanding_CAMS_PM25_Rata_ug_m3: camsMeanStr,
+          Validasi_MERRA2_r: (st.validation && st.validation.merra.r !== null) ? st.validation.merra.r.toFixed(3) : 'N/A',
+          Validasi_MERRA2_Bias_ug_m3: (st.validation && st.validation.merra.bias !== null) ? st.validation.merra.bias.toFixed(2) : 'N/A',
+          Validasi_MERRA2_RMSE_ug_m3: (st.validation && st.validation.merra.rmse !== null) ? st.validation.merra.rmse.toFixed(2) : 'N/A',
+          Validasi_MODIS_AOD_r: (st.validation && st.validation.modis.r !== null) ? st.validation.modis.r.toFixed(3) : 'N/A',
+          Validasi_CAMS_r: (st.validation && st.validation.cams.r !== null) ? st.validation.cams.r.toFixed(3) : 'N/A',
+          Validasi_CAMS_RMSE_ug_m3: (st.validation && st.validation.cams.rmse !== null) ? st.validation.cams.rmse.toFixed(2) : 'N/A',
           Sumber_Data: 'HYSPLIT; ERA5 Wind (Darat & Laut); BPS Kalbar; NASA FIRMS VIIRS 375m; KHG Gambut; MODIS MCD64A1; MERRA-2; MODIS AOD; CAMS'
         };
       });
@@ -7581,8 +7790,8 @@
       reportContainer.innerHTML = `
         <div class="rep-header">
           <div>
-            <h1>LAPORAN ANALISIS SEBARAN ASAP KARHUTLA &amp; RISIKO BENCANA</h1>
-            <p>Sistem Pendukung Keputusan Spasial (SDSS) — Pemodelan HYSPLIT, Angin ERA5, Titik Api VIIRS &amp; Indeks Risiko BNPB/IPCC</p>
+            <h1>SDSS PEMODELAN BAHAYA &amp; DAMPAK ASAP KARHUTLA</h1>
+            <p>Dispersi PM2.5 HYSPLIT, Medan Angin ERA5 &amp; Analisis Paparan &bull; Kalimantan Barat (Agt–Nov 2026)</p>
             <p style="margin-top:2px;"><strong>Wilayah Kajian:</strong> ${st.regionLabel} &bull; <strong>Kelompok 5 (GD4103 Sistem Informasi Geografis — ITB)</strong></p>
           </div>
           <div class="rep-meta-box">
@@ -7735,7 +7944,36 @@
         </div>
 
         <div class="rep-section">
-          <div class="rep-section-title">4. Rekomendasi Tindak Lanjut BPBD &amp; Dinas Kesehatan</div>
+          <div class="rep-section-title">4. Validasi Kuantitatif Kinerja Model HYSPLIT (Korelasi <em>r</em>, R&sup2;, Bias, RMSE)</div>
+          <table class="rep-table">
+            <thead>
+              <tr>
+                <th>Pasangan Validasi</th>
+                <th>N</th>
+                <th>Korelasi (r)</th>
+                <th>R&sup2;</th>
+                <th>Bias (ME)</th>
+                <th>RMSE</th>
+                <th>Interpretasi</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${[st.validation.merra, st.validation.modis, st.validation.cams].map(v => {
+                if (!v || v.n < 2) {
+                  return `<tr><td><strong>${v ? v.label : '-'}</strong></td><td>${v ? v.n : 0}</td><td colspan="5" style="color:#64748b;">Data pembanding belum termuat untuk filter ini</td></tr>`;
+                }
+                const rStr = v.r !== null ? v.r.toFixed(3) : '—';
+                const r2Str = v.r2 !== null ? v.r2.toFixed(3) : '—';
+                const biasStr = v.sameUnit && v.bias !== null ? `${v.bias >= 0 ? '+' : ''}${v.bias.toFixed(2)} µg/m³` : 'N/A (Beda Satuan)';
+                const rmseStr = v.sameUnit && v.rmse !== null ? `${v.rmse.toFixed(2)} µg/m³` : 'N/A (Beda Satuan)';
+                return `<tr><td><strong>${v.label}</strong></td><td>${v.n}</td><td>${rStr}</td><td>${r2Str}</td><td>${biasStr}</td><td>${rmseStr}</td><td>${v.interp}</td></tr>`;
+              }).join('')}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="rep-section">
+          <div class="rep-section-title">5. Rekomendasi Tindak Lanjut BPBD &amp; Dinas Kesehatan</div>
           <ul style="margin:0; padding-left:18px; font-size:8.5pt; line-height:1.5; color:#0f172a;">
             ${buildBpbdDinkesProtocols({
               maxPm25: st.expSummary.maxPm25,
